@@ -192,7 +192,7 @@ export default function HomePage() {
           <div className="pt-2">
             <form
               onSubmit={handleSearchMatches}
-              className="rounded-3xl border border-white/20 bg-white/95 backdrop-blur-xl p-3.5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)] sm:p-4 text-left"
+              className="rounded-3xl border border-white/20  p-3.5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)] sm:p-4 text-left"
             >
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 items-center">
                 {/* Field 1: District */}
