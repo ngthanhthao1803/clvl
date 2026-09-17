@@ -365,11 +365,10 @@ export default function ExplorePage() {
             <button
               type="button"
               onClick={() => setActiveChip("all")}
-              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
-                activeChip === "all"
+              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${activeChip === "all"
                   ? "bg-slate-900 text-white shadow-sm"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               Tất cả ({filteredSessions.length})
             </button>
@@ -378,11 +377,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "tonight" ? "all" : "tonight")
               }
-              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
-                activeChip === "tonight"
+              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${activeChip === "tonight"
                   ? "bg-emerald-600 text-white shadow-sm"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               🌙 Tối nay (18h+)
             </button>
@@ -391,11 +389,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "escrow" ? "all" : "escrow")
               }
-              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
-                activeChip === "escrow"
+              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${activeChip === "escrow"
                   ? "bg-emerald-600 text-white shadow-sm"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               🛡️ Ký quỹ an toàn
             </button>
@@ -404,11 +401,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "tb" ? "all" : "tb")
               }
-              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
-                activeChip === "tb"
+              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${activeChip === "tb"
                   ? "bg-emerald-600 text-white shadow-sm"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               ⚡ Trình TB/TB+
             </button>
@@ -417,11 +413,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "mixed" ? "all" : "mixed")
               }
-              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
-                activeChip === "mixed"
+              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${activeChip === "mixed"
                   ? "bg-emerald-600 text-white shadow-sm"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               👥 Đôi Nam Nữ
             </button>
@@ -430,11 +425,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "available" ? "all" : "available")
               }
-              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
-                activeChip === "available"
+              className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${activeChip === "available"
                   ? "bg-emerald-600 text-white shadow-sm"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               🔥 Còn chỗ trống
             </button>
@@ -523,9 +517,8 @@ export default function ExplorePage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Left Column: Boarding Pass Cards (60% on desktop) */}
         <div
-          className={`space-y-4 lg:col-span-7 ${
-            mobileView === "map" ? "hidden lg:block" : "block"
-          }`}
+          className={`space-y-4 lg:col-span-7 ${mobileView === "map" ? "hidden lg:block" : "block"
+            }`}
         >
           <div className="flex items-center justify-between text-xs text-slate-500 px-1">
             <span>
@@ -568,9 +561,8 @@ export default function ExplorePage() {
                   <div
                     key={sId}
                     onMouseEnter={() => setSelectedSessionId(sId)}
-                    className={`transition-transform duration-300 ${
-                      isSelected ? "scale-[1.01]" : ""
-                    }`}
+                    className={`transition-transform duration-300 ${isSelected ? "scale-[1.01]" : ""
+                      }`}
                   >
                     <MatchCard session={session} />
                   </div>
@@ -582,9 +574,8 @@ export default function ExplorePage() {
 
         {/* Right Column: Sticky Interactive Leaflet Map (40% on desktop) */}
         <div
-          className={`lg:col-span-5 ${
-            mobileView === "list" ? "hidden lg:block" : "block"
-          }`}
+          className={`lg:col-span-5 ${mobileView === "list" ? "hidden lg:block" : "block"
+            }`}
         >
           <div className="sticky top-20">
             <div className="flex items-center justify-between px-1 pb-2">
