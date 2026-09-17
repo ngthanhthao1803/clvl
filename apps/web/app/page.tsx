@@ -20,6 +20,7 @@ import {
 import { MatchCard } from "@/components/cards/MatchCard";
 import { MapWrapper } from "@/components/map/MapWrapper";
 import { GoogleLoginButton } from "@/components/auth/GoogleLoginButton";
+import { HeroDynamicBackground } from "@/components/home/HeroDynamicBackground";
 import { api } from "@/lib/api";
 
 const defaultFeatured = [
@@ -144,7 +145,7 @@ export default function HomePage() {
         const res = await api.get("/sessions", { params: { limit: 6 } });
         const list = res.data?.data?.sessions;
         if (Array.isArray(list) && list.length > 0) return list;
-      } catch {}
+      } catch { }
       return defaultFeatured;
     },
     placeholderData: defaultFeatured,
@@ -162,41 +163,40 @@ export default function HomePage() {
 
   return (
     <div className="space-y-12 pb-14 animate-fadeUp">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-[2.5rem] border border-slate-200/90 bg-white p-6 shadow-sm sm:p-10 lg:p-12">
-        {/* Subtle background glow */}
-        <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-emerald-100/50 blur-3xl pointer-events-none" />
-        <div className="absolute -left-24 -bottom-24 h-96 w-96 rounded-full bg-cyan-100/40 blur-3xl pointer-events-none" />
+      {/* Hero Section with Dynamic Background */}
+      <section className="relative overflow-hidden rounded-[2.5rem] border border-emerald-500/20 bg-slate-950 p-6 shadow-2xl sm:p-10 lg:p-14 text-white">
+        {/* Dynamic Animated Canvas, Aurora Orbs & 3D Badminton Court */}
+        <HeroDynamicBackground />
 
-        <div className="relative space-y-6 max-w-4xl mx-auto text-center">
+        <div className="relative z-10 space-y-6 max-w-4xl mx-auto text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/90 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-emerald-800">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-950/70 backdrop-blur-md px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
             <span>Nền Tảng Cầu Lông Thông Minh Việt Nam</span>
           </div>
 
           {/* Heading */}
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl sm:leading-[1.15]">
+          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl sm:leading-[1.15] drop-shadow-sm">
             Ghép Kèo Lên Sân Cầu Lông,{" "}
-            <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(16,185,129,0.45)]">
               Không Lo Bùng Kèo
             </span>
           </h1>
 
-          <p className="mx-auto max-w-2xl text-base text-slate-600 sm:text-lg">
+          <p className="mx-auto max-w-2xl text-base text-slate-300 sm:text-lg drop-shadow">
             Tìm kèo ghép đôi, bao sân nhanh chóng, xác thực mã check-in tại sân
             và bảo vệ người chơi bằng quỹ ký quỹ ký thác an toàn.
           </p>
 
-          {/* Match Search Bar */}
+          {/* Match Search Bar (Frosted Glassmorphism Console) */}
           <div className="pt-2">
             <form
               onSubmit={handleSearchMatches}
-              className="rounded-3xl border border-slate-200/90 bg-slate-50/90 p-3 shadow-lg shadow-emerald-500/5 sm:p-4 text-left"
+              className="rounded-3xl border border-white/20 bg-white/95 backdrop-blur-xl p-3.5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)] sm:p-4 text-left"
             >
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 items-center">
                 {/* Field 1: District */}
-                <div className="rounded-2xl border border-slate-200 bg-white px-3.5 py-2.5">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50/90 px-3.5 py-2.5">
                   <span className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
                     Khu Vực (Quận / Huyện)
                   </span>
@@ -219,7 +219,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Field 2: Time */}
-                <div className="rounded-2xl border border-slate-200 bg-white px-3.5 py-2.5">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50/90 px-3.5 py-2.5">
                   <span className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
                     Khung Giờ Chơi
                   </span>
@@ -236,7 +236,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Field 3: Skill Level */}
-                <div className="rounded-2xl border border-slate-200 bg-white px-3.5 py-2.5">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50/90 px-3.5 py-2.5">
                   <span className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
                     Trình Độ Yêu Cầu
                   </span>
@@ -259,7 +259,7 @@ export default function HomePage() {
                 <div>
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 rounded-2xl bg-slate-900 py-3.5 px-6 text-sm font-bold text-white shadow-md hover:bg-emerald-600 transition-all active:scale-[0.98]"
+                    className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 py-3.5 px-6 text-sm font-bold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-600 hover:to-teal-700 transition-all hover:scale-[1.02] active:scale-[0.98]"
                   >
                     <span>Tìm Kèo Lên Sân</span>
                     <ArrowRight className="h-4 w-4" />
@@ -270,23 +270,23 @@ export default function HomePage() {
           </div>
 
           {/* Live Pulse Ticker */}
-          <div className="flex flex-wrap items-center justify-center gap-6 pt-2 text-xs text-slate-500 font-medium">
+          <div className="flex flex-wrap items-center justify-center gap-6 pt-2 text-xs text-slate-300 font-medium">
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
               <span>
-                <strong>1,056+</strong> Sân cầu lông sẵn sàng
+                <strong className="text-white">1,056+</strong> Sân cầu lông sẵn sàng
               </span>
             </span>
             <span className="flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-emerald-600" />
+              <ShieldCheck className="h-4 w-4 text-emerald-400" />
               <span>
-                <strong>100%</strong> Ký quỹ hoàn cọc tự động
+                <strong className="text-white">100%</strong> Ký quỹ hoàn cọc tự động
               </span>
             </span>
             <span className="flex items-center gap-1.5">
-              <KeyRound className="h-4 w-4 text-emerald-600" />
+              <KeyRound className="h-4 w-4 text-emerald-400" />
               <span>
-                <strong>Mã Check-in</strong> chống kèo ảo
+                <strong className="text-white">Mã Check-in</strong> chống kèo ảo
               </span>
             </span>
           </div>

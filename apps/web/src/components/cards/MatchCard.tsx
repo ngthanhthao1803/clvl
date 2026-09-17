@@ -79,7 +79,7 @@ export function MatchCard({ session }: MatchCardProps) {
   const isAlmostFull = slotsLeft > 0 && slotsLeft <= 2;
 
   let statusBadge = (
-    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 border border-emerald-200/80">
+    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 border border-emerald-200/80 leading-none">
       <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
       Mở đăng ký
     </span>
@@ -87,19 +87,19 @@ export function MatchCard({ session }: MatchCardProps) {
 
   if (isCancelled) {
     statusBadge = (
-      <span className="inline-flex items-center rounded-full bg-rose-50 px-2.5 py-0.5 text-[11px] font-semibold text-rose-700 border border-rose-200">
+      <span className="inline-flex items-center rounded-full bg-rose-50 px-2 py-0.5 text-[11px] font-semibold text-rose-700 border border-rose-200 leading-none">
         Đã hủy
       </span>
     );
   } else if (isFull) {
     statusBadge = (
-      <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-semibold text-slate-500 border border-slate-200">
+      <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-500 border border-slate-200 leading-none">
         Đã đủ chỗ
       </span>
     );
   } else if (isAlmostFull) {
     statusBadge = (
-      <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-[11px] font-semibold text-amber-700 border border-amber-200">
+      <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 border border-amber-200 leading-none">
         <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
         Còn {slotsLeft} chỗ
       </span>
@@ -109,17 +109,17 @@ export function MatchCard({ session }: MatchCardProps) {
   return (
     <Link
       href={`/sessions/${sessionId}`}
-      className="group block rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-400 hover:shadow-md"
+      className="group block rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-400 hover:shadow-md"
     >
       {/* Top badges: Match Type, Escrow, Status */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-1.5">
-          <span className="rounded-lg bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700">
+          <span className="rounded-lg bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-700 leading-none">
             {matchType}
           </span>
           {session.depositRequired && (
-            <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+            <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 leading-none">
+              <ShieldCheck className="h-3 w-3 text-emerald-600 shrink-0" />
               <span>Có ký quỹ</span>
             </span>
           )}
@@ -129,14 +129,14 @@ export function MatchCard({ session }: MatchCardProps) {
 
       {/* Title */}
       <h3
-        className="mt-3 text-base font-bold text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-1"
+        className="mt-2 text-sm sm:text-[15px] font-bold text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-1 leading-snug"
         title={session.title}
       >
         {session.title}
       </h3>
 
       {/* Venue & District */}
-      <p className="mt-1 flex items-center gap-1.5 text-xs text-slate-500 line-clamp-1">
+      <p className="mt-1 flex items-center gap-1.5 text-xs text-slate-500 line-clamp-1 leading-none">
         <MapPin className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
         <span className="font-medium text-slate-700">{session.venueName}</span>
         {session.courtNumber ? <span>(Sân {session.courtNumber})</span> : null}
@@ -149,47 +149,44 @@ export function MatchCard({ session }: MatchCardProps) {
       </p>
 
       {/* Key Info Chips: Time, Skill, Players */}
-      <div className="mt-3.5 grid grid-cols-3 gap-2 rounded-xl bg-slate-50 p-2 text-xs text-slate-600">
+      <div className="mt-2.5 grid grid-cols-3 gap-2 rounded-xl bg-slate-50/80 px-2.5 py-1.5 text-xs text-slate-600">
         {/* Time */}
         <div className="flex flex-col">
-          <span className="text-[10px] uppercase font-semibold text-slate-400">
+          <span className="text-[10px] uppercase font-semibold text-slate-400 leading-none">
             Thời gian
           </span>
-          <span className="mt-0.5 font-bold text-slate-800">{time}</span>
-          <span className="text-[10px] text-slate-400">{date}</span>
+          <span className="mt-0.5 font-bold text-slate-800 text-xs leading-tight">{time}</span>
+          <span className="text-[10px] text-slate-400 leading-none">{date}</span>
         </div>
 
-        {/* Skill Range: first → last (or single) */}
+        {/* Skill Range */}
         <div className="flex flex-col">
-          <span className="text-[10px] uppercase font-semibold text-slate-400">
+          <span className="text-[10px] uppercase font-semibold text-slate-400 leading-none">
             Trình độ
           </span>
           <div className="mt-0.5">
-            <SkillBadge level={skillLevel} />
+            <SkillBadge level={skillLevel} className="text-[11px] px-2 py-0" />
           </div>
         </div>
 
         {/* Players */}
-        <div className="flex flex-col">
-          <span className="text-[10px] uppercase font-semibold text-slate-400">
+        <div className="flex flex-col items-end">
+          <span className="text-[10px] uppercase font-semibold text-slate-400 leading-none">
             Số người
           </span>
-          <span className="mt-0.5 font-bold text-slate-800">
+          <span className="mt-0.5 font-bold text-slate-800 text-xs leading-tight">
             {currentCount}/{maxCount}
           </span>
-          <span className="text-[10px] text-emerald-600">
+          <span className="text-[10px] text-emerald-600 font-medium leading-none">
             {slotsLeft > 0 ? `Còn ${slotsLeft} chỗ` : "Đã đủ"}
           </span>
         </div>
       </div>
 
       {/* Bottom Footer: Price & Link */}
-      <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs">
+      <div className="mt-2.5 flex items-center justify-between border-t border-slate-100 pt-2 text-xs">
         <div>
-          {/* <span className="text-[10px] uppercase font-semibold text-slate-400 block">
-            Chi phí
-          </span> */}
-          <span className="text-base font-extrabold text-emerald-600">
+          <span className="text-sm sm:text-[15px] font-extrabold text-emerald-600 leading-none">
             {session.price > 0
               ? `${session.price.toLocaleString("vi-VN")} đ`
               : "Miễn phí"}
@@ -199,7 +196,7 @@ export function MatchCard({ session }: MatchCardProps) {
           </span>
         </div>
 
-        <div className="inline-flex items-center gap-1 font-semibold text-emerald-700 group-hover:text-emerald-800">
+        <div className="inline-flex items-center gap-1 font-semibold text-emerald-700 group-hover:text-emerald-800 text-xs">
           <span>Chi tiết</span>
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
         </div>
