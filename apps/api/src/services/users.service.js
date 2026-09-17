@@ -11,6 +11,7 @@ export function toUserDto(user) {
     firebaseUid: user.firebaseUid,
     name: user.name,
     email: user.email,
+    phone: user.phone || "",
     avatar: user.avatar,
     bio: user.bio,
     gender: user.gender,

@@ -191,9 +191,23 @@ export default function SessionDetailsPage() {
   };
 
   return (
-    <RequireAuth>
-      <div className="space-y-6 animate-fadeUp">
-        <MatchCard session={session} />
+    <div className="space-y-6 animate-fadeUp">
+      {!user && (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/80 p-4 text-xs text-emerald-900 shadow-sm">
+          <span>
+            Bạn đang xem buổi chơi này ở chế độ khách. Hãy đăng nhập để tham gia
+            và nhận mã check-in bảo chứng.
+          </span>
+          <Link
+            href={`/login?redirect=/sessions/${params.id}`}
+            className="inline-flex shrink-0 items-center justify-center rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-600 transition shadow-sm"
+          >
+            Đăng nhập ngay
+          </Link>
+        </div>
+      )}
+
+      <MatchCard session={session} />
 
         {/* Escrow Trust & Cancellation Policy Banner */}
         <div className="rounded-3xl border border-emerald-200 bg-gradient-to-r from-emerald-50 via-teal-50 to-white p-5 shadow-sm">
@@ -265,11 +279,21 @@ export default function SessionDetailsPage() {
           {/* Join button */}
           {!myPlayer && (
             <button
-              onClick={() => joinMutation.mutate()}
+              onClick={() => {
+                if (!user) {
+                  router.push(`/login?redirect=/sessions/${params.id}`);
+                  return;
+                }
+                joinMutation.mutate();
+              }}
               disabled={joinMutation.isPending}
               className="rounded-full bg-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 disabled:opacity-50"
             >
-              {joinMutation.isPending ? "Đang gửi..." : "Tham gia buổi chơi"}
+              {joinMutation.isPending
+                ? "Đang gửi..."
+                : !user
+                  ? "Đăng nhập để tham gia buổi chơi"
+                  : "Tham gia buổi chơi"}
             </button>
           )}
 
@@ -720,6 +744,5 @@ export default function SessionDetailsPage() {
           }}
         />
       </div>
-    </RequireAuth>
   );
 }

@@ -5,9 +5,13 @@ export type AuthUser = {
   id: string;
   name: string;
   email?: string;
+  phone?: string;
   avatar?: string;
   skillLevel?: string;
+  district?: string;
   city?: string;
+  role?: string;
+  reputation?: number;
 };
 
 type AuthState = {
@@ -25,8 +29,18 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isReady: false,
-      setSession: ({ user, token }) => set({ user, token }),
-      clearSession: () => set({ user: null, token: null }),
+      setSession: ({ user, token }) => {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("clvl-jwt", token);
+        }
+        set({ user, token });
+      },
+      clearSession: () => {
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("clvl-jwt");
+        }
+        set({ user: null, token: null });
+      },
       markReady: () => set({ isReady: true }),
     }),
     {

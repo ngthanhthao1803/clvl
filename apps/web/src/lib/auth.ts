@@ -1,6 +1,7 @@
 import { signInWithPopup, signOut } from "firebase/auth";
 import { firebaseAuth, firebaseConfigError, googleProvider } from "./firebase";
 import { api } from "./api";
+import { useAuthStore } from "@/stores/auth-store";
 
 export async function signInWithGoogle() {
   if (firebaseConfigError) {
@@ -21,13 +22,23 @@ export async function signInWithGoogle() {
       name: string;
       avatar?: string;
       email?: string;
+      phone?: string;
       skillLevel?: string;
+      district?: string;
       city?: string;
     },
   };
 }
 
 export async function signOutSession() {
-  await signOut(firebaseAuth);
-  localStorage.removeItem("clvl-jwt");
+  try {
+    if (firebaseAuth) {
+      await signOut(firebaseAuth);
+    }
+  } catch {}
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("clvl-jwt");
+  }
+  useAuthStore.getState().clearSession();
+  window.location.href = "/";
 }

@@ -17,6 +17,22 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+export const authApi = {
+  register: (payload: {
+    name: string;
+    email: string;
+    password: string;
+    phone?: string;
+    skillLevel?: string;
+    district?: string;
+    city?: string;
+  }) => api.post("/auth/register", payload),
+  login: (payload: { email: string; password: string }) =>
+    api.post("/auth/login", payload),
+  getMe: () => api.get("/auth/me"),
+  logout: () => api.post("/auth/logout"),
+};
+
 export const sessionsApi = {
   updateSession: (id: string, payload: any) =>
     api.patch(`/sessions/${id}`, payload),

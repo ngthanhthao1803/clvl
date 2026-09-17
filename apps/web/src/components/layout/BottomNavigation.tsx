@@ -27,7 +27,7 @@ export function BottomNavigation() {
     { href: "/sessions/create", label: "Tạo", icon: Plus },
     { href: "/notifications", label: "Thông báo", icon: Bell },
     {
-      href: user ? `/profile/${user.id}` : "/settings",
+      href: user ? `/profile/${user.id}` : "/login",
       label: "Tài khoản",
       icon: UserRound,
     },

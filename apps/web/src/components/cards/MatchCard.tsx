@@ -186,9 +186,9 @@ export function MatchCard({ session }: MatchCardProps) {
       {/* Bottom Footer: Price & Link */}
       <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs">
         <div>
-          <span className="text-[10px] uppercase font-semibold text-slate-400 block">
+          {/* <span className="text-[10px] uppercase font-semibold text-slate-400 block">
             Chi phí
-          </span>
+          </span> */}
           <span className="text-base font-extrabold text-emerald-600">
             {session.price > 0
               ? `${session.price.toLocaleString("vi-VN")} đ`

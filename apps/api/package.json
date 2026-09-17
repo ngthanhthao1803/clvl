@@ -13,6 +13,7 @@
     "seed:venues": "node scripts/seed-venues.mjs"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.0",
     "express": "^5.0.0",

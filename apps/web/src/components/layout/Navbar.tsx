@@ -63,15 +63,24 @@ export function Navbar() {
             ) : null}
           </Link>
           {user ? (
-            <Link
-              href={`/profile/${user.id}`}
-              className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700"
-            >
-              <span className="h-7 w-7 rounded-full bg-slate-200" />
-              <span className="hidden sm:inline">{user.name}</span>
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link
+                href={`/profile/${user.id}`}
+                className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-emerald-300 hover:bg-emerald-50 transition"
+              >
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-bold text-emerald-800">
+                  {(user.name?.[0] || "U").toUpperCase()}
+                </div>
+                <span className="max-w-[120px] truncate">{user.name}</span>
+              </Link>
+            </div>
           ) : (
-            <GoogleLoginButton />
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-emerald-600 transition"
+            >
+              <span>Đăng nhập / Đăng ký</span>
+            </Link>
           )}
         </div>
       </div>

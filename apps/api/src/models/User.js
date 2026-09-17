@@ -1,16 +1,26 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
-    firebaseUid: { type: String, required: true, unique: true, index: true },
+    firebaseUid: {
+      type: String,
+      required: false,
+      unique: true,
+      index: true,
+      sparse: true,
+    },
+    password: { type: String, required: false, select: false },
     name: { type: String, required: true, trim: true, maxlength: 80 },
     email: {
       type: String,
       trim: true,
       lowercase: true,
+      unique: true,
       index: true,
       sparse: true,
     },
+    phone: { type: String, trim: true },
     avatar: { type: String, trim: true },
     bio: { type: String, trim: true, maxlength: 400, default: "" },
     gender: {
@@ -21,14 +31,28 @@ const userSchema = new mongoose.Schema(
     skillLevel: {
       type: String,
       enum: [
+        "Newbie",
+        "Yếu",
+        "Yếu+",
+        "TBY-",
+        "TBY",
+        "TBY+",
+        "TB-",
+        "TB",
+        "TB+",
+        "Khá-",
+        "Khá",
+        "Khá+",
+        "Pro",
+        "Bán chuyên",
+        "Trình giải",
         "Beginner",
         "Intermediate",
         "Intermediate+",
         "Advanced",
         "Advanced+",
-        "Pro",
       ],
-      default: "Beginner",
+      default: "TB",
       index: true,
     },
     dominantHand: {
@@ -41,7 +65,7 @@ const userSchema = new mongoose.Schema(
       enum: ["front", "back", "left", "right", "all-round"],
       default: "all-round",
     },
-    city: { type: String, trim: true, index: true },
+    city: { type: String, trim: true, index: true, default: "Hồ Chí Minh" },
     district: { type: String, trim: true, index: true },
     playSchedule: [{ type: String, trim: true }],
     rating: { type: Number, default: 0, min: 0, max: 5 },
@@ -68,5 +92,25 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.index({ name: "text", bio: "text", city: "text", district: "text" });
+
+// Hash password before save
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password") || !this.password) {
+    return next();
+  }
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+});
+
+// Compare password method
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  if (!this.password) return false;
+  return bcrypt.compare(enteredPassword, this.password);
+};
 
 export const User = mongoose.model("User", userSchema);
