@@ -29,30 +29,45 @@ const resolveTone = (value: string) => {
 };
 
 export function SkillBadge({ level, className }: SkillBadgeProps) {
-  const levels = Array.isArray(level) ? level : [level];
+  const levels = (Array.isArray(level) ? level : [level]).filter(Boolean);
 
-  if (levels.length > 1) {
+  if (levels.length === 0) {
     return (
-      <div className={clsx("flex flex-wrap gap-2", className)}>
-        {levels.map((item) => (
-          <span
-            key={item}
-            className={clsx(
-              "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ring-1",
-              resolveTone(item),
-            )}
-          >
-            {item}
-          </span>
-        ))}
-      </div>
+      <span
+        className={clsx(
+          "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-slate-200 bg-slate-50 text-slate-700",
+          className,
+        )}
+      >
+        Tự do
+      </span>
     );
   }
 
+  // If multiple levels are specified, show: first → last
+  if (levels.length > 1 && levels[0] !== levels[levels.length - 1]) {
+    const first = levels[0];
+    const last = levels[levels.length - 1];
+    return (
+      <span
+        className={clsx(
+          "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1",
+          resolveTone(last),
+          className,
+        )}
+      >
+        <span>{first}</span>
+        <span className="opacity-60 font-normal">→</span>
+        <span>{last}</span>
+      </span>
+    );
+  }
+
+  // Single skill level (no arrow)
   return (
     <span
       className={clsx(
-        "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ring-1",
+        "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1",
         resolveTone(levels[0]),
         className,
       )}

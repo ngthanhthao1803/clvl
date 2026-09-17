@@ -1,4 +1,5 @@
 import { Session } from "../models/Session.js";
+import { Venue } from "../models/Venue.js";
 import { AppError } from "../utils/AppError.js";
 import { createNotification } from "./notifications.service.js";
 
@@ -49,8 +50,38 @@ export async function createSession(hostId, payload) {
         ? Math.min(payload.price, 50000)
         : 50000;
 
+  let geoFields = {};
+  const venueIdToLook = payload.venueId || payload.venue;
+  if (venueIdToLook) {
+    try {
+      const vDoc = await Venue.findById(venueIdToLook).lean();
+      if (vDoc?.latitude && vDoc?.longitude) {
+        geoFields = {
+          latitude: vDoc.latitude,
+          longitude: vDoc.longitude,
+          location: vDoc.location,
+          googleMapsUrl: vDoc.googleMapsUrl,
+        };
+      }
+    } catch {}
+  }
+  if (!geoFields.latitude && payload.venueName) {
+    try {
+      const vDoc = await Venue.findOne({ name: payload.venueName }).lean();
+      if (vDoc?.latitude && vDoc?.longitude) {
+        geoFields = {
+          latitude: vDoc.latitude,
+          longitude: vDoc.longitude,
+          location: vDoc.location,
+          googleMapsUrl: vDoc.googleMapsUrl,
+        };
+      }
+    } catch {}
+  }
+
   const session = await Session.create({
     ...payload,
+    ...geoFields,
     ...(normalizedSkills ? { skillRequirements: normalizedSkills } : {}),
     venue: payload.venueId,
     host: hostId,

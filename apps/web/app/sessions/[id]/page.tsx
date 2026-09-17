@@ -17,9 +17,11 @@ import {
   ShieldCheck,
   UserX,
   Wallet,
+  Navigation,
 } from "lucide-react";
 import { api, paymentsApi, sessionsApi } from "@/lib/api";
 import { MatchCard } from "@/components/cards/MatchCard";
+import { MapWrapper } from "@/components/map/MapWrapper";
 import { RequireAuth } from "@/components/auth/RequireAuth";
 import { useAuthStore } from "@/stores/auth-store";
 import { PaymentQRModal } from "@/components/modals/PaymentQRModal";
@@ -585,6 +587,99 @@ export default function SessionDetailsPage() {
             </div>
           </section>
         )}
+
+        {/* Venue Address & Interactive Map */}
+        <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-glow">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-700">
+                <MapPin className="h-4 w-4" />
+                <span>Địa Chỉ & Sân Đấu</span>
+              </div>
+              <h2 className="mt-1 text-lg font-bold text-slate-900">
+                {session.venueName}
+              </h2>
+              <p className="mt-0.5 text-xs text-slate-500">
+                {session.venue?.address ||
+                  session.address ||
+                  `${session.district || ""}, ${session.city || "TP. Hồ Chí Minh"}`}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href={
+                  session.googleMapsUrl ||
+                  session.venue?.googleMapsUrl ||
+                  (session.latitude && session.longitude
+                    ? `https://www.google.com/maps/dir/?api=1&destination=${session.latitude},${session.longitude}`
+                    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        session.venueName + " " + (session.district || ""),
+                      )}`)
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-emerald-600 transition"
+              >
+                <Navigation className="h-3.5 w-3.5 text-emerald-400" />
+                <span>Chỉ đường Google Maps</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
+            <MapWrapper
+              venues={[
+                {
+                  id: session.id ?? session._id ?? "session",
+                  sessionId: session.id ?? session._id ?? "session",
+                  name: session.venueName,
+                  address:
+                    session.venue?.address ||
+                    `${session.district || ""}, ${session.city || ""}`,
+                  district: session.district,
+                  city: session.city,
+                  latitude: Number(
+                    session.latitude ||
+                      session.venue?.latitude ||
+                      10.896255,
+                  ),
+                  longitude: Number(
+                    session.longitude ||
+                      session.venue?.longitude ||
+                      106.5840769,
+                  ),
+                  price: session.price,
+                  sessionTitle: session.title,
+                  slotsLeft: Math.max(
+                    0,
+                    (session.maxPlayers || 8) -
+                      (session.currentPlayersCount || 1),
+                  ),
+                  maxPlayers: session.maxPlayers || 8,
+                  datetime: session.datetime,
+                  googleMapsUrl:
+                    session.googleMapsUrl || session.venue?.googleMapsUrl,
+                },
+              ]}
+              selectedId={session.id ?? session._id}
+              center={[
+                Number(
+                  session.latitude ||
+                    session.venue?.latitude ||
+                    10.896255,
+                ),
+                Number(
+                  session.longitude ||
+                    session.venue?.longitude ||
+                    106.5840769,
+                ),
+              ]}
+              zoom={14}
+              className="h-[280px] w-full"
+            />
+          </div>
+        </section>
 
         {/* Notes */}
         <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-glow">

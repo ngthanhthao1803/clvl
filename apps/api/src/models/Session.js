@@ -112,10 +112,25 @@ const sessionSchema = new mongoose.Schema(
       default: "none",
     },
     totalEscrowHeld: { type: Number, default: 0, min: 0 },
+    latitude: { type: Number, required: false },
+    longitude: { type: Number, required: false },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], // [lng, lat]
+        default: [106.6297, 10.8231],
+      },
+    },
+    googleMapsUrl: { type: String, trim: true },
   },
   { timestamps: true },
 );
 
 sessionSchema.index({ city: 1, district: 1, datetime: 1, status: 1 });
+sessionSchema.index({ location: "2dsphere" });
 
 export const Session = mongoose.model("Session", sessionSchema);

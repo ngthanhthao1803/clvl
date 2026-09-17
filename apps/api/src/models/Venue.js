@@ -22,6 +22,21 @@ const venueSchema = new mongoose.Schema(
       required: false,
       index: true,
     },
+    latitude: { type: Number, required: false },
+    longitude: { type: Number, required: false },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], // [lng, lat]
+        default: [106.6297, 10.8231],
+      },
+    },
+    googleMapsUrl: { type: String, trim: true },
+    phone: { type: String, trim: true },
     rating: { type: Number, default: 0, min: 0, max: 5 },
     reviewCount: { type: Number, default: 0, min: 0 },
     isActive: { type: Boolean, default: true },
@@ -35,5 +50,7 @@ venueSchema.index({
   district: "text",
   city: "text",
 });
+
+venueSchema.index({ location: "2dsphere" });
 
 export const Venue = mongoose.model("Venue", venueSchema);

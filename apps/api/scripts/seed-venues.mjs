@@ -66,6 +66,11 @@ function toVenuePayload(entry) {
   const district = extractDistrict(entry);
   const address = entry.address || entry.street || entry.title;
 
+  const lat = entry.location?.lat ? Number(entry.location.lat) : undefined;
+  const lng = entry.location?.lng ? Number(entry.location.lng) : undefined;
+  const hasGeo =
+    typeof lat === "number" && !isNaN(lat) && typeof lng === "number" && !isNaN(lng);
+
   return {
     name: entry.title.trim(),
     address: address.trim(),
@@ -78,6 +83,17 @@ function toVenuePayload(entry) {
     rating: Number(entry.totalScore) || 4.5,
     reviewCount: Number(entry.reviewsCount) || 10,
     isActive: true,
+    latitude: hasGeo ? lat : undefined,
+    longitude: hasGeo ? lng : undefined,
+    location: hasGeo
+      ? { type: "Point", coordinates: [lng, lat] }
+      : { type: "Point", coordinates: [106.6297, 10.8231] },
+    googleMapsUrl:
+      entry.url ||
+      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        entry.title + " " + address,
+      )}`,
+    phone: entry.phone || "",
   };
 }
 
