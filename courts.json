@@ -1,0 +1,5656 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-06-18T14:27:10Z",
+    "timestamp_areas_base": "2026-05-12T07:36:16Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+    {
+      "type": "node",
+      "id": 9586881865,
+      "lat": 10.7471263,
+      "lon": 106.6985988,
+      "tags": {
+        "leisure": "pitch",
+        "name": "Câu Lạc Bộ Cầu Lông T793",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "node",
+      "id": 11754636541,
+      "lat": 10.8002755,
+      "lon": 106.6700708,
+      "tags": {
+        "access": "customers",
+        "addr:city": "Ho Chi Minh City",
+        "addr:district": "Phú Nhuận",
+        "addr:housenumber": "202B",
+        "addr:postcode": "72215",
+        "addr:province": "Hồ Chí Minh",
+        "addr:street": "Hoàng Văn Thụ",
+        "addr:subdistrict": "Phường 9",
+        "description": "Sân Cầu, Giao Lưu & Thi Đấu",
+        "leisure": "pitch",
+        "name": "CLB Cầu Lông Hoàng Văn Thụ",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "node",
+      "id": 11979078815,
+      "lat": 10.8513037,
+      "lon": 106.6286597,
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12184085591,
+      "lat": 11.9002194,
+      "lon": 107.002606,
+      "tags": {
+        "access": "yes",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "Sân cầu lông Linh Vy Sport",
+        "sport": "badminton",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12387903617,
+      "lat": 20.9839319,
+      "lon": 105.8068835,
+      "tags": {
+        "name": "Sân cầu lông BMC Nguyễn Xiển",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12387918642,
+      "lat": 20.9834057,
+      "lon": 105.8064029,
+      "tags": {
+        "name": "Sân cầu lông 4T Nguyễn Xiển",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12418249325,
+      "lat": 10.7664071,
+      "lon": 106.6000565,
+      "tags": {
+        "access": "yes",
+        "addr:city": "Hồ Chí Minh",
+        "addr:district": "Bình Tân",
+        "addr:housenumber": "859",
+        "addr:postcode": "762300",
+        "addr:province": "Hồ Chí Minh",
+        "addr:street": "Hương Lộ 2",
+        "addr:subdistrict": "Bình Trị Đông A",
+        "leisure": "pitch",
+        "name": "Sân Cầu Lông The B Hương Lộ 2",
+        "sport": "badminton",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12496314223,
+      "lat": 10.8270363,
+      "lon": 106.7018339,
+      "tags": {
+        "access": "yes",
+        "leisure": "pitch",
+        "lit": "no",
+        "name": "Outdoor badminton court",
+        "sport": "badminton",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12508525731,
+      "lat": 20.9839411,
+      "lon": 105.8038597,
+      "tags": {
+        "name": "Sân cầu lông 1991",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12508582178,
+      "lat": 20.9835497,
+      "lon": 105.8041173,
+      "tags": {
+        "name": "Sân cầu lông A&C",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "node",
+      "id": 12647601302,
+      "lat": 10.6717372,
+      "lon": 105.5576055,
+      "tags": {
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "Leduc Badminton",
+        "phone": "+84 946 504 357",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13397876603,
+      "lat": 21.1599951,
+      "lon": 106.0402996,
+      "tags": {
+        "addr:city": "Bắc Ninh",
+        "addr:district": "Thành phố Bắc Ninh",
+        "addr:province": "Bac Ninh",
+        "addr:subdistrict": "Phường Võ Cường",
+        "leisure": "pitch",
+        "name": "Sân cầu lông Hưng Con",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13397876647,
+      "lat": 21.1786405,
+      "lon": 106.0787256,
+      "tags": {
+        "addr:city": "Bắc Ninh",
+        "addr:district": "Thành phố Bắc Ninh",
+        "addr:province": "Bac Ninh",
+        "addr:subdistrict": "Phường Đại Phúc",
+        "leisure": "pitch",
+        "name": "Sân cầu lông Hưng Ánh",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13433896662,
+      "lat": 20.9477228,
+      "lon": 105.9743123,
+      "tags": {
+        "leisure": "pitch",
+        "name": "Sân cầu lông.",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13579698304,
+      "lat": 10.7148856,
+      "lon": 106.626184,
+      "tags": {
+        "description:surface": "thảm_chuyên_dùng,_08_sân,_có_khán_đài,_chuẩn_thi_đấu",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "Rạch Cát Badminton Club",
+        "parking": "yes",
+        "ref": "70000",
+        "sport": "badminton",
+        "toilets": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13798209225,
+      "lat": 10.7656722,
+      "lon": 107.8894202,
+      "tags": {
+        "access": "permit",
+        "leisure": "pitch",
+        "name": "Sân cầu lông trong Uỷ ban",
+        "sport": "badminton",
+        "surface": "concrete"
+      }
+    },
+    {
+      "type": "way",
+      "id": 118946692,
+      "nodes": [1337153787, 1337153509, 1337153917, 1337153681, 1337153787],
+      "tags": {
+        "building": "yes",
+        "leisure": "sports_hall",
+        "name": "Nhà thi đấu Cầu lông",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 126759149,
+      "nodes": [1404352939, 1404352925, 1404352923, 1404352935, 1404352939],
+      "tags": {
+        "building": "yes",
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 186584462,
+      "nodes": [1973325713, 1973325714, 1973325710, 1973325709, 1973325713],
+      "tags": {
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 290230759,
+      "nodes": [2937886898, 2937886899, 2937886900, 2937886896, 2937886898],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 290230760,
+      "nodes": [2937886898, 2937887001, 2937887002, 2937886899, 2937886898],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 331167453,
+      "nodes": [
+        3382292771, 3382292772, 3382292737, 3382292736, 3382292753, 3382292752,
+        3382292754, 3382292755, 3382292771
+      ],
+      "tags": {
+        "building": "yes",
+        "name": "Hồ bơi Phú Thọ",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 543808063,
+      "nodes": [5256938564, 5256938561, 5256938562, 5256938563, 5256938564],
+      "tags": {
+        "building": "yes",
+        "leisure": "sports_hall",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 543840870,
+      "nodes": [5257213944, 5257213943, 5257213942, 5257213941, 5257213944],
+      "tags": {
+        "building": "yes",
+        "leisure": "stadium",
+        "name": "Sân Cầu Lông TamBo",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 589521925,
+      "nodes": [5629422917, 5629422916, 5629422915, 5629422914, 5629422917],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 589521926,
+      "nodes": [5629423321, 5629422920, 5629422919, 5629422918, 5629423321],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 609967462,
+      "nodes": [5777094096, 5777094095, 5777094094, 5777094093, 5777094096],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 721852508,
+      "nodes": [
+        6771442607, 6771442608, 9939001360, 6771442609, 9939001361, 6771442611,
+        6771442612, 6771442613, 6771442614, 6771442615, 6771442616, 6771442617,
+        6771442618, 6771442619, 6771442620, 6771442621, 6771442622, 6771442623,
+        6771442624, 6771442625, 6771442626, 2645632761, 4828651657, 2645632760,
+        4828651658, 4828651676, 2645632759, 6771442631, 4828651660, 2645632757,
+        4828651661, 9939001362, 6771442636, 6771442637, 6771442638, 6771442639,
+        6771442640, 6771442641, 6771442642, 6771442643, 6771442644, 6771442645,
+        6771442607
+      ],
+      "tags": {
+        "building": "yes",
+        "leisure": "sports_centre",
+        "name": "Nhà thi đấu ĐH KHXH&NV",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 755376840,
+      "nodes": [11170051927, 11170051928, 7056058485, 7056058486, 11170051927],
+      "tags": {
+        "leisure": "pitch",
+        "lit": "yes",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 786415062,
+      "nodes": [7353156953, 7353156952, 7353156951, 7353156950, 7353156953],
+      "tags": {
+        "building": "sports_hall",
+        "leisure": "sports_hall",
+        "name": "CLB Cầu lông Trung Thành",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 807423449,
+      "nodes": [7550423326, 7550423327, 7550423328, 7550423329, 7550423326],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 889424136,
+      "nodes": [8268871282, 8268871283, 8268871284, 8268871285, 8268871282],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 961208464,
+      "nodes": [
+        8891690418, 8891690419, 8891690420, 8891690421, 8891690422, 8891690423,
+        8891690424, 8891690425, 8891690426, 8891690427, 8891690418
+      ],
+      "tags": {
+        "addr:city": "Hà Nội",
+        "addr:district": "Cầu Giấy",
+        "addr:housenumber": "1",
+        "addr:postcode": "10036",
+        "addr:province": "Hà Nội",
+        "addr:street": "Phố Tôn Thất Thuyết",
+        "addr:subdistrict": "Yên Hòa",
+        "building": "house",
+        "leisure": "sports_hall",
+        "name": "Sân cầu lông TVC",
+        "opening_hours": "24/7",
+        "operator": "TVC Sports",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 978035284,
+      "nodes": [9049791291, 9049791292, 9049791294, 9049791293, 9049791291],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 978035285,
+      "nodes": [9049791293, 9049791294, 9049791295, 9049791296, 9049791293],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 982766475,
+      "nodes": [9087718471, 9087718472, 9087718473, 9087718474, 9087718471],
+      "tags": {
+        "access": "yes",
+        "area": "yes",
+        "description": "Khu giáo dục thể chất",
+        "leisure": "pitch",
+        "lit": "no",
+        "playground": "yes",
+        "sport": "badminton",
+        "surface": "concrete"
+      }
+    },
+    {
+      "type": "way",
+      "id": 992658930,
+      "nodes": [9171288755, 9171288756, 9171288757, 9171288758, 9171288755],
+      "tags": {
+        "building": "yes",
+        "leisure": "sports_centre",
+        "name": "Nhà thi đấu quận 12",
+        "phone": "+84396916078",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1037268130,
+      "nodes": [9555409563, 9555409564, 9555409565, 9555409566, 9555409563],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1117762086,
+      "nodes": [
+        10223135323, 10223135324, 10223135325, 10223135326, 10223135323
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1117762087,
+      "nodes": [
+        10223135327, 10223135328, 10223135329, 10223135330, 10223135327
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1117846971,
+      "nodes": [
+        10223837889, 10223837890, 10223837891, 10223837892, 10223837889
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1117846972,
+      "nodes": [
+        10223837893, 10223837894, 10223837895, 10223837896, 10223837893
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1121009601,
+      "nodes": [
+        10209380669, 10253350344, 10253350345, 10253350346, 10209380669
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1121013614,
+      "nodes": [
+        11593386712, 11593386713, 11593386714, 11593386715, 11593386712
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1121013615,
+      "nodes": [
+        10253401284, 10253401285, 10253401286, 10253401283, 10253401284
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1123053910,
+      "nodes": [
+        10270760845, 10270760846, 10270760847, 10270760848, 10270760845
+      ],
+      "tags": {
+        "access": "private",
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1123085025,
+      "nodes": [
+        10271068955, 10271068956, 10271068957, 10271068958, 10271068955
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1163526189,
+      "nodes": [
+        10820828057, 10820828059, 10820828060, 10829795517, 10820828058,
+        10820828057
+      ],
+      "tags": {
+        "access": "private",
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1163665650,
+      "nodes": [
+        10822317236, 10822317237, 10822317238, 10822317239, 10822317236
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "lit": "no",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1172354222,
+      "nodes": [
+        10892814137, 10892814138, 10892814139, 10892814140, 10892814137
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "name": "Sân cầu lông 29/12",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1173732827,
+      "nodes": [
+        10905590997, 10905590998, 11633981634, 11633981636, 11633981637,
+        10905590997
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1173732828,
+      "nodes": [
+        10905591001, 11633981641, 11633981643, 10905591002, 10905591003,
+        10905591004, 10905591001
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1173732853,
+      "nodes": [
+        10905600651, 10905600652, 10905600653, 10905600654, 10905600651
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1180587893,
+      "nodes": [
+        10964817973, 10964817974, 10964817975, 10964817976, 10964817973
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1182478978,
+      "nodes": [
+        10980777548, 10980777549, 10980777550, 10980777551, 10980777552,
+        10980777553, 10980777548
+      ],
+      "tags": {
+        "access": "yes",
+        "leisure": "pitch",
+        "name": "Sân Cầu lông",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1189409902,
+      "nodes": [
+        11044254072, 11044254073, 11044254074, 11044254075, 11044254072
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1189409903,
+      "nodes": [
+        11044254076, 11044254077, 11044254078, 11044254079, 11044254076
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1189409904,
+      "nodes": [
+        11044254080, 11044254081, 11044254082, 11044254083, 11044254080
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1190945132,
+      "nodes": [
+        11057862826, 11057862827, 11057862828, 11057862829, 11057862826
+      ],
+      "tags": {
+        "access": "private",
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1190945133,
+      "nodes": [
+        11057862830, 11057862831, 11057862832, 11057862833, 11057862830
+      ],
+      "tags": {
+        "access": "private",
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1191706087,
+      "nodes": [
+        11064186403, 11064186404, 11064198205, 11064198206, 11064186403
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1191706088,
+      "nodes": [
+        11064186404, 11064198207, 11064198208, 11064198205, 11064186404
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1191706089,
+      "nodes": [
+        11064198207, 11064198209, 11064198210, 11064198208, 11064198207
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1191706090,
+      "nodes": [
+        11064198209, 11064198211, 11064198212, 11064198210, 11064198209
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1191706091,
+      "nodes": [
+        11064198206, 11064198205, 11064198213, 11064198214, 11064198206
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1191706092,
+      "nodes": [
+        11064198205, 11064198208, 11064198215, 11064198213, 11064198205
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1191706093,
+      "nodes": [
+        11064198208, 11064198210, 11064198216, 11064198215, 11064198208
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1191706094,
+      "nodes": [
+        11064198210, 11064198212, 11064198217, 11064198216, 11064198210
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1194927117,
+      "nodes": [
+        11091109008, 11091109011, 11091109010, 11091109007, 11091109008
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1194927118,
+      "nodes": [
+        11091109006, 11091109012, 11091109013, 11091109009, 11091109006
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1197473332,
+      "nodes": [
+        11110289863, 11110289864, 11110289865, 11110289866, 11110289863
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1197473333,
+      "nodes": [
+        11110289867, 11110289868, 11110289869, 11110289870, 11110289867
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1197473334,
+      "nodes": [
+        11110289871, 11110289872, 11110289873, 11110289874, 11110289871
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1197473335,
+      "nodes": [
+        11110289875, 11110289876, 11110289877, 11110289878, 11110289875
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1201883643,
+      "nodes": [
+        11143168103, 11143168104, 11143178805, 11143178806, 11143168103
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1201883644,
+      "nodes": [
+        11143178807, 11143178808, 11143178809, 11143178810, 11143178807
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1205399757,
+      "nodes": [
+        11171104886, 11171104887, 11171104888, 11171104889, 11171104886
+      ],
+      "tags": {
+        "access": "permissive",
+        "check_date": "2024-06-25",
+        "covered": "no",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "S1 Badminton Court 2",
+        "name:en": "S1 Badminton Court 2",
+        "name:vi": "S1 Sân Cầu Lông 2",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1205399775,
+      "nodes": [
+        11171143178, 11171143179, 11171143180, 11171143181, 11171143178
+      ],
+      "tags": {
+        "access": "permissive",
+        "check_date": "2024-06-25",
+        "covered": "no",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "S1 Badminton Court 1",
+        "name:en": "S1 Badminton Court 1",
+        "name:vi": "S1 Sân Cầu Lông 1",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1206157074,
+      "nodes": [
+        11176855147, 11176855148, 11176855149, 11176855150, 11176855147
+      ],
+      "tags": {
+        "access": "private",
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1206157091,
+      "nodes": [
+        11176855230, 11176855231, 11176855232, 11176855233, 11176855230
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1206157092,
+      "nodes": [
+        11176855234, 11176855235, 11176855236, 11176855237, 11176855234
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1206350896,
+      "nodes": [
+        11178508232, 11178508233, 11178508234, 11178508235, 11178508232
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1208748081,
+      "nodes": [
+        11199616729, 11199616728, 11199616727, 11199616726, 11199616729
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton",
+        "surface": "concrete"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1208748082,
+      "nodes": [
+        11199616733, 11199616732, 11199616731, 11199616730, 11199616733
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton",
+        "surface": "concrete"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1210016573,
+      "nodes": [
+        11209972400, 11209972401, 11209972402, 11209972403, 11209972400
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1221219166,
+      "nodes": [
+        11323015246, 11323015247, 11323015248, 11323015249, 11323015246
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1221219167,
+      "nodes": [
+        11323015250, 11323015251, 11323015252, 11323015253, 11323015250
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1222468028,
+      "nodes": [
+        11338000015, 11338000016, 11171143305, 11171143304, 11338000015
+      ],
+      "tags": {
+        "access": "permissive",
+        "check_date": "2024-06-25",
+        "covered": "no",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "Bien Ho Badminton Court 2",
+        "name:en": "Bien Ho Badminton Court 2",
+        "name:vi": "Biển Hồ Sân Cầu Lông 2",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1222468029,
+      "nodes": [
+        11338000015, 11171143306, 11171143307, 11338000016, 11338000015
+      ],
+      "tags": {
+        "access": "permissive",
+        "check_date": "2024-06-25",
+        "covered": "no",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "Bien Ho Badminton Court 1",
+        "name:en": "Bien Ho Badminton Court 1",
+        "name:vi": "Biển Hồ Sân Cầu Lông 1",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1222751827,
+      "nodes": [
+        11341398669, 11341398670, 11341398671, 11341398672, 11341398669
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1223147659,
+      "nodes": [
+        11345877095, 11345877096, 11345877097, 11345877098, 11345877095
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1223147665,
+      "nodes": [
+        11345877117, 11345877118, 11345877119, 11345877120, 11345877117
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1223164937,
+      "nodes": [
+        11346009456, 11346009457, 11346009458, 11346009459, 11346010713,
+        11346009456
+      ],
+      "tags": {
+        "access": "permissive",
+        "check_date": "2024-06-26",
+        "covered": "no",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "Ngoc Trai Badminton Court",
+        "name:vi": "Ngọc Trai Sân Cầu Lông",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1223164976,
+      "nodes": [
+        11346010808, 11346010809, 11346010810, 11346010811, 11346010808
+      ],
+      "tags": {
+        "access": "permissive",
+        "check_date": "2024-06-26",
+        "covered": "no",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "Ngoc Trai Badminton Court",
+        "name:en": "Ngoc Trai Badminton Court",
+        "name:vi": "Ngọc Trai Sân Cầu Lông",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1223164977,
+      "nodes": [
+        11346010811, 11346011101, 11346010812, 11346010813, 11346010810,
+        11346010811
+      ],
+      "tags": {
+        "access": "permissive",
+        "check_date": "2024-06-26",
+        "covered": "no",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "Ngoc Trai Badminton Court",
+        "name:en": "Ngoc Trai Badminton Court",
+        "name:vi": "Ngọc Trai Sân Cầu Lông",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1223678136,
+      "nodes": [
+        11350267665, 11350267666, 11350267667, 11350267668, 11350267665
+      ],
+      "tags": {
+        "access": "permissive",
+        "check_date": "2024-06-25",
+        "covered": "no",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "Bien Ho Badminton Court 3",
+        "name:en": "Bien Ho Badminton Court 3",
+        "name:vi": "Biển Hồ Sân Cầu Lông 3",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1225581682,
+      "nodes": [
+        11365640481, 11365640485, 11365640489, 11365640486, 11365640482,
+        11365640481
+      ],
+      "tags": {
+        "access": "permissive",
+        "check_date": "2024-06-25",
+        "covered": "no",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "S2 Badminton Court 1",
+        "name:en": "S2 Badminton Court 1",
+        "name:vi": "S2 Sân Cầu Lông 1",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1226672992,
+      "nodes": [
+        11374986696, 11374986697, 11374986698, 11374986695, 11374986696
+      ],
+      "tags": {
+        "access": "permissive",
+        "check_date": "2024-06-25",
+        "covered": "no",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "Sao Bien Badminton Court 1",
+        "name:en": "Sao Bien Badminton Court 1",
+        "name:vi": "Sao Biển Sân Cầu Lông 1",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1226679162,
+      "nodes": [
+        11375040995, 11375040998, 11375040999, 11375041000, 11375040995
+      ],
+      "tags": {
+        "access": "permissive",
+        "check_date": "2024-06-25",
+        "covered": "no",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "Hai Au Badminton Court 1",
+        "name:en": "Hai Au Badminton Court 1",
+        "name:vi": "Hải Âu Sân Cầu Lông 1",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1228194782,
+      "nodes": [
+        11389436678, 11389436681, 11389436682, 11389436683, 11389436678
+      ],
+      "tags": {
+        "access": "private",
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1228194783,
+      "nodes": [
+        11389436683, 11389436684, 11389436685, 11389436682, 11389436683
+      ],
+      "tags": {
+        "access": "private",
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1228194784,
+      "nodes": [
+        11389436685, 11389436686, 11389436687, 11389436684, 11389436685
+      ],
+      "tags": {
+        "access": "private",
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1228194785,
+      "nodes": [
+        11389436687, 11389436679, 11389436688, 11389436686, 11389436687
+      ],
+      "tags": {
+        "access": "private",
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1229058073,
+      "nodes": [
+        11397904011, 11397904012, 11397904013, 11397904014, 11397904011
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1229058074,
+      "nodes": [
+        11397904015, 11397904016, 11397904017, 11397904018, 11397904015
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1232948933,
+      "nodes": [
+        11438495926, 11438495927, 11438495928, 11438495929, 11438495926
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1238602787,
+      "nodes": [
+        11505935204, 11505935207, 11505935208, 11505935205, 11505935204
+      ],
+      "tags": {
+        "access": "permissive",
+        "covered": "no",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "Zenpark Badminton Court 1",
+        "name:en": "Zenpark Badminton Court 1",
+        "name:vi": "Zenpark Sân Cầu Lông 1",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1243476219,
+      "nodes": [
+        11556835428, 11556835429, 11556835430, 11556835431, 11556835428
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1243476220,
+      "nodes": [
+        11556835432, 11556835433, 11556835434, 11556835435, 11556835432
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1243476228,
+      "nodes": [
+        11556835508, 11556835509, 11556835510, 11556835511, 11556835508
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1247282608,
+      "nodes": [
+        11595048054, 11595048055, 11595048056, 11595048057, 11595048054
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1247282609,
+      "nodes": [
+        11595048058, 11595048059, 11595048060, 11595048061, 11595048058
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1247591273,
+      "nodes": [
+        11597930434, 11597930435, 11597930436, 11597930437, 11597930434
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1247591274,
+      "nodes": [
+        11597930438, 11597930439, 11597930440, 11597930441, 11597930438
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1248964752,
+      "nodes": [
+        11609106042, 11609106043, 11609106044, 11609106045, 11609106042
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1248964753,
+      "nodes": [
+        11609106046, 11609106047, 11609106048, 11609106049, 11609106046
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1248970104,
+      "nodes": [
+        11609373748, 11609373749, 11609373750, 11609373751, 11609373748
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1249789677,
+      "nodes": [
+        11617804897, 11617804898, 11617804899, 11617804900, 11617804897
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1249789678,
+      "nodes": [
+        11617804901, 11617804902, 11617804903, 11617804904, 11617804901
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1250830092,
+      "nodes": [
+        11627183391, 11627183392, 11627183393, 11627183394, 11627183391
+      ],
+      "tags": {
+        "access": "yes",
+        "leisure": "pitch",
+        "sport": "badminton",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1256880153,
+      "nodes": [
+        11684789656, 11684789657, 11684789658, 11684789659, 11684789656
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1279590856,
+      "nodes": [
+        11878506941, 11878506938, 11878506939, 11878506940, 11878506941
+      ],
+      "tags": {
+        "leisure": "sports_centre",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1279590857,
+      "nodes": [
+        11878506945, 11878506942, 11878506943, 11878506944, 11878506945
+      ],
+      "tags": {
+        "leisure": "sports_centre",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1281412070,
+      "nodes": [
+        11893443413, 11893443412, 11893443411, 11893443410, 11893443413
+      ],
+      "tags": {
+        "leisure": "sports_centre",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1281412071,
+      "nodes": [
+        11893443417, 11893443416, 11893443415, 11893443414, 11893443417
+      ],
+      "tags": {
+        "leisure": "sports_centre",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1285154802,
+      "nodes": [
+        11922046000, 11922045997, 11922045998, 11922045999, 11922046000
+      ],
+      "tags": {
+        "leisure": "sports_centre",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1294887074,
+      "nodes": [
+        12000118316, 12000118317, 12000118318, 12000118319, 12000118316
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1294981381,
+      "nodes": [
+        12000868331, 12000868332, 12000868333, 12000868334, 12000868331
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1295625741,
+      "nodes": [
+        12005862394, 12005862395, 12005862396, 12005862397, 12005862394
+      ],
+      "tags": {
+        "access": "permissive",
+        "check_date": "2024-06-25",
+        "leisure": "pitch",
+        "lit": "yes",
+        "name": "S2 Badminton Court 4",
+        "name:en": "S2 Badminton Court 4",
+        "name:vi": "S2 Sân Cầu Lông 4",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1301566677,
+      "nodes": [
+        12055563268, 12055608069, 12055608070, 12055608071, 12055563268
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1302111857,
+      "nodes": [
+        12059972733, 12059972734, 12059972735, 12059972736, 12059972733
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1302111858,
+      "nodes": [
+        12059972754, 12059972755, 12059972756, 12059972757, 11998776790,
+        12059972754
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1302800822,
+      "nodes": [
+        12065665465, 12065665466, 12065665467, 12065665468, 12065665465
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1308941548,
+      "nodes": [
+        12121477981, 12121477982, 12121477983, 12121477984, 12121477981
+      ],
+      "tags": {
+        "access": "customers",
+        "leisure": "pitch",
+        "lit": "yes",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1308941549,
+      "nodes": [
+        12121477985, 12121477986, 12121477987, 12121477988, 12121477985
+      ],
+      "tags": {
+        "access": "customers",
+        "leisure": "pitch",
+        "lit": "yes",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1313727423,
+      "nodes": [
+        12159797673, 12159797676, 12159797677, 12159797678, 12159797673
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1330858344,
+      "nodes": [
+        12313948987, 12313948988, 12313948989, 12313948990, 12313948987
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1330858345,
+      "nodes": [
+        12313948991, 12313948992, 12313948993, 12313948994, 12313948991
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1331546372,
+      "nodes": [
+        12320073335, 12320073336, 12320073337, 12320073338, 12320073335
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "name": "Sân cầu lông",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1338236843,
+      "nodes": [
+        12378389802, 12378372998, 12378389803, 12378389804, 12378389802
+      ],
+      "tags": {
+        "leisure": "sports_centre",
+        "name": "Nhà thể thao UEL",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1347893002,
+      "nodes": [
+        12468132295, 12468132296, 12468132297, 12468132298, 12468132299,
+        12468132300, 12468132295
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "name": "Sân Cầu lông Hương Giang",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1369408164,
+      "nodes": [
+        12682543232, 12682543233, 12682543234, 12682543235, 12682543232
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "name": "Sân cầu lông Tây Thạnh",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1450359245,
+      "nodes": [
+        13302252245, 13302252246, 13302252247, 13302252248, 13302252245
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "name": "Xoài Arena - Tổ hợp sân Cầu Lông",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1455786556,
+      "nodes": [
+        13351472586, 13351472587, 13351472588, 13351472589, 13351472586
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1462920020,
+      "nodes": [
+        13418888126, 13418888127, 13418888128, 13418888129, 13418888126
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1464324128,
+      "nodes": [
+        13432242235, 13432242234, 13432242233, 13432242232, 13432242235
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1464324129,
+      "nodes": [
+        13432242239, 13432242238, 13432242237, 13432242236, 13432242239
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1464525477,
+      "nodes": [
+        13433896658, 13433896659, 13433896660, 13433896661, 13433896658
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1464883431,
+      "nodes": [
+        13435977729, 13435977728, 13435977730, 13435977731, 13435977729
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1465123156,
+      "nodes": [
+        13437928490, 13437928491, 13437928492, 13437928493, 13437928490
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1465123157,
+      "nodes": [
+        13437928494, 13437928495, 13437928496, 13437928497, 13437928494
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1465123158,
+      "nodes": [
+        13437928498, 13437928499, 13437928500, 13437934701, 13437928498
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1465123159,
+      "nodes": [
+        13437934702, 13437934703, 13437934704, 13437934705, 13437934702
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1465123165,
+      "nodes": [
+        13437934739, 13437934740, 13437934741, 13437934742, 13437934739
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1465123166,
+      "nodes": [
+        13437934743, 13437934744, 13437934745, 13437934746, 13437934743
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1465123167,
+      "nodes": [
+        13437934747, 13437934748, 13437934749, 13437934750, 13437934747
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1469999114,
+      "nodes": [
+        13481509868, 13481509869, 13481509870, 13481509871, 13481509868
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1474096624,
+      "nodes": [
+        13523662631, 13523662632, 13523662633, 13523662634, 13523662631
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1475501482,
+      "nodes": [
+        13536198731, 13536198732, 13536198733, 13536198734, 13536198731
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1476135879,
+      "nodes": [
+        13540382777, 13540382778, 13540382779, 13540382780, 13540382777
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1511491222,
+      "nodes": [
+        13814507712, 13814507713, 13814507714, 13814507715, 13814507712
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "name": "Sân cầu lông công viên Vĩnh Hoàng",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1514726238,
+      "nodes": [
+        13836157421, 13836157422, 13836157423, 13836157424, 13836157421
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1514726239,
+      "nodes": [
+        13836157424, 13836157423, 13836157425, 13836157426, 13836157424
+      ],
+      "tags": {
+        "leisure": "pitch",
+        "sport": "badminton"
+      }
+    },
+    {
+      "type": "node",
+      "id": 11922045998,
+      "lat": 10.2333719,
+      "lon": 103.985583
+    },
+    {
+      "type": "node",
+      "id": 11922045999,
+      "lat": 10.2333854,
+      "lon": 103.9854656
+    },
+    {
+      "type": "node",
+      "id": 11922045997,
+      "lat": 10.2336039,
+      "lon": 103.9856105
+    },
+    {
+      "type": "node",
+      "id": 11922046000,
+      "lat": 10.2336174,
+      "lon": 103.9854931
+    },
+    {
+      "type": "node",
+      "id": 11893443410,
+      "lat": 10.2873263,
+      "lon": 103.9284188
+    },
+    {
+      "type": "node",
+      "id": 11893443411,
+      "lat": 10.287369,
+      "lon": 103.9284874
+    },
+    {
+      "type": "node",
+      "id": 11893443412,
+      "lat": 10.2874896,
+      "lon": 103.9284099
+    },
+    {
+      "type": "node",
+      "id": 11893443413,
+      "lat": 10.2874469,
+      "lon": 103.9283413
+    },
+    {
+      "type": "node",
+      "id": 11893443414,
+      "lat": 10.2873991,
+      "lon": 103.9282587
+    },
+    {
+      "type": "node",
+      "id": 11893443415,
+      "lat": 10.2872751,
+      "lon": 103.9283385
+    },
+    {
+      "type": "node",
+      "id": 11893443416,
+      "lat": 10.2873169,
+      "lon": 103.9284056
+    },
+    {
+      "type": "node",
+      "id": 11893443417,
+      "lat": 10.287441,
+      "lon": 103.9283258
+    },
+    {
+      "type": "node",
+      "id": 11878506938,
+      "lat": 10.3282029,
+      "lon": 103.8562335
+    },
+    {
+      "type": "node",
+      "id": 11878506939,
+      "lat": 10.3280013,
+      "lon": 103.8563116
+    },
+    {
+      "type": "node",
+      "id": 11878506940,
+      "lat": 10.3279679,
+      "lon": 103.8562224
+    },
+    {
+      "type": "node",
+      "id": 11878506941,
+      "lat": 10.3281694,
+      "lon": 103.8561442
+    },
+    {
+      "type": "node",
+      "id": 11878506942,
+      "lat": 10.3281469,
+      "lon": 103.8560911
+    },
+    {
+      "type": "node",
+      "id": 11878506943,
+      "lat": 10.3279509,
+      "lon": 103.8561691
+    },
+    {
+      "type": "node",
+      "id": 11878506944,
+      "lat": 10.327917,
+      "lon": 103.8560812
+    },
+    {
+      "type": "node",
+      "id": 11878506945,
+      "lat": 10.328113,
+      "lon": 103.8560031
+    },
+    {
+      "type": "node",
+      "id": 10980777548,
+      "lat": 10.272455,
+      "lon": 105.2741431
+    },
+    {
+      "type": "node",
+      "id": 10980777549,
+      "lat": 10.271811,
+      "lon": 105.2739561
+    },
+    {
+      "type": "node",
+      "id": 10980777550,
+      "lat": 10.271535,
+      "lon": 105.2748993
+    },
+    {
+      "type": "node",
+      "id": 10980777551,
+      "lat": 10.272043,
+      "lon": 105.275131
+    },
+    {
+      "type": "node",
+      "id": 10980777552,
+      "lat": 10.272379,
+      "lon": 105.2746716
+    },
+    {
+      "type": "node",
+      "id": 10980777553,
+      "lat": 10.272291,
+      "lon": 105.2744805
+    },
+    {
+      "type": "node",
+      "id": 11044254072,
+      "lat": 10.709906,
+      "lon": 105.120578
+    },
+    {
+      "type": "node",
+      "id": 11044254073,
+      "lat": 10.709956,
+      "lon": 105.1206496
+    },
+    {
+      "type": "node",
+      "id": 11044254074,
+      "lat": 10.709789,
+      "lon": 105.1207704
+    },
+    {
+      "type": "node",
+      "id": 11044254075,
+      "lat": 10.709739,
+      "lon": 105.1206987
+    },
+    {
+      "type": "node",
+      "id": 11044254076,
+      "lat": 10.7099927,
+      "lon": 105.1207019
+    },
+    {
+      "type": "node",
+      "id": 11044254077,
+      "lat": 10.7100427,
+      "lon": 105.1207735
+    },
+    {
+      "type": "node",
+      "id": 11044254078,
+      "lat": 10.7098757,
+      "lon": 105.1208943
+    },
+    {
+      "type": "node",
+      "id": 11044254079,
+      "lat": 10.7098257,
+      "lon": 105.1208226
+    },
+    {
+      "type": "node",
+      "id": 11044254080,
+      "lat": 10.7100742,
+      "lon": 105.1208268
+    },
+    {
+      "type": "node",
+      "id": 11044254081,
+      "lat": 10.7101242,
+      "lon": 105.1208984
+    },
+    {
+      "type": "node",
+      "id": 11044254082,
+      "lat": 10.7099571,
+      "lon": 105.1210192
+    },
+    {
+      "type": "node",
+      "id": 11044254083,
+      "lat": 10.7099071,
+      "lon": 105.1209475
+    },
+    {
+      "type": "node",
+      "id": 5257213941,
+      "lat": 10.0272904,
+      "lon": 105.7632426
+    },
+    {
+      "type": "node",
+      "id": 5257213942,
+      "lat": 10.0276636,
+      "lon": 105.7633169
+    },
+    {
+      "type": "node",
+      "id": 5257213943,
+      "lat": 10.0276974,
+      "lon": 105.7631466
+    },
+    {
+      "type": "node",
+      "id": 5257213944,
+      "lat": 10.0273321,
+      "lon": 105.7630759
+    },
+    {
+      "type": "node",
+      "id": 5256938561,
+      "lat": 10.0536972,
+      "lon": 105.7681258
+    },
+    {
+      "type": "node",
+      "id": 5256938562,
+      "lat": 10.053338,
+      "lon": 105.7682277
+    },
+    {
+      "type": "node",
+      "id": 5256938563,
+      "lat": 10.053216,
+      "lon": 105.7677841
+    },
+    {
+      "type": "node",
+      "id": 5256938564,
+      "lat": 10.0535752,
+      "lon": 105.7676822
+    },
+    {
+      "type": "node",
+      "id": 1337153509,
+      "lat": 10.3642996,
+      "lon": 107.0779392
+    },
+    {
+      "type": "node",
+      "id": 1337153681,
+      "lat": 10.364133,
+      "lon": 107.0776187
+    },
+    {
+      "type": "node",
+      "id": 1337153787,
+      "lat": 10.3643346,
+      "lon": 107.0776434
+    },
+    {
+      "type": "node",
+      "id": 1337153917,
+      "lat": 10.3640979,
+      "lon": 107.0779145
+    },
+    {
+      "type": "node",
+      "id": 7353156950,
+      "lat": 10.3759886,
+      "lon": 107.1146848
+    },
+    {
+      "type": "node",
+      "id": 7353156951,
+      "lat": 10.3758154,
+      "lon": 107.1148041
+    },
+    {
+      "type": "node",
+      "id": 7353156952,
+      "lat": 10.3760008,
+      "lon": 107.1150887
+    },
+    {
+      "type": "node",
+      "id": 7353156953,
+      "lat": 10.376174,
+      "lon": 107.1149694
+    },
+    {
+      "type": "node",
+      "id": 5777094093,
+      "lat": 10.6798322,
+      "lon": 106.9333488
+    },
+    {
+      "type": "node",
+      "id": 5777094094,
+      "lat": 10.6796842,
+      "lon": 106.9332853
+    },
+    {
+      "type": "node",
+      "id": 5777094095,
+      "lat": 10.679768,
+      "lon": 106.9330832
+    },
+    {
+      "type": "node",
+      "id": 5777094096,
+      "lat": 10.679916,
+      "lon": 106.9331467
+    },
+    {
+      "type": "node",
+      "id": 12682543234,
+      "lat": 10.8099993,
+      "lon": 106.6267893
+    },
+    {
+      "type": "node",
+      "id": 12682543235,
+      "lat": 10.8099813,
+      "lon": 106.6264245
+    },
+    {
+      "type": "node",
+      "id": 12682543232,
+      "lat": 10.8102585,
+      "lon": 106.6264095
+    },
+    {
+      "type": "node",
+      "id": 12682543233,
+      "lat": 10.8102733,
+      "lon": 106.6267732
+    },
+    {
+      "type": "node",
+      "id": 3382292736,
+      "lat": 10.7643825,
+      "lon": 106.6588841
+    },
+    {
+      "type": "node",
+      "id": 3382292737,
+      "lat": 10.7643878,
+      "lon": 106.6587008
+    },
+    {
+      "type": "node",
+      "id": 3382292752,
+      "lat": 10.7645528,
+      "lon": 106.6589078
+    },
+    {
+      "type": "node",
+      "id": 3382292753,
+      "lat": 10.7645533,
+      "lon": 106.6588892
+    },
+    {
+      "type": "node",
+      "id": 3382292754,
+      "lat": 10.7646598,
+      "lon": 106.6589111
+    },
+    {
+      "type": "node",
+      "id": 3382292755,
+      "lat": 10.7646604,
+      "lon": 106.6588906
+    },
+    {
+      "type": "node",
+      "id": 3382292771,
+      "lat": 10.7648658,
+      "lon": 106.6588968
+    },
+    {
+      "type": "node",
+      "id": 3382292772,
+      "lat": 10.764871,
+      "lon": 106.6587154
+    },
+    {
+      "type": "node",
+      "id": 1973325709,
+      "lat": 10.8085519,
+      "lon": 106.6491355
+    },
+    {
+      "type": "node",
+      "id": 1973325710,
+      "lat": 10.8086062,
+      "lon": 106.6486325
+    },
+    {
+      "type": "node",
+      "id": 1973325713,
+      "lat": 10.8086867,
+      "lon": 106.6491542
+    },
+    {
+      "type": "node",
+      "id": 1973325714,
+      "lat": 10.8087311,
+      "lon": 106.6486473
+    },
+    {
+      "type": "node",
+      "id": 1404352923,
+      "lat": 10.8039693,
+      "lon": 106.6678986
+    },
+    {
+      "type": "node",
+      "id": 1404352925,
+      "lat": 10.8040169,
+      "lon": 106.6676221
+    },
+    {
+      "type": "node",
+      "id": 1404352935,
+      "lat": 10.8043936,
+      "lon": 106.6679628
+    },
+    {
+      "type": "node",
+      "id": 1404352939,
+      "lat": 10.8044393,
+      "lon": 106.6676881
+    },
+    {
+      "type": "node",
+      "id": 8268871282,
+      "lat": 10.7911969,
+      "lon": 106.723494
+    },
+    {
+      "type": "node",
+      "id": 8268871283,
+      "lat": 10.7911667,
+      "lon": 106.7235812
+    },
+    {
+      "type": "node",
+      "id": 8268871284,
+      "lat": 10.7910556,
+      "lon": 106.7235413
+    },
+    {
+      "type": "node",
+      "id": 8268871285,
+      "lat": 10.7910858,
+      "lon": 106.7234541
+    },
+    {
+      "type": "node",
+      "id": 7550423326,
+      "lat": 10.7975573,
+      "lon": 106.7249407
+    },
+    {
+      "type": "node",
+      "id": 7550423327,
+      "lat": 10.7974718,
+      "lon": 106.7250904
+    },
+    {
+      "type": "node",
+      "id": 7550423328,
+      "lat": 10.7973476,
+      "lon": 106.7250169
+    },
+    {
+      "type": "node",
+      "id": 7550423329,
+      "lat": 10.7974332,
+      "lon": 106.7248672
+    },
+    {
+      "type": "node",
+      "id": 9171288755,
+      "lat": 10.8742777,
+      "lon": 106.6383883
+    },
+    {
+      "type": "node",
+      "id": 9171288756,
+      "lat": 10.8739537,
+      "lon": 106.6389596
+    },
+    {
+      "type": "node",
+      "id": 9171288757,
+      "lat": 10.8733347,
+      "lon": 106.6385787
+    },
+    {
+      "type": "node",
+      "id": 9171288758,
+      "lat": 10.8736824,
+      "lon": 106.6380262
+    },
+    {
+      "type": "node",
+      "id": 12320073335,
+      "lat": 10.7931264,
+      "lon": 106.7738907
+    },
+    {
+      "type": "node",
+      "id": 12320073336,
+      "lat": 10.7931361,
+      "lon": 106.7739394
+    },
+    {
+      "type": "node",
+      "id": 12320073337,
+      "lat": 10.7930272,
+      "lon": 106.7739619
+    },
+    {
+      "type": "node",
+      "id": 12320073338,
+      "lat": 10.7930175,
+      "lon": 106.7739132
+    },
+    {
+      "type": "node",
+      "id": 11143168103,
+      "lat": 10.8152479,
+      "lon": 106.8099784
+    },
+    {
+      "type": "node",
+      "id": 11143168104,
+      "lat": 10.8152694,
+      "lon": 106.8100513
+    },
+    {
+      "type": "node",
+      "id": 11143178805,
+      "lat": 10.8151323,
+      "lon": 106.8100932
+    },
+    {
+      "type": "node",
+      "id": 11143178806,
+      "lat": 10.8151108,
+      "lon": 106.8100202
+    },
+    {
+      "type": "node",
+      "id": 11143178807,
+      "lat": 10.815161,
+      "lon": 106.8094366
+    },
+    {
+      "type": "node",
+      "id": 11143178808,
+      "lat": 10.8151824,
+      "lon": 106.8095095
+    },
+    {
+      "type": "node",
+      "id": 11143178809,
+      "lat": 10.8150453,
+      "lon": 106.8095514
+    },
+    {
+      "type": "node",
+      "id": 11143178810,
+      "lat": 10.8150238,
+      "lon": 106.8094784
+    },
+    {
+      "type": "node",
+      "id": 11341398669,
+      "lat": 10.8380051,
+      "lon": 106.8333315
+    },
+    {
+      "type": "node",
+      "id": 11341398670,
+      "lat": 10.8378628,
+      "lon": 106.8333867
+    },
+    {
+      "type": "node",
+      "id": 11341398671,
+      "lat": 10.8378343,
+      "lon": 106.8333107
+    },
+    {
+      "type": "node",
+      "id": 11341398672,
+      "lat": 10.8379767,
+      "lon": 106.8332555
+    },
+    {
+      "type": "node",
+      "id": 12121477981,
+      "lat": 10.8406086,
+      "lon": 106.8398393
+    },
+    {
+      "type": "node",
+      "id": 12121477982,
+      "lat": 10.8405402,
+      "lon": 106.8399925
+    },
+    {
+      "type": "node",
+      "id": 12121477983,
+      "lat": 10.8404426,
+      "lon": 106.8399474
+    },
+    {
+      "type": "node",
+      "id": 12121477984,
+      "lat": 10.840511,
+      "lon": 106.8397942
+    },
+    {
+      "type": "node",
+      "id": 12121477985,
+      "lat": 10.8405388,
+      "lon": 106.8399936
+    },
+    {
+      "type": "node",
+      "id": 12121477986,
+      "lat": 10.8404704,
+      "lon": 106.8401468
+    },
+    {
+      "type": "node",
+      "id": 12121477987,
+      "lat": 10.8403728,
+      "lon": 106.8401016
+    },
+    {
+      "type": "node",
+      "id": 12121477988,
+      "lat": 10.8404412,
+      "lon": 106.8399484
+    },
+    {
+      "type": "node",
+      "id": 11345877117,
+      "lat": 10.8445572,
+      "lon": 106.8362308
+    },
+    {
+      "type": "node",
+      "id": 11345877118,
+      "lat": 10.8445023,
+      "lon": 106.8363609
+    },
+    {
+      "type": "node",
+      "id": 11345877119,
+      "lat": 10.8444372,
+      "lon": 106.8363346
+    },
+    {
+      "type": "node",
+      "id": 11345877120,
+      "lat": 10.8444919,
+      "lon": 106.8362015
+    },
+    {
+      "type": "node",
+      "id": 11345877095,
+      "lat": 10.8433187,
+      "lon": 106.8377722
+    },
+    {
+      "type": "node",
+      "id": 11345877096,
+      "lat": 10.8433724,
+      "lon": 106.8377968
+    },
+    {
+      "type": "node",
+      "id": 11345877097,
+      "lat": 10.843318,
+      "lon": 106.837927
+    },
+    {
+      "type": "node",
+      "id": 11345877098,
+      "lat": 10.8432597,
+      "lon": 106.8379024
+    },
+    {
+      "type": "node",
+      "id": 12159797673,
+      "lat": 10.8458741,
+      "lon": 106.8388885
+    },
+    {
+      "type": "node",
+      "id": 12159797676,
+      "lat": 10.8457192,
+      "lon": 106.8388488
+    },
+    {
+      "type": "node",
+      "id": 12159797677,
+      "lat": 10.8457436,
+      "lon": 106.8387549
+    },
+    {
+      "type": "node",
+      "id": 12159797678,
+      "lat": 10.8458963,
+      "lon": 106.838793
+    },
+    {
+      "type": "node",
+      "id": 12378389804,
+      "lat": 10.8726286,
+      "lon": 106.7777566
+    },
+    {
+      "type": "node",
+      "id": 12378372998,
+      "lat": 10.8728368,
+      "lon": 106.7780442
+    },
+    {
+      "type": "node",
+      "id": 12378389802,
+      "lat": 10.872902,
+      "lon": 106.7778359
+    },
+    {
+      "type": "node",
+      "id": 12378389803,
+      "lat": 10.8725669,
+      "lon": 106.7779587
+    },
+    {
+      "type": "node",
+      "id": 2937886896,
+      "lat": 10.8732752,
+      "lon": 106.7955328
+    },
+    {
+      "type": "node",
+      "id": 2937886898,
+      "lat": 10.8732773,
+      "lon": 106.7957094
+    },
+    {
+      "type": "node",
+      "id": 2937886899,
+      "lat": 10.8729809,
+      "lon": 106.795713
+    },
+    {
+      "type": "node",
+      "id": 2937886900,
+      "lat": 10.8729788,
+      "lon": 106.7955364
+    },
+    {
+      "type": "node",
+      "id": 2937887001,
+      "lat": 10.8732791,
+      "lon": 106.7958618
+    },
+    {
+      "type": "node",
+      "id": 2937887002,
+      "lat": 10.8729827,
+      "lon": 106.7958654
+    },
+    {
+      "type": "node",
+      "id": 2645632757,
+      "lat": 10.8704286,
+      "lon": 106.8014943
+    },
+    {
+      "type": "node",
+      "id": 2645632759,
+      "lat": 10.8703726,
+      "lon": 106.8013796
+    },
+    {
+      "type": "node",
+      "id": 2645632760,
+      "lat": 10.8704333,
+      "lon": 106.801156
+    },
+    {
+      "type": "node",
+      "id": 2645632761,
+      "lat": 10.8705153,
+      "lon": 106.8010686
+    },
+    {
+      "type": "node",
+      "id": 4828651657,
+      "lat": 10.8704702,
+      "lon": 106.8011174
+    },
+    {
+      "type": "node",
+      "id": 4828651658,
+      "lat": 10.8703953,
+      "lon": 106.8012109
+    },
+    {
+      "type": "node",
+      "id": 4828651660,
+      "lat": 10.8704101,
+      "lon": 106.8014668
+    },
+    {
+      "type": "node",
+      "id": 4828651661,
+      "lat": 10.8704609,
+      "lon": 106.8015284
+    },
+    {
+      "type": "node",
+      "id": 4828651676,
+      "lat": 10.8703799,
+      "lon": 106.8012549
+    },
+    {
+      "type": "node",
+      "id": 6771442607,
+      "lat": 10.8708138,
+      "lon": 106.801401
+    },
+    {
+      "type": "node",
+      "id": 6771442608,
+      "lat": 10.8708573,
+      "lon": 106.801393
+    },
+    {
+      "type": "node",
+      "id": 6771442609,
+      "lat": 10.8709287,
+      "lon": 106.801337
+    },
+    {
+      "type": "node",
+      "id": 6771442611,
+      "lat": 10.8709719,
+      "lon": 106.8012502
+    },
+    {
+      "type": "node",
+      "id": 6771442612,
+      "lat": 10.8709808,
+      "lon": 106.8011985
+    },
+    {
+      "type": "node",
+      "id": 6771442613,
+      "lat": 10.8709801,
+      "lon": 106.8011348
+    },
+    {
+      "type": "node",
+      "id": 6771442614,
+      "lat": 10.8709745,
+      "lon": 106.8011053
+    },
+    {
+      "type": "node",
+      "id": 6771442615,
+      "lat": 10.8709626,
+      "lon": 106.8010705
+    },
+    {
+      "type": "node",
+      "id": 6771442616,
+      "lat": 10.8709435,
+      "lon": 106.8010389
+    },
+    {
+      "type": "node",
+      "id": 6771442617,
+      "lat": 10.8709264,
+      "lon": 106.8010185
+    },
+    {
+      "type": "node",
+      "id": 6771442618,
+      "lat": 10.8709014,
+      "lon": 106.8009964
+    },
+    {
+      "type": "node",
+      "id": 6771442619,
+      "lat": 10.8708754,
+      "lon": 106.8009826
+    },
+    {
+      "type": "node",
+      "id": 6771442620,
+      "lat": 10.8708435,
+      "lon": 106.8009692
+    },
+    {
+      "type": "node",
+      "id": 6771442621,
+      "lat": 10.8708092,
+      "lon": 106.8009615
+    },
+    {
+      "type": "node",
+      "id": 6771442622,
+      "lat": 10.870748,
+      "lon": 106.8009612
+    },
+    {
+      "type": "node",
+      "id": 6771442623,
+      "lat": 10.8707055,
+      "lon": 106.8009669
+    },
+    {
+      "type": "node",
+      "id": 6771442624,
+      "lat": 10.870661,
+      "lon": 106.8009819
+    },
+    {
+      "type": "node",
+      "id": 6771442625,
+      "lat": 10.8706317,
+      "lon": 106.8009927
+    },
+    {
+      "type": "node",
+      "id": 6771442626,
+      "lat": 10.8705807,
+      "lon": 106.8010229
+    },
+    {
+      "type": "node",
+      "id": 6771442631,
+      "lat": 10.8703935,
+      "lon": 106.8014312
+    },
+    {
+      "type": "node",
+      "id": 6771442636,
+      "lat": 10.8705254,
+      "lon": 106.8015673
+    },
+    {
+      "type": "node",
+      "id": 6771442637,
+      "lat": 10.87056,
+      "lon": 106.8015754
+    },
+    {
+      "type": "node",
+      "id": 6771442638,
+      "lat": 10.8705942,
+      "lon": 106.8015781
+    },
+    {
+      "type": "node",
+      "id": 6771442639,
+      "lat": 10.8706205,
+      "lon": 106.801568
+    },
+    {
+      "type": "node",
+      "id": 6771442640,
+      "lat": 10.8706459,
+      "lon": 106.801566
+    },
+    {
+      "type": "node",
+      "id": 6771442641,
+      "lat": 10.8706749,
+      "lon": 106.8015593
+    },
+    {
+      "type": "node",
+      "id": 6771442642,
+      "lat": 10.8707187,
+      "lon": 106.8015362
+    },
+    {
+      "type": "node",
+      "id": 6771442643,
+      "lat": 10.8707509,
+      "lon": 106.801507
+    },
+    {
+      "type": "node",
+      "id": 6771442644,
+      "lat": 10.8707736,
+      "lon": 106.8014761
+    },
+    {
+      "type": "node",
+      "id": 6771442645,
+      "lat": 10.870796,
+      "lon": 106.8014386
+    },
+    {
+      "type": "node",
+      "id": 9939001360,
+      "lat": 10.8708979,
+      "lon": 106.8013667
+    },
+    {
+      "type": "node",
+      "id": 9939001361,
+      "lat": 10.8709547,
+      "lon": 106.8012967
+    },
+    {
+      "type": "node",
+      "id": 9939001362,
+      "lat": 10.8704908,
+      "lon": 106.8015553
+    },
+    {
+      "type": "node",
+      "id": 12468132295,
+      "lat": 10.5049489,
+      "lon": 107.1684271
+    },
+    {
+      "type": "node",
+      "id": 12468132296,
+      "lat": 10.5052855,
+      "lon": 107.1680764
+    },
+    {
+      "type": "node",
+      "id": 12468132297,
+      "lat": 10.5047766,
+      "lon": 107.1676258
+    },
+    {
+      "type": "node",
+      "id": 12468132298,
+      "lat": 10.5046157,
+      "lon": 107.167768
+    },
+    {
+      "type": "node",
+      "id": 12468132299,
+      "lat": 10.5045445,
+      "lon": 107.1679423
+    },
+    {
+      "type": "node",
+      "id": 12468132300,
+      "lat": 10.5047258,
+      "lon": 107.168189
+    },
+    {
+      "type": "node",
+      "id": 11064186403,
+      "lat": 11.1063206,
+      "lon": 106.6142958
+    },
+    {
+      "type": "node",
+      "id": 11064186404,
+      "lat": 11.1063533,
+      "lon": 106.6143847
+    },
+    {
+      "type": "node",
+      "id": 11064198205,
+      "lat": 11.1061964,
+      "lon": 106.6144446
+    },
+    {
+      "type": "node",
+      "id": 11064198206,
+      "lat": 11.1061637,
+      "lon": 106.6143557
+    },
+    {
+      "type": "node",
+      "id": 11064198207,
+      "lat": 11.1063864,
+      "lon": 106.6144729
+    },
+    {
+      "type": "node",
+      "id": 11064198208,
+      "lat": 11.1062298,
+      "lon": 106.6145333
+    },
+    {
+      "type": "node",
+      "id": 11064198209,
+      "lat": 11.1064184,
+      "lon": 106.614559
+    },
+    {
+      "type": "node",
+      "id": 11064198210,
+      "lat": 11.1062618,
+      "lon": 106.6146195
+    },
+    {
+      "type": "node",
+      "id": 11064198211,
+      "lat": 11.1064502,
+      "lon": 106.6146446
+    },
+    {
+      "type": "node",
+      "id": 11064198212,
+      "lat": 11.1062937,
+      "lon": 106.614705
+    },
+    {
+      "type": "node",
+      "id": 11064198213,
+      "lat": 11.1060424,
+      "lon": 106.6145036
+    },
+    {
+      "type": "node",
+      "id": 11064198214,
+      "lat": 11.1060098,
+      "lon": 106.6144147
+    },
+    {
+      "type": "node",
+      "id": 11064198215,
+      "lat": 11.1060758,
+      "lon": 106.6145923
+    },
+    {
+      "type": "node",
+      "id": 11064198216,
+      "lat": 11.1061078,
+      "lon": 106.6146785
+    },
+    {
+      "type": "node",
+      "id": 11064198217,
+      "lat": 11.1061397,
+      "lon": 106.614764
+    },
+    {
+      "type": "node",
+      "id": 9049791291,
+      "lat": 10.9508773,
+      "lon": 106.8646396
+    },
+    {
+      "type": "node",
+      "id": 9049791292,
+      "lat": 10.9506126,
+      "lon": 106.8647453
+    },
+    {
+      "type": "node",
+      "id": 9049791293,
+      "lat": 10.9509419,
+      "lon": 106.8648098
+    },
+    {
+      "type": "node",
+      "id": 9049791294,
+      "lat": 10.9506773,
+      "lon": 106.864914
+    },
+    {
+      "type": "node",
+      "id": 9049791295,
+      "lat": 10.9507459,
+      "lon": 106.8650932
+    },
+    {
+      "type": "node",
+      "id": 9049791296,
+      "lat": 10.9510098,
+      "lon": 106.8649924
+    },
+    {
+      "type": "node",
+      "id": 11199616726,
+      "lat": 15.3337197,
+      "lon": 108.2003251
+    },
+    {
+      "type": "node",
+      "id": 11199616727,
+      "lat": 15.3336689,
+      "lon": 108.2004239
+    },
+    {
+      "type": "node",
+      "id": 11199616728,
+      "lat": 15.3338297,
+      "lon": 108.2005128
+    },
+    {
+      "type": "node",
+      "id": 11199616729,
+      "lat": 15.3338805,
+      "lon": 108.200414
+    },
+    {
+      "type": "node",
+      "id": 11199616730,
+      "lat": 15.33392,
+      "lon": 108.2004423
+    },
+    {
+      "type": "node",
+      "id": 11199616731,
+      "lat": 15.3338692,
+      "lon": 108.2005411
+    },
+    {
+      "type": "node",
+      "id": 11199616732,
+      "lat": 15.33403,
+      "lon": 108.20063
+    },
+    {
+      "type": "node",
+      "id": 11199616733,
+      "lat": 15.3340808,
+      "lon": 108.2005311
+    },
+    {
+      "type": "node",
+      "id": 9087718471,
+      "lat": 16.0499581,
+      "lon": 108.1587218
+    },
+    {
+      "type": "node",
+      "id": 9087718472,
+      "lat": 16.0496589,
+      "lon": 108.1588217
+    },
+    {
+      "type": "node",
+      "id": 9087718473,
+      "lat": 16.049702,
+      "lon": 108.1589614
+    },
+    {
+      "type": "node",
+      "id": 9087718474,
+      "lat": 16.0500012,
+      "lon": 108.1588615
+    },
+    {
+      "type": "node",
+      "id": 12313948987,
+      "lat": 16.1167795,
+      "lon": 108.3090616
+    },
+    {
+      "type": "node",
+      "id": 12313948988,
+      "lat": 16.1167784,
+      "lon": 108.3091695
+    },
+    {
+      "type": "node",
+      "id": 12313948989,
+      "lat": 16.1165615,
+      "lon": 108.3091671
+    },
+    {
+      "type": "node",
+      "id": 12313948990,
+      "lat": 16.1165626,
+      "lon": 108.3090592
+    },
+    {
+      "type": "node",
+      "id": 12313948991,
+      "lat": 16.1167778,
+      "lon": 108.3092337
+    },
+    {
+      "type": "node",
+      "id": 12313948992,
+      "lat": 16.1167767,
+      "lon": 108.3093416
+    },
+    {
+      "type": "node",
+      "id": 12313948993,
+      "lat": 16.1165598,
+      "lon": 108.3093393
+    },
+    {
+      "type": "node",
+      "id": 12313948994,
+      "lat": 16.1165609,
+      "lon": 108.3092313
+    },
+    {
+      "type": "node",
+      "id": 10964817973,
+      "lat": 21.1484473,
+      "lon": 105.4018245
+    },
+    {
+      "type": "node",
+      "id": 10964817974,
+      "lat": 21.1483872,
+      "lon": 105.4017228
+    },
+    {
+      "type": "node",
+      "id": 10964817975,
+      "lat": 21.1482288,
+      "lon": 105.4018304
+    },
+    {
+      "type": "node",
+      "id": 10964817976,
+      "lat": 21.1482888,
+      "lon": 105.4019321
+    },
+    {
+      "type": "node",
+      "id": 10892814137,
+      "lat": 21.3088874,
+      "lon": 105.5953342
+    },
+    {
+      "type": "node",
+      "id": 10892814138,
+      "lat": 21.3089374,
+      "lon": 105.5954969
+    },
+    {
+      "type": "node",
+      "id": 10892814139,
+      "lat": 21.3086606,
+      "lon": 105.595595
+    },
+    {
+      "type": "node",
+      "id": 10892814140,
+      "lat": 21.3086105,
+      "lon": 105.5954323
+    },
+    {
+      "type": "node",
+      "id": 11323015246,
+      "lat": 20.6841898,
+      "lon": 106.1012807
+    },
+    {
+      "type": "node",
+      "id": 11323015247,
+      "lat": 20.6842134,
+      "lon": 106.1013341
+    },
+    {
+      "type": "node",
+      "id": 11323015248,
+      "lat": 20.6841019,
+      "lon": 106.1013904
+    },
+    {
+      "type": "node",
+      "id": 11323015249,
+      "lat": 20.6840783,
+      "lon": 106.101337
+    },
+    {
+      "type": "node",
+      "id": 11323015250,
+      "lat": 20.6842625,
+      "lon": 106.1014443
+    },
+    {
+      "type": "node",
+      "id": 11323015251,
+      "lat": 20.6842861,
+      "lon": 106.1014977
+    },
+    {
+      "type": "node",
+      "id": 11323015252,
+      "lat": 20.6841747,
+      "lon": 106.101554
+    },
+    {
+      "type": "node",
+      "id": 11323015253,
+      "lat": 20.6841511,
+      "lon": 106.1015006
+    },
+    {
+      "type": "node",
+      "id": 12000118316,
+      "lat": 20.9384586,
+      "lon": 105.7102452
+    },
+    {
+      "type": "node",
+      "id": 12000118317,
+      "lat": 20.9384869,
+      "lon": 105.7103798
+    },
+    {
+      "type": "node",
+      "id": 12000118318,
+      "lat": 20.9385428,
+      "lon": 105.7103664
+    },
+    {
+      "type": "node",
+      "id": 12000118319,
+      "lat": 20.9385145,
+      "lon": 105.7102318
+    },
+    {
+      "type": "node",
+      "id": 11057862826,
+      "lat": 20.9652344,
+      "lon": 105.9310447
+    },
+    {
+      "type": "node",
+      "id": 11057862827,
+      "lat": 20.9651179,
+      "lon": 105.9310988
+    },
+    {
+      "type": "node",
+      "id": 11057862828,
+      "lat": 20.9650946,
+      "lon": 105.9310414
+    },
+    {
+      "type": "node",
+      "id": 11057862829,
+      "lat": 20.9652112,
+      "lon": 105.9309872
+    },
+    {
+      "type": "node",
+      "id": 11057862830,
+      "lat": 20.9651894,
+      "lon": 105.9309414
+    },
+    {
+      "type": "node",
+      "id": 11057862831,
+      "lat": 20.9650728,
+      "lon": 105.9309956
+    },
+    {
+      "type": "node",
+      "id": 11057862832,
+      "lat": 20.9650495,
+      "lon": 105.9309381
+    },
+    {
+      "type": "node",
+      "id": 11057862833,
+      "lat": 20.9651661,
+      "lon": 105.930884
+    },
+    {
+      "type": "node",
+      "id": 13433896658,
+      "lat": 20.9478298,
+      "lon": 105.9742881
+    },
+    {
+      "type": "node",
+      "id": 13433896659,
+      "lat": 20.9477911,
+      "lon": 105.9742006
+    },
+    {
+      "type": "node",
+      "id": 13433896660,
+      "lat": 20.9476386,
+      "lon": 105.9742734
+    },
+    {
+      "type": "node",
+      "id": 13433896661,
+      "lat": 20.947675,
+      "lon": 105.9743626
+    },
+    {
+      "type": "node",
+      "id": 13836157421,
+      "lat": 20.9999654,
+      "lon": 105.7391786
+    },
+    {
+      "type": "node",
+      "id": 13836157422,
+      "lat": 20.9998141,
+      "lon": 105.7392225
+    },
+    {
+      "type": "node",
+      "id": 13836157423,
+      "lat": 20.9998357,
+      "lon": 105.7393083
+    },
+    {
+      "type": "node",
+      "id": 13836157424,
+      "lat": 20.9999871,
+      "lon": 105.7392644
+    },
+    {
+      "type": "node",
+      "id": 13836157425,
+      "lat": 20.9998585,
+      "lon": 105.739399
+    },
+    {
+      "type": "node",
+      "id": 13836157426,
+      "lat": 21.0000101,
+      "lon": 105.7393551
+    },
+    {
+      "type": "node",
+      "id": 11389436678,
+      "lat": 21.0077864,
+      "lon": 105.7348676
+    },
+    {
+      "type": "node",
+      "id": 11389436679,
+      "lat": 21.007784,
+      "lon": 105.735137
+    },
+    {
+      "type": "node",
+      "id": 11389436681,
+      "lat": 21.0076574,
+      "lon": 105.7348662
+    },
+    {
+      "type": "node",
+      "id": 11389436682,
+      "lat": 21.0076567,
+      "lon": 105.7349349
+    },
+    {
+      "type": "node",
+      "id": 11389436683,
+      "lat": 21.0077858,
+      "lon": 105.7349363
+    },
+    {
+      "type": "node",
+      "id": 11389436684,
+      "lat": 21.0077852,
+      "lon": 105.7350021
+    },
+    {
+      "type": "node",
+      "id": 11389436685,
+      "lat": 21.0076561,
+      "lon": 105.7350008
+    },
+    {
+      "type": "node",
+      "id": 11389436686,
+      "lat": 21.0076555,
+      "lon": 105.735067
+    },
+    {
+      "type": "node",
+      "id": 11389436687,
+      "lat": 21.0077846,
+      "lon": 105.7350684
+    },
+    {
+      "type": "node",
+      "id": 11389436688,
+      "lat": 21.0076548,
+      "lon": 105.7351356
+    },
+    {
+      "type": "node",
+      "id": 11110289863,
+      "lat": 21.0058072,
+      "lon": 105.7447108
+    },
+    {
+      "type": "node",
+      "id": 11110289864,
+      "lat": 21.0058413,
+      "lon": 105.7448044
+    },
+    {
+      "type": "node",
+      "id": 11110289865,
+      "lat": 21.0056592,
+      "lon": 105.7448806
+    },
+    {
+      "type": "node",
+      "id": 11110289866,
+      "lat": 21.0056251,
+      "lon": 105.744787
+    },
+    {
+      "type": "node",
+      "id": 11110289867,
+      "lat": 21.005851,
+      "lon": 105.7448413
+    },
+    {
+      "type": "node",
+      "id": 11110289868,
+      "lat": 21.0058852,
+      "lon": 105.7449349
+    },
+    {
+      "type": "node",
+      "id": 11110289869,
+      "lat": 21.0057031,
+      "lon": 105.7450111
+    },
+    {
+      "type": "node",
+      "id": 11110289870,
+      "lat": 21.005669,
+      "lon": 105.7449175
+    },
+    {
+      "type": "node",
+      "id": 11110289871,
+      "lat": 21.0058965,
+      "lon": 105.7449694
+    },
+    {
+      "type": "node",
+      "id": 11110289872,
+      "lat": 21.0059306,
+      "lon": 105.745063
+    },
+    {
+      "type": "node",
+      "id": 11110289873,
+      "lat": 21.0057486,
+      "lon": 105.7451392
+    },
+    {
+      "type": "node",
+      "id": 11110289874,
+      "lat": 21.0057144,
+      "lon": 105.7450456
+    },
+    {
+      "type": "node",
+      "id": 11110289875,
+      "lat": 21.0059386,
+      "lon": 105.7450985
+    },
+    {
+      "type": "node",
+      "id": 11110289876,
+      "lat": 21.0059727,
+      "lon": 105.745192
+    },
+    {
+      "type": "node",
+      "id": 11110289877,
+      "lat": 21.0057907,
+      "lon": 105.7452682
+    },
+    {
+      "type": "node",
+      "id": 11110289878,
+      "lat": 21.0057565,
+      "lon": 105.7451746
+    },
+    {
+      "type": "node",
+      "id": 10223135323,
+      "lat": 21.0158955,
+      "lon": 105.7279588
+    },
+    {
+      "type": "node",
+      "id": 10223135324,
+      "lat": 21.0158422,
+      "lon": 105.7279572
+    },
+    {
+      "type": "node",
+      "id": 10223135325,
+      "lat": 21.0158387,
+      "lon": 105.7280876
+    },
+    {
+      "type": "node",
+      "id": 10223135326,
+      "lat": 21.015892,
+      "lon": 105.7280892
+    },
+    {
+      "type": "node",
+      "id": 10223135327,
+      "lat": 21.0158313,
+      "lon": 105.7279588
+    },
+    {
+      "type": "node",
+      "id": 10223135328,
+      "lat": 21.015778,
+      "lon": 105.7279572
+    },
+    {
+      "type": "node",
+      "id": 10223135329,
+      "lat": 21.0157745,
+      "lon": 105.7280876
+    },
+    {
+      "type": "node",
+      "id": 10223135330,
+      "lat": 21.0158278,
+      "lon": 105.7280892
+    },
+    {
+      "type": "node",
+      "id": 12000868332,
+      "lat": 20.9997799,
+      "lon": 105.7947534
+    },
+    {
+      "type": "node",
+      "id": 12000868333,
+      "lat": 20.9997864,
+      "lon": 105.7946954
+    },
+    {
+      "type": "node",
+      "id": 12000868334,
+      "lat": 20.9998991,
+      "lon": 105.79471
+    },
+    {
+      "type": "node",
+      "id": 12000868331,
+      "lat": 20.9998926,
+      "lon": 105.794768
+    },
+    {
+      "type": "node",
+      "id": 8891690418,
+      "lat": 21.0262231,
+      "lon": 105.7871421
+    },
+    {
+      "type": "node",
+      "id": 8891690419,
+      "lat": 21.0262619,
+      "lon": 105.7872198
+    },
+    {
+      "type": "node",
+      "id": 8891690420,
+      "lat": 21.0262932,
+      "lon": 105.7872091
+    },
+    {
+      "type": "node",
+      "id": 8891690421,
+      "lat": 21.026307,
+      "lon": 105.7872708
+    },
+    {
+      "type": "node",
+      "id": 8891690422,
+      "lat": 21.0259878,
+      "lon": 105.7874143
+    },
+    {
+      "type": "node",
+      "id": 8891690423,
+      "lat": 21.025949,
+      "lon": 105.7873553
+    },
+    {
+      "type": "node",
+      "id": 8891690424,
+      "lat": 21.0259953,
+      "lon": 105.7873298
+    },
+    {
+      "type": "node",
+      "id": 8891690425,
+      "lat": 21.0259828,
+      "lon": 105.7873151
+    },
+    {
+      "type": "node",
+      "id": 8891690426,
+      "lat": 21.025954,
+      "lon": 105.7873231
+    },
+    {
+      "type": "node",
+      "id": 8891690427,
+      "lat": 21.0259364,
+      "lon": 105.7872708
+    },
+    {
+      "type": "node",
+      "id": 11397904011,
+      "lat": 21.0312128,
+      "lon": 105.7874064
+    },
+    {
+      "type": "node",
+      "id": 11397904012,
+      "lat": 21.0312007,
+      "lon": 105.7874662
+    },
+    {
+      "type": "node",
+      "id": 11397904013,
+      "lat": 21.0310896,
+      "lon": 105.7874406
+    },
+    {
+      "type": "node",
+      "id": 11397904014,
+      "lat": 21.0311016,
+      "lon": 105.7873807
+    },
+    {
+      "type": "node",
+      "id": 11397904015,
+      "lat": 21.0314904,
+      "lon": 105.787216
+    },
+    {
+      "type": "node",
+      "id": 11397904016,
+      "lat": 21.0315167,
+      "lon": 105.7872704
+    },
+    {
+      "type": "node",
+      "id": 11397904017,
+      "lat": 21.0314157,
+      "lon": 105.7873264
+    },
+    {
+      "type": "node",
+      "id": 11397904018,
+      "lat": 21.0313894,
+      "lon": 105.7872721
+    },
+    {
+      "type": "node",
+      "id": 10223837889,
+      "lat": 21.0398964,
+      "lon": 105.7872381
+    },
+    {
+      "type": "node",
+      "id": 10223837890,
+      "lat": 21.039713,
+      "lon": 105.7872245
+    },
+    {
+      "type": "node",
+      "id": 10223837891,
+      "lat": 21.0397063,
+      "lon": 105.7873279
+    },
+    {
+      "type": "node",
+      "id": 10223837892,
+      "lat": 21.0398897,
+      "lon": 105.7873415
+    },
+    {
+      "type": "node",
+      "id": 10223837893,
+      "lat": 21.0398888,
+      "lon": 105.7873535
+    },
+    {
+      "type": "node",
+      "id": 10223837894,
+      "lat": 21.0397054,
+      "lon": 105.7873399
+    },
+    {
+      "type": "node",
+      "id": 10223837895,
+      "lat": 21.0396987,
+      "lon": 105.7874434
+    },
+    {
+      "type": "node",
+      "id": 10223837896,
+      "lat": 21.0398821,
+      "lon": 105.7874569
+    },
+    {
+      "type": "node",
+      "id": 10253401283,
+      "lat": 21.0403444,
+      "lon": 105.7840317
+    },
+    {
+      "type": "node",
+      "id": 10253401284,
+      "lat": 21.0401802,
+      "lon": 105.7840234
+    },
+    {
+      "type": "node",
+      "id": 10253401285,
+      "lat": 21.0401763,
+      "lon": 105.7841129
+    },
+    {
+      "type": "node",
+      "id": 10253401286,
+      "lat": 21.0403405,
+      "lon": 105.7841212
+    },
+    {
+      "type": "node",
+      "id": 11593386712,
+      "lat": 21.0403399,
+      "lon": 105.7841523
+    },
+    {
+      "type": "node",
+      "id": 11593386713,
+      "lat": 21.0401757,
+      "lon": 105.784144
+    },
+    {
+      "type": "node",
+      "id": 11593386714,
+      "lat": 21.0401717,
+      "lon": 105.7842335
+    },
+    {
+      "type": "node",
+      "id": 11593386715,
+      "lat": 21.0403359,
+      "lon": 105.7842418
+    },
+    {
+      "type": "node",
+      "id": 11595048054,
+      "lat": 21.040075,
+      "lon": 105.7818735
+    },
+    {
+      "type": "node",
+      "id": 11595048055,
+      "lat": 21.0400775,
+      "lon": 105.7818161
+    },
+    {
+      "type": "node",
+      "id": 11595048056,
+      "lat": 21.0399696,
+      "lon": 105.7818106
+    },
+    {
+      "type": "node",
+      "id": 11595048057,
+      "lat": 21.0399671,
+      "lon": 105.781868
+    },
+    {
+      "type": "node",
+      "id": 11595048058,
+      "lat": 21.0400614,
+      "lon": 105.7818896
+    },
+    {
+      "type": "node",
+      "id": 11595048059,
+      "lat": 21.0400078,
+      "lon": 105.7818871
+    },
+    {
+      "type": "node",
+      "id": 11595048060,
+      "lat": 21.0400033,
+      "lon": 105.7820028
+    },
+    {
+      "type": "node",
+      "id": 11595048061,
+      "lat": 21.0400569,
+      "lon": 105.7820052
+    },
+    {
+      "type": "node",
+      "id": 10271068955,
+      "lat": 21.0440213,
+      "lon": 105.7771408
+    },
+    {
+      "type": "node",
+      "id": 10271068956,
+      "lat": 21.0439117,
+      "lon": 105.7771026
+    },
+    {
+      "type": "node",
+      "id": 10271068957,
+      "lat": 21.0439307,
+      "lon": 105.7770402
+    },
+    {
+      "type": "node",
+      "id": 10271068958,
+      "lat": 21.0440403,
+      "lon": 105.7770783
+    },
+    {
+      "type": "node",
+      "id": 10209380669,
+      "lat": 21.0422974,
+      "lon": 105.7836637
+    },
+    {
+      "type": "node",
+      "id": 10253350344,
+      "lat": 21.0424202,
+      "lon": 105.7836677
+    },
+    {
+      "type": "node",
+      "id": 10253350345,
+      "lat": 21.0424186,
+      "lon": 105.7837279
+    },
+    {
+      "type": "node",
+      "id": 10253350346,
+      "lat": 21.0422957,
+      "lon": 105.7837239
+    },
+    {
+      "type": "node",
+      "id": 11556835428,
+      "lat": 21.0424048,
+      "lon": 105.7880449
+    },
+    {
+      "type": "node",
+      "id": 11556835429,
+      "lat": 21.0425183,
+      "lon": 105.788044
+    },
+    {
+      "type": "node",
+      "id": 11556835430,
+      "lat": 21.0425188,
+      "lon": 105.7881097
+    },
+    {
+      "type": "node",
+      "id": 11556835431,
+      "lat": 21.0424052,
+      "lon": 105.7881106
+    },
+    {
+      "type": "node",
+      "id": 11556835432,
+      "lat": 21.0424684,
+      "lon": 105.787953
+    },
+    {
+      "type": "node",
+      "id": 11556835433,
+      "lat": 21.042582,
+      "lon": 105.7879521
+    },
+    {
+      "type": "node",
+      "id": 11556835434,
+      "lat": 21.0425824,
+      "lon": 105.7880178
+    },
+    {
+      "type": "node",
+      "id": 11556835435,
+      "lat": 21.0424689,
+      "lon": 105.7880187
+    },
+    {
+      "type": "node",
+      "id": 11597930434,
+      "lat": 21.0405223,
+      "lon": 105.7830655
+    },
+    {
+      "type": "node",
+      "id": 11597930435,
+      "lat": 21.0404687,
+      "lon": 105.7830644
+    },
+    {
+      "type": "node",
+      "id": 11597930436,
+      "lat": 21.0404668,
+      "lon": 105.7831802
+    },
+    {
+      "type": "node",
+      "id": 11597930437,
+      "lat": 21.0405204,
+      "lon": 105.7831812
+    },
+    {
+      "type": "node",
+      "id": 11597930438,
+      "lat": 21.0405248,
+      "lon": 105.7829032
+    },
+    {
+      "type": "node",
+      "id": 11597930439,
+      "lat": 21.0404711,
+      "lon": 105.7829022
+    },
+    {
+      "type": "node",
+      "id": 11597930440,
+      "lat": 21.0404694,
+      "lon": 105.7830179
+    },
+    {
+      "type": "node",
+      "id": 11597930441,
+      "lat": 21.040523,
+      "lon": 105.7830189
+    },
+    {
+      "type": "node",
+      "id": 11609106042,
+      "lat": 21.0408474,
+      "lon": 105.7854105
+    },
+    {
+      "type": "node",
+      "id": 11609106043,
+      "lat": 21.040792,
+      "lon": 105.7854093
+    },
+    {
+      "type": "node",
+      "id": 11609106044,
+      "lat": 21.0407898,
+      "lon": 105.7855257
+    },
+    {
+      "type": "node",
+      "id": 11609106045,
+      "lat": 21.0408452,
+      "lon": 105.7855269
+    },
+    {
+      "type": "node",
+      "id": 11609106046,
+      "lat": 21.040839,
+      "lon": 105.7857436
+    },
+    {
+      "type": "node",
+      "id": 11609106047,
+      "lat": 21.0407836,
+      "lon": 105.7857424
+    },
+    {
+      "type": "node",
+      "id": 11609106048,
+      "lat": 21.0407814,
+      "lon": 105.7858588
+    },
+    {
+      "type": "node",
+      "id": 11609106049,
+      "lat": 21.0408368,
+      "lon": 105.78586
+    },
+    {
+      "type": "node",
+      "id": 11609373748,
+      "lat": 21.0408425,
+      "lon": 105.7855783
+    },
+    {
+      "type": "node",
+      "id": 11609373749,
+      "lat": 21.0407871,
+      "lon": 105.7855771
+    },
+    {
+      "type": "node",
+      "id": 11609373750,
+      "lat": 21.0407849,
+      "lon": 105.7856935
+    },
+    {
+      "type": "node",
+      "id": 11609373751,
+      "lat": 21.0408403,
+      "lon": 105.7856947
+    },
+    {
+      "type": "node",
+      "id": 11617804897,
+      "lat": 21.0408358,
+      "lon": 105.7819678
+    },
+    {
+      "type": "node",
+      "id": 11617804898,
+      "lat": 21.0407804,
+      "lon": 105.7819666
+    },
+    {
+      "type": "node",
+      "id": 11617804899,
+      "lat": 21.0407782,
+      "lon": 105.782083
+    },
+    {
+      "type": "node",
+      "id": 11617804900,
+      "lat": 21.0408336,
+      "lon": 105.7820842
+    },
+    {
+      "type": "node",
+      "id": 11617804901,
+      "lat": 21.0408328,
+      "lon": 105.782158
+    },
+    {
+      "type": "node",
+      "id": 11617804902,
+      "lat": 21.0407774,
+      "lon": 105.7821568
+    },
+    {
+      "type": "node",
+      "id": 11617804903,
+      "lat": 21.0407752,
+      "lon": 105.7822732
+    },
+    {
+      "type": "node",
+      "id": 11617804904,
+      "lat": 21.0408306,
+      "lon": 105.7822744
+    },
+    {
+      "type": "node",
+      "id": 11684789656,
+      "lat": 21.0487381,
+      "lon": 105.778041
+    },
+    {
+      "type": "node",
+      "id": 11684789657,
+      "lat": 21.0486122,
+      "lon": 105.7780413
+    },
+    {
+      "type": "node",
+      "id": 11684789658,
+      "lat": 21.0486123,
+      "lon": 105.7781025
+    },
+    {
+      "type": "node",
+      "id": 11684789659,
+      "lat": 21.0487382,
+      "lon": 105.7781022
+    },
+    {
+      "type": "node",
+      "id": 11556835508,
+      "lat": 21.042231,
+      "lon": 105.7884928
+    },
+    {
+      "type": "node",
+      "id": 11556835509,
+      "lat": 21.0422313,
+      "lon": 105.7883712
+    },
+    {
+      "type": "node",
+      "id": 11556835510,
+      "lat": 21.0422927,
+      "lon": 105.7883714
+    },
+    {
+      "type": "node",
+      "id": 11556835511,
+      "lat": 21.0422923,
+      "lon": 105.788493
+    },
+    {
+      "type": "node",
+      "id": 11438495926,
+      "lat": 21.033181,
+      "lon": 105.8207995
+    },
+    {
+      "type": "node",
+      "id": 11438495927,
+      "lat": 21.0332125,
+      "lon": 105.8209454
+    },
+    {
+      "type": "node",
+      "id": 11438495928,
+      "lat": 21.0331403,
+      "lon": 105.8209633
+    },
+    {
+      "type": "node",
+      "id": 11438495929,
+      "lat": 21.0331088,
+      "lon": 105.8208174
+    },
+    {
+      "type": "node",
+      "id": 12055563268,
+      "lat": 21.0372551,
+      "lon": 105.8325096
+    },
+    {
+      "type": "node",
+      "id": 12055608069,
+      "lat": 21.0371734,
+      "lon": 105.8324955
+    },
+    {
+      "type": "node",
+      "id": 12055608070,
+      "lat": 21.0371481,
+      "lon": 105.8326642
+    },
+    {
+      "type": "node",
+      "id": 12055608071,
+      "lat": 21.0372298,
+      "lon": 105.8326783
+    },
+    {
+      "type": "node",
+      "id": 12065665465,
+      "lat": 21.0314528,
+      "lon": 105.8415389
+    },
+    {
+      "type": "node",
+      "id": 12065665466,
+      "lat": 21.0314202,
+      "lon": 105.8417068
+    },
+    {
+      "type": "node",
+      "id": 12065665467,
+      "lat": 21.0315006,
+      "lon": 105.8417247
+    },
+    {
+      "type": "node",
+      "id": 12065665468,
+      "lat": 21.0315332,
+      "lon": 105.8415568
+    },
+    {
+      "type": "node",
+      "id": 11998776790,
+      "lat": 21.0394296,
+      "lon": 105.8442557
+    },
+    {
+      "type": "node",
+      "id": 12059972733,
+      "lat": 21.0390417,
+      "lon": 105.8432583
+    },
+    {
+      "type": "node",
+      "id": 12059972734,
+      "lat": 21.0390595,
+      "lon": 105.8431629
+    },
+    {
+      "type": "node",
+      "id": 12059972735,
+      "lat": 21.0388938,
+      "lon": 105.8431275
+    },
+    {
+      "type": "node",
+      "id": 12059972736,
+      "lat": 21.038876,
+      "lon": 105.8432228
+    },
+    {
+      "type": "node",
+      "id": 12059972754,
+      "lat": 21.0392918,
+      "lon": 105.8442254
+    },
+    {
+      "type": "node",
+      "id": 12059972755,
+      "lat": 21.0393108,
+      "lon": 105.8441235
+    },
+    {
+      "type": "node",
+      "id": 12059972756,
+      "lat": 21.0395097,
+      "lon": 105.8441662
+    },
+    {
+      "type": "node",
+      "id": 12059972757,
+      "lat": 21.0394905,
+      "lon": 105.8442688
+    },
+    {
+      "type": "node",
+      "id": 7056058486,
+      "lat": 20.9916872,
+      "lon": 105.866697
+    },
+    {
+      "type": "node",
+      "id": 11170051927,
+      "lat": 20.9915792,
+      "lon": 105.8666929
+    },
+    {
+      "type": "node",
+      "id": 5629422914,
+      "lat": 20.9906122,
+      "lon": 105.8691741
+    },
+    {
+      "type": "node",
+      "id": 5629422915,
+      "lat": 20.9904842,
+      "lon": 105.8692143
+    },
+    {
+      "type": "node",
+      "id": 5629422916,
+      "lat": 20.9905043,
+      "lon": 105.8692877
+    },
+    {
+      "type": "node",
+      "id": 5629422917,
+      "lat": 20.9906323,
+      "lon": 105.8692475
+    },
+    {
+      "type": "node",
+      "id": 5629422918,
+      "lat": 20.9905814,
+      "lon": 105.8689853
+    },
+    {
+      "type": "node",
+      "id": 5629422919,
+      "lat": 20.9905802,
+      "lon": 105.8691282
+    },
+    {
+      "type": "node",
+      "id": 5629422920,
+      "lat": 20.9906515,
+      "lon": 105.8691289
+    },
+    {
+      "type": "node",
+      "id": 5629423321,
+      "lat": 20.9906528,
+      "lon": 105.868986
+    },
+    {
+      "type": "node",
+      "id": 7056058485,
+      "lat": 20.991682,
+      "lon": 105.8670476
+    },
+    {
+      "type": "node",
+      "id": 11170051928,
+      "lat": 20.9915766,
+      "lon": 105.8670462
+    },
+    {
+      "type": "node",
+      "id": 13814507712,
+      "lat": 20.9942041,
+      "lon": 105.8752759
+    },
+    {
+      "type": "node",
+      "id": 13814507713,
+      "lat": 20.9942063,
+      "lon": 105.875607
+    },
+    {
+      "type": "node",
+      "id": 13814507714,
+      "lat": 20.9940693,
+      "lon": 105.8756081
+    },
+    {
+      "type": "node",
+      "id": 13814507715,
+      "lat": 20.9940671,
+      "lon": 105.875277
+    },
+    {
+      "type": "node",
+      "id": 13523662631,
+      "lat": 21.0249136,
+      "lon": 105.8884998
+    },
+    {
+      "type": "node",
+      "id": 13523662632,
+      "lat": 21.0247374,
+      "lon": 105.888462
+    },
+    {
+      "type": "node",
+      "id": 13523662633,
+      "lat": 21.0246935,
+      "lon": 105.8886971
+    },
+    {
+      "type": "node",
+      "id": 13523662634,
+      "lat": 21.0248697,
+      "lon": 105.8887349
+    },
+    {
+      "type": "node",
+      "id": 13540382777,
+      "lat": 21.0400794,
+      "lon": 105.8980977
+    },
+    {
+      "type": "node",
+      "id": 13540382778,
+      "lat": 21.0399743,
+      "lon": 105.8981373
+    },
+    {
+      "type": "node",
+      "id": 13540382779,
+      "lat": 21.0400152,
+      "lon": 105.898262
+    },
+    {
+      "type": "node",
+      "id": 13540382780,
+      "lat": 21.0401203,
+      "lon": 105.8982224
+    },
+    {
+      "type": "node",
+      "id": 10270760845,
+      "lat": 21.0417065,
+      "lon": 105.8020972
+    },
+    {
+      "type": "node",
+      "id": 10270760846,
+      "lat": 21.0416284,
+      "lon": 105.8020974
+    },
+    {
+      "type": "node",
+      "id": 10270760847,
+      "lat": 21.0416289,
+      "lon": 105.802276
+    },
+    {
+      "type": "node",
+      "id": 10270760848,
+      "lat": 21.041707,
+      "lon": 105.8022758
+    },
+    {
+      "type": "node",
+      "id": 11176855147,
+      "lat": 21.0420814,
+      "lon": 105.8020033
+    },
+    {
+      "type": "node",
+      "id": 11176855148,
+      "lat": 21.0420815,
+      "lon": 105.8020599
+    },
+    {
+      "type": "node",
+      "id": 11176855149,
+      "lat": 21.0419723,
+      "lon": 105.80206
+    },
+    {
+      "type": "node",
+      "id": 11176855150,
+      "lat": 21.0419723,
+      "lon": 105.8020035
+    },
+    {
+      "type": "node",
+      "id": 11176855230,
+      "lat": 21.0414185,
+      "lon": 105.8017341
+    },
+    {
+      "type": "node",
+      "id": 11176855231,
+      "lat": 21.0414175,
+      "lon": 105.8018779
+    },
+    {
+      "type": "node",
+      "id": 11176855232,
+      "lat": 21.0413622,
+      "lon": 105.8018775
+    },
+    {
+      "type": "node",
+      "id": 11176855233,
+      "lat": 21.0413632,
+      "lon": 105.8017337
+    },
+    {
+      "type": "node",
+      "id": 11176855234,
+      "lat": 21.0413535,
+      "lon": 105.8015638
+    },
+    {
+      "type": "node",
+      "id": 11176855235,
+      "lat": 21.0413525,
+      "lon": 105.8017076
+    },
+    {
+      "type": "node",
+      "id": 11176855236,
+      "lat": 21.0412972,
+      "lon": 105.8017071
+    },
+    {
+      "type": "node",
+      "id": 11176855237,
+      "lat": 21.0412982,
+      "lon": 105.8015633
+    },
+    {
+      "type": "node",
+      "id": 11178508232,
+      "lat": 21.0455364,
+      "lon": 105.8029986
+    },
+    {
+      "type": "node",
+      "id": 11178508233,
+      "lat": 21.0454835,
+      "lon": 105.8029982
+    },
+    {
+      "type": "node",
+      "id": 11178508234,
+      "lat": 21.0454825,
+      "lon": 105.8031336
+    },
+    {
+      "type": "node",
+      "id": 11178508235,
+      "lat": 21.0455354,
+      "lon": 105.8031341
+    },
+    {
+      "type": "node",
+      "id": 10820828057,
+      "lat": 21.043187,
+      "lon": 105.833509
+    },
+    {
+      "type": "node",
+      "id": 10820828058,
+      "lat": 21.0431871,
+      "lon": 105.8336943
+    },
+    {
+      "type": "node",
+      "id": 10820828059,
+      "lat": 21.0428494,
+      "lon": 105.8335095
+    },
+    {
+      "type": "node",
+      "id": 10820828060,
+      "lat": 21.0428497,
+      "lon": 105.8336947
+    },
+    {
+      "type": "node",
+      "id": 10822317236,
+      "lat": 21.0414344,
+      "lon": 105.8300627
+    },
+    {
+      "type": "node",
+      "id": 10822317237,
+      "lat": 21.0416151,
+      "lon": 105.8299632
+    },
+    {
+      "type": "node",
+      "id": 10822317238,
+      "lat": 21.0415595,
+      "lon": 105.8298473
+    },
+    {
+      "type": "node",
+      "id": 10822317239,
+      "lat": 21.0413788,
+      "lon": 105.8299468
+    },
+    {
+      "type": "node",
+      "id": 10829795517,
+      "lat": 21.0430557,
+      "lon": 105.8336943
+    },
+    {
+      "type": "node",
+      "id": 13435977728,
+      "lat": 21.0496097,
+      "lon": 105.8470507
+    },
+    {
+      "type": "node",
+      "id": 13435977729,
+      "lat": 21.049673,
+      "lon": 105.8471257
+    },
+    {
+      "type": "node",
+      "id": 13435977730,
+      "lat": 21.0494719,
+      "lon": 105.8471844
+    },
+    {
+      "type": "node",
+      "id": 13435977731,
+      "lat": 21.0495352,
+      "lon": 105.8472594
+    },
+    {
+      "type": "node",
+      "id": 13481509868,
+      "lat": 21.0465188,
+      "lon": 105.8653008
+    },
+    {
+      "type": "node",
+      "id": 13481509869,
+      "lat": 21.0465305,
+      "lon": 105.8654566
+    },
+    {
+      "type": "node",
+      "id": 13481509870,
+      "lat": 21.0464082,
+      "lon": 105.8654671
+    },
+    {
+      "type": "node",
+      "id": 13481509871,
+      "lat": 21.0463966,
+      "lon": 105.8653114
+    },
+    {
+      "type": "node",
+      "id": 13302252245,
+      "lat": 21.0517595,
+      "lon": 105.8812345
+    },
+    {
+      "type": "node",
+      "id": 13302252246,
+      "lat": 21.0513193,
+      "lon": 105.8814713
+    },
+    {
+      "type": "node",
+      "id": 13302252247,
+      "lat": 21.0514464,
+      "lon": 105.8817425
+    },
+    {
+      "type": "node",
+      "id": 13302252248,
+      "lat": 21.0518866,
+      "lon": 105.8815058
+    },
+    {
+      "type": "node",
+      "id": 13418888126,
+      "lat": 21.0806817,
+      "lon": 105.8544828
+    },
+    {
+      "type": "node",
+      "id": 13418888127,
+      "lat": 21.0805422,
+      "lon": 105.8544849
+    },
+    {
+      "type": "node",
+      "id": 13418888128,
+      "lat": 21.0805456,
+      "lon": 105.8546692
+    },
+    {
+      "type": "node",
+      "id": 13418888129,
+      "lat": 21.080685,
+      "lon": 105.8546634
+    },
+    {
+      "type": "node",
+      "id": 13437928490,
+      "lat": 21.1111323,
+      "lon": 105.8440679
+    },
+    {
+      "type": "node",
+      "id": 13437928491,
+      "lat": 21.1110159,
+      "lon": 105.8440368
+    },
+    {
+      "type": "node",
+      "id": 13437928492,
+      "lat": 21.1110017,
+      "lon": 105.8440981
+    },
+    {
+      "type": "node",
+      "id": 13437928493,
+      "lat": 21.1111181,
+      "lon": 105.8441291
+    },
+    {
+      "type": "node",
+      "id": 13437928494,
+      "lat": 21.1109445,
+      "lon": 105.8440094
+    },
+    {
+      "type": "node",
+      "id": 13437928495,
+      "lat": 21.1108281,
+      "lon": 105.8439783
+    },
+    {
+      "type": "node",
+      "id": 13437928496,
+      "lat": 21.1108138,
+      "lon": 105.8440396
+    },
+    {
+      "type": "node",
+      "id": 13437928497,
+      "lat": 21.1109302,
+      "lon": 105.8440707
+    },
+    {
+      "type": "node",
+      "id": 13437928498,
+      "lat": 21.1109257,
+      "lon": 105.844098
+    },
+    {
+      "type": "node",
+      "id": 13437928499,
+      "lat": 21.1108093,
+      "lon": 105.844067
+    },
+    {
+      "type": "node",
+      "id": 13437928500,
+      "lat": 21.110795,
+      "lon": 105.8441282
+    },
+    {
+      "type": "node",
+      "id": 13437934701,
+      "lat": 21.1109114,
+      "lon": 105.8441593
+    },
+    {
+      "type": "node",
+      "id": 13437934702,
+      "lat": 21.1111112,
+      "lon": 105.8441491
+    },
+    {
+      "type": "node",
+      "id": 13437934703,
+      "lat": 21.1109948,
+      "lon": 105.844118
+    },
+    {
+      "type": "node",
+      "id": 13437934704,
+      "lat": 21.1109805,
+      "lon": 105.8441793
+    },
+    {
+      "type": "node",
+      "id": 13437934705,
+      "lat": 21.1110969,
+      "lon": 105.8442104
+    },
+    {
+      "type": "node",
+      "id": 13437934739,
+      "lat": 21.1132956,
+      "lon": 105.8437533
+    },
+    {
+      "type": "node",
+      "id": 13437934740,
+      "lat": 21.1131566,
+      "lon": 105.8437545
+    },
+    {
+      "type": "node",
+      "id": 13437934741,
+      "lat": 21.1131572,
+      "lon": 105.8438304
+    },
+    {
+      "type": "node",
+      "id": 13437934742,
+      "lat": 21.1132962,
+      "lon": 105.8438292
+    },
+    {
+      "type": "node",
+      "id": 13437934743,
+      "lat": 21.1132939,
+      "lon": 105.8438658
+    },
+    {
+      "type": "node",
+      "id": 13437934744,
+      "lat": 21.1131549,
+      "lon": 105.843867
+    },
+    {
+      "type": "node",
+      "id": 13437934745,
+      "lat": 21.1131555,
+      "lon": 105.8439429
+    },
+    {
+      "type": "node",
+      "id": 13437934746,
+      "lat": 21.1132944,
+      "lon": 105.8439416
+    },
+    {
+      "type": "node",
+      "id": 13437934747,
+      "lat": 21.1132922,
+      "lon": 105.8439736
+    },
+    {
+      "type": "node",
+      "id": 13437934748,
+      "lat": 21.1131532,
+      "lon": 105.8439748
+    },
+    {
+      "type": "node",
+      "id": 13437934749,
+      "lat": 21.1131538,
+      "lon": 105.8440507
+    },
+    {
+      "type": "node",
+      "id": 13437934750,
+      "lat": 21.1132927,
+      "lon": 105.8440495
+    },
+    {
+      "type": "node",
+      "id": 13536198731,
+      "lat": 21.1092378,
+      "lon": 105.8616705
+    },
+    {
+      "type": "node",
+      "id": 13536198732,
+      "lat": 21.109042,
+      "lon": 105.8615416
+    },
+    {
+      "type": "node",
+      "id": 13536198733,
+      "lat": 21.1089751,
+      "lon": 105.8616585
+    },
+    {
+      "type": "node",
+      "id": 13536198734,
+      "lat": 21.1091708,
+      "lon": 105.8617873
+    },
+    {
+      "type": "node",
+      "id": 13432242232,
+      "lat": 21.17508,
+      "lon": 105.8577745
+    },
+    {
+      "type": "node",
+      "id": 13432242233,
+      "lat": 21.175085,
+      "lon": 105.8576438
+    },
+    {
+      "type": "node",
+      "id": 13432242234,
+      "lat": 21.1750258,
+      "lon": 105.8576412
+    },
+    {
+      "type": "node",
+      "id": 13432242235,
+      "lat": 21.1750208,
+      "lon": 105.8577719
+    },
+    {
+      "type": "node",
+      "id": 13432242236,
+      "lat": 21.1750865,
+      "lon": 105.8575871
+    },
+    {
+      "type": "node",
+      "id": 13432242237,
+      "lat": 21.1750915,
+      "lon": 105.8574563
+    },
+    {
+      "type": "node",
+      "id": 13432242238,
+      "lat": 21.1750323,
+      "lon": 105.8574537
+    },
+    {
+      "type": "node",
+      "id": 13432242239,
+      "lat": 21.1750273,
+      "lon": 105.8575845
+    },
+    {
+      "type": "node",
+      "id": 11171104887,
+      "lat": 20.9944449,
+      "lon": 105.9401927
+    },
+    {
+      "type": "node",
+      "id": 11171104888,
+      "lat": 20.9943058,
+      "lon": 105.940105
+    },
+    {
+      "type": "node",
+      "id": 11171104889,
+      "lat": 20.9943511,
+      "lon": 105.9400226
+    },
+    {
+      "type": "node",
+      "id": 11171143178,
+      "lat": 20.9939259,
+      "lon": 105.9440748
+    },
+    {
+      "type": "node",
+      "id": 11171143179,
+      "lat": 20.9938638,
+      "lon": 105.9440344
+    },
+    {
+      "type": "node",
+      "id": 11171143180,
+      "lat": 20.9937815,
+      "lon": 105.9441797
+    },
+    {
+      "type": "node",
+      "id": 11171143181,
+      "lat": 20.9938437,
+      "lon": 105.9442201
+    },
+    {
+      "type": "node",
+      "id": 11365640481,
+      "lat": 20.9914869,
+      "lon": 105.940292
+    },
+    {
+      "type": "node",
+      "id": 11365640482,
+      "lat": 20.9913586,
+      "lon": 105.9404089
+    },
+    {
+      "type": "node",
+      "id": 11365640485,
+      "lat": 20.991428,
+      "lon": 105.9402178
+    },
+    {
+      "type": "node",
+      "id": 11365640486,
+      "lat": 20.9912997,
+      "lon": 105.9403348
+    },
+    {
+      "type": "node",
+      "id": 11365640489,
+      "lat": 20.9913392,
+      "lon": 105.9402988
+    },
+    {
+      "type": "node",
+      "id": 12005862394,
+      "lat": 20.9916585,
+      "lon": 105.9431036
+    },
+    {
+      "type": "node",
+      "id": 12005862395,
+      "lat": 20.9915787,
+      "lon": 105.9430518
+    },
+    {
+      "type": "node",
+      "id": 12005862396,
+      "lat": 20.9914908,
+      "lon": 105.9432071
+    },
+    {
+      "type": "node",
+      "id": 12005862397,
+      "lat": 20.9915706,
+      "lon": 105.9432589
+    },
+    {
+      "type": "node",
+      "id": 11091109006,
+      "lat": 20.997528,
+      "lon": 105.9375807
+    },
+    {
+      "type": "node",
+      "id": 11091109007,
+      "lat": 20.9972375,
+      "lon": 105.9373449
+    },
+    {
+      "type": "node",
+      "id": 11091109008,
+      "lat": 20.997408,
+      "lon": 105.9374864
+    },
+    {
+      "type": "node",
+      "id": 11091109009,
+      "lat": 20.9977025,
+      "lon": 105.9377196
+    },
+    {
+      "type": "node",
+      "id": 11091109010,
+      "lat": 20.9971499,
+      "lon": 105.937466
+    },
+    {
+      "type": "node",
+      "id": 11091109011,
+      "lat": 20.9973203,
+      "lon": 105.9376075
+    },
+    {
+      "type": "node",
+      "id": 11091109012,
+      "lat": 20.9974427,
+      "lon": 105.9377037
+    },
+    {
+      "type": "node",
+      "id": 11091109013,
+      "lat": 20.9976172,
+      "lon": 105.9378426
+    },
+    {
+      "type": "node",
+      "id": 11171104886,
+      "lat": 20.9944902,
+      "lon": 105.9401103
+    },
+    {
+      "type": "node",
+      "id": 11171143304,
+      "lat": 20.9969645,
+      "lon": 105.9443245
+    },
+    {
+      "type": "node",
+      "id": 11171143305,
+      "lat": 20.9970938,
+      "lon": 105.9444091
+    },
+    {
+      "type": "node",
+      "id": 11171143306,
+      "lat": 20.9968601,
+      "lon": 105.9445073
+    },
+    {
+      "type": "node",
+      "id": 11171143307,
+      "lat": 20.9969903,
+      "lon": 105.9445917
+    },
+    {
+      "type": "node",
+      "id": 11338000015,
+      "lat": 20.9969106,
+      "lon": 105.9444188
+    },
+    {
+      "type": "node",
+      "id": 11338000016,
+      "lat": 20.9970402,
+      "lon": 105.9445033
+    },
+    {
+      "type": "node",
+      "id": 11350267665,
+      "lat": 20.9984872,
+      "lon": 105.9440186
+    },
+    {
+      "type": "node",
+      "id": 11350267666,
+      "lat": 20.9984047,
+      "lon": 105.9440817
+    },
+    {
+      "type": "node",
+      "id": 11350267667,
+      "lat": 20.9984994,
+      "lon": 105.9442238
+    },
+    {
+      "type": "node",
+      "id": 11350267668,
+      "lat": 20.9985819,
+      "lon": 105.9441607
+    },
+    {
+      "type": "node",
+      "id": 11505935204,
+      "lat": 21.0005954,
+      "lon": 105.9436381
+    },
+    {
+      "type": "node",
+      "id": 11505935205,
+      "lat": 21.0006868,
+      "lon": 105.9437804
+    },
+    {
+      "type": "node",
+      "id": 11505935207,
+      "lat": 21.0005151,
+      "lon": 105.9436973
+    },
+    {
+      "type": "node",
+      "id": 11505935208,
+      "lat": 21.0006065,
+      "lon": 105.9438396
+    },
+    {
+      "type": "node",
+      "id": 11346010808,
+      "lat": 20.9943372,
+      "lon": 105.9480598
+    },
+    {
+      "type": "node",
+      "id": 11346010809,
+      "lat": 20.994211,
+      "lon": 105.9481617
+    },
+    {
+      "type": "node",
+      "id": 11346010810,
+      "lat": 20.9942546,
+      "lon": 105.9482238
+    },
+    {
+      "type": "node",
+      "id": 11346010811,
+      "lat": 20.994381,
+      "lon": 105.9481217
+    },
+    {
+      "type": "node",
+      "id": 11346010812,
+      "lat": 20.9944317,
+      "lon": 105.9481938
+    },
+    {
+      "type": "node",
+      "id": 11346010813,
+      "lat": 20.9943054,
+      "lon": 105.9482959
+    },
+    {
+      "type": "node",
+      "id": 11346011101,
+      "lat": 20.9944294,
+      "lon": 105.9481905
+    },
+    {
+      "type": "node",
+      "id": 11375040995,
+      "lat": 20.9908181,
+      "lon": 105.9539585
+    },
+    {
+      "type": "node",
+      "id": 11375040998,
+      "lat": 20.9907551,
+      "lon": 105.9538594
+    },
+    {
+      "type": "node",
+      "id": 11375040999,
+      "lat": 20.9908916,
+      "lon": 105.9537599
+    },
+    {
+      "type": "node",
+      "id": 11375041000,
+      "lat": 20.9909547,
+      "lon": 105.9538591
+    },
+    {
+      "type": "node",
+      "id": 11346009456,
+      "lat": 20.9965951,
+      "lon": 105.9467702
+    },
+    {
+      "type": "node",
+      "id": 11346009457,
+      "lat": 20.9964649,
+      "lon": 105.9468748
+    },
+    {
+      "type": "node",
+      "id": 11346009458,
+      "lat": 20.9965264,
+      "lon": 105.9469626
+    },
+    {
+      "type": "node",
+      "id": 11346009459,
+      "lat": 20.9966566,
+      "lon": 105.9468579
+    },
+    {
+      "type": "node",
+      "id": 11346010713,
+      "lat": 20.9966329,
+      "lon": 105.9468241
+    },
+    {
+      "type": "node",
+      "id": 11374986695,
+      "lat": 20.9967897,
+      "lon": 105.9559696
+    },
+    {
+      "type": "node",
+      "id": 11374986696,
+      "lat": 20.9969055,
+      "lon": 105.9560717
+    },
+    {
+      "type": "node",
+      "id": 11374986697,
+      "lat": 20.9968347,
+      "lon": 105.9561628
+    },
+    {
+      "type": "node",
+      "id": 11374986698,
+      "lat": 20.9967197,
+      "lon": 105.9560624
+    },
+    {
+      "type": "node",
+      "id": 11627183391,
+      "lat": 21.0287495,
+      "lon": 105.9088281
+    },
+    {
+      "type": "node",
+      "id": 11627183392,
+      "lat": 21.0287543,
+      "lon": 105.9088901
+    },
+    {
+      "type": "node",
+      "id": 11627183393,
+      "lat": 21.0288545,
+      "lon": 105.9088812
+    },
+    {
+      "type": "node",
+      "id": 11627183394,
+      "lat": 21.0288497,
+      "lon": 105.9088192
+    },
+    {
+      "type": "node",
+      "id": 10905590997,
+      "lat": 21.0649245,
+      "lon": 105.9144717
+    },
+    {
+      "type": "node",
+      "id": 10905590998,
+      "lat": 21.0649601,
+      "lon": 105.9146129
+    },
+    {
+      "type": "node",
+      "id": 10905591001,
+      "lat": 21.0650828,
+      "lon": 105.9150473
+    },
+    {
+      "type": "node",
+      "id": 10905591002,
+      "lat": 21.0649512,
+      "lon": 105.9150885
+    },
+    {
+      "type": "node",
+      "id": 10905591003,
+      "lat": 21.064969,
+      "lon": 105.9151535
+    },
+    {
+      "type": "node",
+      "id": 10905591004,
+      "lat": 21.0651005,
+      "lon": 105.9151122
+    },
+    {
+      "type": "node",
+      "id": 10905600651,
+      "lat": 21.0650315,
+      "lon": 105.9159319
+    },
+    {
+      "type": "node",
+      "id": 10905600652,
+      "lat": 21.0649196,
+      "lon": 105.9159703
+    },
+    {
+      "type": "node",
+      "id": 10905600653,
+      "lat": 21.0649575,
+      "lon": 105.9160969
+    },
+    {
+      "type": "node",
+      "id": 10905600654,
+      "lat": 21.0650693,
+      "lon": 105.9160585
+    },
+    {
+      "type": "node",
+      "id": 11633981634,
+      "lat": 21.0648749,
+      "lon": 105.9146375
+    },
+    {
+      "type": "node",
+      "id": 11633981636,
+      "lat": 21.0648367,
+      "lon": 105.9146485
+    },
+    {
+      "type": "node",
+      "id": 11633981637,
+      "lat": 21.0648011,
+      "lon": 105.9145074
+    },
+    {
+      "type": "node",
+      "id": 11633981641,
+      "lat": 21.0650573,
+      "lon": 105.9150553
+    },
+    {
+      "type": "node",
+      "id": 11633981643,
+      "lat": 21.0649772,
+      "lon": 105.9150804
+    },
+    {
+      "type": "node",
+      "id": 9555409563,
+      "lat": 21.0612761,
+      "lon": 106.0933516
+    },
+    {
+      "type": "node",
+      "id": 9555409564,
+      "lat": 21.0611942,
+      "lon": 106.0933837
+    },
+    {
+      "type": "node",
+      "id": 9555409565,
+      "lat": 21.0611404,
+      "lon": 106.0932261
+    },
+    {
+      "type": "node",
+      "id": 9555409566,
+      "lat": 21.0612222,
+      "lon": 106.0931939
+    },
+    {
+      "type": "node",
+      "id": 13351472586,
+      "lat": 21.1823993,
+      "lon": 106.0578171
+    },
+    {
+      "type": "node",
+      "id": 13351472587,
+      "lat": 21.182346,
+      "lon": 106.0576062
+    },
+    {
+      "type": "node",
+      "id": 13351472588,
+      "lat": 21.1822311,
+      "lon": 106.0576396
+    },
+    {
+      "type": "node",
+      "id": 13351472589,
+      "lat": 21.1822845,
+      "lon": 106.0578506
+    },
+    {
+      "type": "node",
+      "id": 11209972402,
+      "lat": 20.8043226,
+      "lon": 106.6201108
+    },
+    {
+      "type": "node",
+      "id": 11209972403,
+      "lat": 20.8042653,
+      "lon": 106.619873
+    },
+    {
+      "type": "node",
+      "id": 11209972400,
+      "lat": 20.8045026,
+      "lon": 106.619815
+    },
+    {
+      "type": "node",
+      "id": 11209972401,
+      "lat": 20.8045573,
+      "lon": 106.6200477
+    }
+  ]
+}

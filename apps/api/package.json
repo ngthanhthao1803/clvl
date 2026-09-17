@@ -1,0 +1,30 @@
+{
+  "name": "clvl-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node scripts/kill-port.js && nodemon src/server.js",
+    "build": "echo \"API is source-only and does not require a build step\"",
+    "start": "node src/server.js",
+    "lint": "echo \"Add API linting after dependency install\"",
+    "seed": "node scripts/seed.js",
+    "seed:venues": "node scripts/seed-venues.mjs"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.0",
+    "express": "^5.0.0",
+    "firebase-admin": "^12.0.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^8.0.0",
+    "morgan": "^1.10.0",
+    "socket.io": "^4.8.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

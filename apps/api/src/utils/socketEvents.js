@@ -1,0 +1,14 @@
+export const socketEvents = {
+  connection: "connection",
+  authenticate: "authenticate",
+  disconnect: "disconnect",
+  sessionJoin: "session:join",
+  sessionLeave: "session:leave",
+  messageSend: "message:send",
+  messageNew: "message:new",
+  typingStart: "typing:start",
+  typingStop: "typing:stop",
+  onlineStatus: "online:status",
+  notificationNew: "notification:new",
+  sessionUpdated: "session:updated",
+};
