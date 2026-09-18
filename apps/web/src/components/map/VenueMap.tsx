@@ -283,7 +283,7 @@ export function VenueMap({
   };
 
   return (
-    <div className={`relative overflow-hidden border border-slate-200/90 shadow-sm ${className}`}>
+    <div className={`relative z-0 isolate overflow-hidden border border-slate-200/90 shadow-sm ${className}`}>
       {/* Map Target Div */}
       <div ref={mapContainerRef} className="h-full w-full" />
 

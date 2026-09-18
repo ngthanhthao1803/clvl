@@ -33,7 +33,7 @@ export function RatingModal({ isOpen, onClose, onSubmit }: RatingModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/20 px-4 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/20 px-4 backdrop-blur-sm">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-lg rounded-[2rem] border border-slate-200 bg-white p-6 shadow-glow"

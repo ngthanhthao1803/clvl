@@ -6,7 +6,10 @@ import {
   confirmEscrowPaymentController,
   createDepositOrderController,
   getBanksController,
+  getMyPaymentsController,
+  getPaymentStatusController,
   getSessionPaymentsController,
+  handleWebhookController,
   markNoShowController,
   releasePayoutController,
   reportDisputeController,
@@ -15,6 +18,10 @@ import {
 const router = Router();
 
 router.get("/banks", getBanksController);
+router.get("/status/:orderCode", authenticateJwt, getPaymentStatusController);
+router.get("/order/:orderCode", authenticateJwt, getPaymentStatusController);
+router.get("/my-payments", authenticateJwt, getMyPaymentsController);
+router.post("/webhook", handleWebhookController);
 router.post("/deposit-order", authenticateJwt, createDepositOrderController);
 router.post("/confirm", authenticateJwt, confirmEscrowPaymentController);
 router.post("/cancel-booking", authenticateJwt, cancelBookingWithRefundController);

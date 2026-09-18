@@ -27,6 +27,8 @@ import { useAuthStore } from "@/stores/auth-store";
 import { PaymentQRModal } from "@/components/modals/PaymentQRModal";
 import { CheckInModal } from "@/components/modals/CheckInModal";
 import { DisputeModal } from "@/components/modals/DisputeModal";
+import { DepositReceiptModal } from "@/components/modals/DepositReceiptModal";
+import { PayoutConfirmModal } from "@/components/modals/PayoutConfirmModal";
 
 export default function SessionDetailsPage() {
   const params = useParams<{ id: string }>();
@@ -44,6 +46,8 @@ export default function SessionDetailsPage() {
   const [paymentOrderData, setPaymentOrderData] = useState<any>(null);
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
   const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
+  const [isReceiptModalOpen, setIsReceiptModalOpen] = useState(false);
+  const [isPayoutModalOpen, setIsPayoutModalOpen] = useState(false);
 
   const sessionQuery = useQuery({
     queryKey: ["session", params.id],
@@ -313,9 +317,14 @@ export default function SessionDetailsPage() {
                     : `Đặt cọc VietQR (${(session.depositAmount || 50000).toLocaleString()}đ)`}
                 </button>
               ) : (
-                <span className="flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2.5 text-xs font-bold text-emerald-700">
-                  <ShieldCheck className="h-4 w-4" /> Đã cọc giữ chỗ (Ký quỹ an toàn)
-                </span>
+                <button
+                  type="button"
+                  onClick={() => setIsReceiptModalOpen(true)}
+                  className="flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2.5 text-xs font-bold text-emerald-700 hover:bg-emerald-100 transition shadow-xs"
+                  title="Bấm để xem biên lai ký quỹ CLVL Escrow"
+                >
+                  <ShieldCheck className="h-4 w-4" /> Đã cọc giữ chỗ • Xem biên lai
+                </button>
               )}
 
               {/* Check-In Action */}
@@ -431,7 +440,7 @@ export default function SessionDetailsPage() {
                 </div>
                 <div className="mt-3">
                   <button
-                    onClick={() => releasePayoutMutation.mutate()}
+                    onClick={() => setIsPayoutModalOpen(true)}
                     disabled={
                       releasePayoutMutation.isPending ||
                       session.escrowStatus === "paid_out" ||
@@ -651,7 +660,7 @@ export default function SessionDetailsPage() {
             </div>
           </div>
 
-          <div className="mt-4 overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
+          <div className="relative z-0 isolate mt-4 overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
             <MapWrapper
               venues={[
                 {
@@ -740,6 +749,28 @@ export default function SessionDetailsPage() {
           sessionTitle={session.title}
           onReportDispute={async (payload) => {
             await paymentsApi.reportDispute(payload);
+            sessionQuery.refetch();
+          }}
+        />
+
+        <DepositReceiptModal
+          isOpen={isReceiptModalOpen}
+          onClose={() => setIsReceiptModalOpen(false)}
+          session={session}
+          player={myPlayer || {}}
+          orderCode={paymentOrderData?.orderCode}
+        />
+
+        <PayoutConfirmModal
+          isOpen={isPayoutModalOpen}
+          onClose={() => setIsPayoutModalOpen(false)}
+          totalEscrowHeld={session.totalEscrowHeld || 0}
+          sessionTitle={session.title}
+          hostBank={session.host?.bankAccount || user?.bankAccount}
+          onConfirmPayout={async () => {
+            await releasePayoutMutation.mutateAsync();
+          }}
+          onBankUpdated={() => {
             sessionQuery.refetch();
           }}
         />

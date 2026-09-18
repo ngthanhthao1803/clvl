@@ -165,6 +165,12 @@ export default function ProfilePage() {
                       { id: "VPB", name: "VPBank" },
                       { id: "ACB", name: "ACB" },
                       { id: "TPB", name: "TPBank" },
+                      { id: "VBA", name: "Agribank" },
+                      { id: "OCB", name: "OCB" },
+                      { id: "SHB", name: "SHB" },
+                      { id: "HDB", name: "HDBank" },
+                      { id: "STB", name: "Sacombank" },
+                      { id: "VIB", name: "VIB" },
                     ].find((b) => b.id === e.target.value);
                     setBankForm((p) => ({
                       ...p,
@@ -174,6 +180,7 @@ export default function ProfilePage() {
                   }}
                   className="mt-1 w-full rounded-2xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs text-slate-800 outline-none"
                 >
+                  <option value="MSB">MSB (Ngân hàng Hàng Hải)</option>
                   <option value="MB">MBBank (Quân Đội)</option>
                   <option value="VCB">Vietcombank</option>
                   <option value="TCB">Techcombank</option>
@@ -182,6 +189,12 @@ export default function ProfilePage() {
                   <option value="VPB">VPBank</option>
                   <option value="ACB">ACB</option>
                   <option value="TPB">TPBank</option>
+                  <option value="VBA">Agribank</option>
+                  <option value="OCB">OCB</option>
+                  <option value="SHB">SHB</option>
+                  <option value="HDB">HDBank</option>
+                  <option value="STB">Sacombank</option>
+                  <option value="VIB">VIB</option>
                 </select>
               </div>
 

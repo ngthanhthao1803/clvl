@@ -80,8 +80,13 @@ export const paymentsApi = {
   getBanks: () => api.get("/payments/banks"),
   createDepositOrder: (sessionId: string) =>
     api.post("/payments/deposit-order", { sessionId }),
-  confirmPayment: (orderCode: string) =>
-    api.post("/payments/confirm", { orderCode }),
+  getPaymentStatus: (orderCode: string) =>
+    api.get(`/payments/status/${orderCode}`),
+  getMyPayments: () => api.get("/payments/my-payments"),
+  confirmPayment: (
+    orderCode: string,
+    payload?: { proofImage?: string; bankTransactionId?: string },
+  ) => api.post("/payments/confirm", { orderCode, ...payload }),
   cancelBooking: (sessionId: string, reason?: string) =>
     api.post("/payments/cancel-booking", { sessionId, reason }),
   checkIn: (sessionId: string, checkInCode: string) =>

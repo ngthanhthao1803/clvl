@@ -12,6 +12,12 @@ export type AuthUser = {
   city?: string;
   role?: string;
   reputation?: number;
+  bankAccount?: {
+    bankId?: string;
+    bankName?: string;
+    accountNumber?: string;
+    accountHolder?: string;
+  };
 };
 
 type AuthState = {

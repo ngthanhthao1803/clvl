@@ -11,4 +11,5 @@ export const socketEvents = {
   onlineStatus: "online:status",
   notificationNew: "notification:new",
   sessionUpdated: "session:updated",
+  paymentUpdated: "payment:updated",
 };

@@ -20,12 +20,45 @@ export async function createDepositOrderController(req, res, next) {
   }
 }
 
+export async function getPaymentStatusController(req, res, next) {
+  try {
+    const { orderCode } = req.params;
+    const userId = req.user?.sub || null;
+    const io = req.app.get("io");
+    const payment = await paymentsService.getPaymentByOrderCode(orderCode, userId, io);
+    res.json({ success: true, data: { payment } });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function confirmEscrowPaymentController(req, res, next) {
   try {
-    const { orderCode } = req.body;
+    const { orderCode, proofImage, bankTransactionId } = req.body;
     const userId = req.user.sub;
-    const result = await paymentsService.confirmEscrowPayment({ orderCode, userId });
+    const io = req.app.get("io");
+    const result = await paymentsService.confirmEscrowPayment({
+      orderCode,
+      userId,
+      proofImage,
+      bankTransactionId,
+      io,
+    });
     res.json({ success: true, data: result });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function handleWebhookController(req, res, next) {
+  try {
+    const io = req.app.get("io");
+    const result = await paymentsService.handlePaymentWebhook({
+      body: req.body,
+      headers: req.headers,
+      io,
+    });
+    res.json(result);
   } catch (error) {
     next(error);
   }
@@ -85,7 +118,8 @@ export async function releasePayoutController(req, res, next) {
   try {
     const { sessionId } = req.body;
     const hostId = req.user.sub;
-    const result = await paymentsService.releasePayoutToHost({ sessionId, hostId });
+    const io = req.app.get("io");
+    const result = await paymentsService.releasePayoutToHost({ sessionId, hostId, io });
     res.json({ success: true, data: result });
   } catch (error) {
     next(error);
@@ -96,6 +130,16 @@ export async function getSessionPaymentsController(req, res, next) {
   try {
     const { sessionId } = req.params;
     const payments = await paymentsService.getSessionPayments(sessionId);
+    res.json({ success: true, data: { payments } });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getMyPaymentsController(req, res, next) {
+  try {
+    const userId = req.user.sub;
+    const payments = await paymentsService.getMyPayments(userId);
     res.json({ success: true, data: { payments } });
   } catch (error) {
     next(error);
