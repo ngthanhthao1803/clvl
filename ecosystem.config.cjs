@@ -5,7 +5,6 @@ module.exports = {
       cwd: "/var/www/clvl/apps/api",
       script: "src/server.js",
       interpreter: "node",
-      interpreter_args: "--env-file=.env",
       env: {
         NODE_ENV: "production",
       },
@@ -19,7 +18,7 @@ module.exports = {
       script: "server.js",
       env: {
         NODE_ENV: "production",
-        PORT: 3001,
+        PORT: 3002,
         HOSTNAME: "127.0.0.1",
       },
       instances: 1,
