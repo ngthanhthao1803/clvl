@@ -87,6 +87,8 @@ const sessionSchema = new mongoose.Schema(
     },
     price: { type: Number, default: 0, min: 0 },
     notes: { type: String, trim: true, maxlength: 1000, default: "" },
+    coverImage: { type: String, trim: true, default: "" },
+    imageUrl: { type: String, trim: true, default: "" },
     host: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

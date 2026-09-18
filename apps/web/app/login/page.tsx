@@ -20,6 +20,7 @@ import {
 import { authApi } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth-store";
 import { GoogleLoginButton } from "@/components/auth/GoogleLoginButton";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 function AuthFormContent() {
   const router = useRouter();
@@ -160,8 +161,11 @@ function AuthFormContent() {
 
   return (
     <div className="mx-auto max-w-md animate-fadeUp">
-      {/* Header Info */}
+      {/* Brand Logo & Header Info */}
       <div className="text-center mb-6">
+        <div className="flex justify-center mb-4">
+          <BrandLogo size="lg" />
+        </div>
         <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-emerald-700">
           <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
           <span>Cộng Đồng Cầu Lông CLVL</span>

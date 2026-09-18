@@ -78,7 +78,9 @@ export async function loginWithEmailPassword({ email, password }) {
   }
 
   user.lastActiveAt = new Date();
-  await user.save();
+  await User.findByIdAndUpdate(user._id, {
+    $set: { lastActiveAt: user.lastActiveAt },
+  });
 
   const token = signJwt({
     sub: user._id.toString(),

@@ -34,6 +34,7 @@ const fallbackSessions = [
     depositRequired: true,
     latitude: 10.7746,
     longitude: 106.6669,
+    coverImage: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "demo-session-2",
@@ -50,6 +51,7 @@ const fallbackSessions = [
     depositRequired: true,
     latitude: 10.779,
     longitude: 106.671,
+    coverImage: "https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?auto=format&fit=crop&w=800&q=80",
   },
   {
     id: "demo-session-3",
@@ -66,6 +68,41 @@ const fallbackSessions = [
     depositRequired: false,
     latitude: 10.7992,
     longitude: 106.6803,
+    coverImage: "https://images.unsplash.com/photo-1521537634581-0dced2fed2a8?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: "demo-session-4",
+    title: "Đôi Nam TB-TB+ rèn kỹ thuật đập cầu",
+    venueName: "Sân Cầu Lông Viettel",
+    district: "Tân Bình",
+    city: "Hồ Chí Minh",
+    datetime: "Ngày mai, 18:30",
+    currentPlayers: 5,
+    maxPlayers: 8,
+    skillRequirements: ["TB", "TB+"],
+    matchType: "doubles",
+    price: 75000,
+    depositRequired: true,
+    latitude: 10.8015,
+    longitude: 106.6558,
+    coverImage: "https://images.unsplash.com/photo-1613918108466-292b78a8ef95?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: "demo-session-5",
+    title: "Giao lưu rèn thể lực & phản xạ sáng sớm",
+    venueName: "Sân Cầu Lông Tre Xanh",
+    district: "Gò Vấp",
+    city: "Hồ Chí Minh",
+    datetime: "Chủ nhật, 06:30",
+    currentPlayers: 4,
+    maxPlayers: 6,
+    skillRequirements: ["TB"],
+    matchType: "mixed doubles",
+    price: 70000,
+    depositRequired: false,
+    latitude: 10.8387,
+    longitude: 106.6653,
+    coverImage: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
   },
 ];
 
@@ -298,7 +335,8 @@ export default function ExplorePage() {
   return (
     <div className="space-y-5 animate-fadeUp">
       {/* Top Header & Search Bar */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex items-center justify-between">
+        {/* Left */}
         <div>
           <div className="flex items-center gap-2">
             <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-ping" />
@@ -306,16 +344,10 @@ export default function ExplorePage() {
               Khám Phá Sân Đấu
             </span>
           </div>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-            Các Buổi Chơi Cầu Lông Đang Mở
-          </h1>
-          <p className="mt-0.5 text-xs text-slate-500">
-            Tìm kiếm sân bãi, ghép kèo chuẩn trình độ và bảo chứng ký quỹ an toàn
-          </p>
         </div>
 
-        {/* View Toggle on Mobile */}
-        <div className="flex items-center gap-2 lg:hidden">
+        {/* Right */}
+        <div className="flex items-center lg:hidden">
           <button
             type="button"
             onClick={() => setMobileView(mobileView === "list" ? "map" : "list")}
@@ -366,8 +398,8 @@ export default function ExplorePage() {
               type="button"
               onClick={() => setActiveChip("all")}
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${activeChip === "all"
-                  ? "bg-slate-900 text-white shadow-sm"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                ? "bg-slate-900 text-white shadow-sm"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
                 }`}
             >
               Tất cả ({filteredSessions.length})
@@ -378,8 +410,8 @@ export default function ExplorePage() {
                 setActiveChip(activeChip === "tonight" ? "all" : "tonight")
               }
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${activeChip === "tonight"
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                ? "bg-emerald-600 text-white shadow-sm"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
                 }`}
             >
               🌙 Tối nay (18h+)
@@ -390,8 +422,8 @@ export default function ExplorePage() {
                 setActiveChip(activeChip === "escrow" ? "all" : "escrow")
               }
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${activeChip === "escrow"
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                ? "bg-emerald-600 text-white shadow-sm"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
                 }`}
             >
               🛡️ Ký quỹ an toàn
@@ -402,8 +434,8 @@ export default function ExplorePage() {
                 setActiveChip(activeChip === "tb" ? "all" : "tb")
               }
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${activeChip === "tb"
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                ? "bg-emerald-600 text-white shadow-sm"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
                 }`}
             >
               ⚡ Trình TB/TB+
@@ -414,8 +446,8 @@ export default function ExplorePage() {
                 setActiveChip(activeChip === "mixed" ? "all" : "mixed")
               }
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${activeChip === "mixed"
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                ? "bg-emerald-600 text-white shadow-sm"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
                 }`}
             >
               👥 Đôi Nam Nữ
@@ -426,8 +458,8 @@ export default function ExplorePage() {
                 setActiveChip(activeChip === "available" ? "all" : "available")
               }
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${activeChip === "available"
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                ? "bg-emerald-600 text-white shadow-sm"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
                 }`}
             >
               🔥 Còn chỗ trống

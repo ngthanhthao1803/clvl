@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Session } from "../models/Session.js";
 import { Venue } from "../models/Venue.js";
 import { AppError } from "../utils/AppError.js";
@@ -49,6 +50,7 @@ export async function createSession(hostId, payload) {
       : payload.price && payload.price > 0
         ? Math.min(payload.price, 50000)
         : 50000;
+  const coverImage = payload.coverImage ?? payload.imageUrl ?? "";
 
   let geoFields = {};
   const venueIdToLook = payload.venueId || payload.venue;
@@ -90,6 +92,8 @@ export async function createSession(hostId, payload) {
     depositAmount,
     depositRequired: payload.depositRequired ?? true,
     cancelPolicyHours: payload.cancelPolicyHours ?? 12,
+    coverImage,
+    imageUrl: coverImage,
     players: [
       {
         user: hostId,
@@ -105,7 +109,13 @@ export async function createSession(hostId, payload) {
 }
 
 export async function updateSession(sessionId, hostId, updates) {
-  const session = await Session.findById(sessionId);
+  let session = null;
+  if (mongoose.Types.ObjectId.isValid(sessionId)) {
+    session = await Session.findById(sessionId);
+  }
+  if (!session) {
+    session = await Session.findOne({ slug: sessionId });
+  }
 
   if (!session) {
     throw new AppError("Session not found", 404);
@@ -134,12 +144,24 @@ export async function updateSession(sessionId, hostId, updates) {
     "depositRequired",
     "depositAmount",
     "cancelPolicyHours",
+    "coverImage",
+    "imageUrl",
   ];
 
   for (const field of directFields) {
     if (updates[field] !== undefined) {
       session[field] = updates[field];
     }
+  }
+
+  if (updates.coverImage !== undefined) {
+    const val = updates.coverImage || "";
+    session.coverImage = val;
+    session.imageUrl = val;
+  } else if (updates.imageUrl !== undefined) {
+    const val = updates.imageUrl || "";
+    session.coverImage = val;
+    session.imageUrl = val;
   }
 
   if (updates.skillRequirement !== undefined) {
@@ -157,11 +179,17 @@ export async function updateSession(sessionId, hostId, updates) {
   syncSessionStatus(session);
   await session.save();
 
-  return populateSession(Session.findById(sessionId));
+  return populateSession(Session.findById(session._id));
 }
 
 export async function cancelSession(sessionId, hostId) {
-  const session = await Session.findById(sessionId);
+  let session = null;
+  if (mongoose.Types.ObjectId.isValid(sessionId)) {
+    session = await Session.findById(sessionId);
+  }
+  if (!session) {
+    session = await Session.findOne({ slug: sessionId });
+  }
 
   if (!session) {
     throw new AppError("Session not found", 404);
@@ -174,7 +202,7 @@ export async function cancelSession(sessionId, hostId) {
   session.status = "cancelled";
   await session.save();
 
-  return populateSession(Session.findById(sessionId));
+  return populateSession(Session.findById(session._id));
 }
 
 export async function getSessionById(sessionId) {

@@ -69,7 +69,7 @@ const userSchema = new mongoose.Schema(
     district: { type: String, trim: true, index: true },
     playSchedule: [{ type: String, trim: true }],
     rating: { type: Number, default: 0, min: 0, max: 5 },
-    reputation: { type: Number, default: 100, min: 0, max: 100 },
+    reputation: { type: Number, default: 100, min: 0 },
     totalMatches: { type: Number, default: 0, min: 0 },
     role: {
       type: String,
