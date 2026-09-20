@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 
 export type AuthUser = {
   id: string;
+  firebaseUid?: string;
   name: string;
   email?: string;
   phone?: string;

@@ -8,7 +8,19 @@ export const api = axios.create({
 
 api.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
-    const token = window.localStorage.getItem("clvl-jwt");
+    let token = window.localStorage.getItem("clvl-jwt");
+    if (!token) {
+      try {
+        const raw = window.localStorage.getItem("clvl-auth");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          token = parsed?.state?.token;
+          if (token) {
+            window.localStorage.setItem("clvl-jwt", token);
+          }
+        }
+      } catch {}
+    }
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
