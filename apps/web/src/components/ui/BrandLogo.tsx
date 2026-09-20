@@ -19,25 +19,25 @@ export function BrandLogo({
   // Sizing matrix for emblem & typography
   const config = {
     sm: {
-      emblemBox: "h-8 w-8",
-      titleText: "text-base",
+      emblemBox: "h-7 w-7",
+      titleText: "text-sm",
       badgeText: "text-[8px] px-1 py-0.2",
       subtitleText: "text-[8.5px]",
-      gap: "gap-2.5",
+      gap: "gap-2",
     },
     md: {
-      emblemBox: "h-10 w-10",
-      titleText: "text-lg sm:text-xl",
-      badgeText: "text-[9px] px-1.5 py-0.5",
-      subtitleText: "text-[9.5px]",
-      gap: "gap-3",
+      emblemBox: "h-8 w-8 sm:h-9 sm:w-9",
+      titleText: "text-base sm:text-lg",
+      badgeText: "text-[8px] sm:text-[9px] px-1.5 py-0.5",
+      subtitleText: "text-[9px] sm:text-[9.5px]",
+      gap: "gap-2 sm:gap-2.5",
     },
     lg: {
-      emblemBox: "h-12 w-12 sm:h-14 sm:w-14",
-      titleText: "text-2xl sm:text-3xl",
-      badgeText: "text-[10px] px-2 py-0.5",
+      emblemBox: "h-10 w-10 sm:h-12 sm:w-12",
+      titleText: "text-xl sm:text-2xl",
+      badgeText: "text-[9px] sm:text-[10px] px-2 py-0.5",
       subtitleText: "text-xs",
-      gap: "gap-3.5",
+      gap: "gap-3",
     },
   }[size];
 
@@ -155,7 +155,7 @@ export function BrandLogo({
 
         {showSubtitle && (
           <span
-            className={`font-black uppercase tracking-[0.16em] text-slate-400 ${config.subtitleText} mt-1 leading-none group-hover:text-slate-600 transition-colors`}
+            className={`hidden sm:block font-black uppercase tracking-[0.16em] text-slate-400 ${config.subtitleText} mt-0.5 leading-none group-hover:text-slate-600 transition-colors`}
           >
             Cầu Lông Việt Nam
           </span>

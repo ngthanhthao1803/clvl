@@ -34,7 +34,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/85 backdrop-blur-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] transition-all">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-3 py-1.5 sm:px-6 sm:py-3 lg:px-8">
         {/* 1. Brand Logo with Shuttlecock Emblem */}
         <div className="flex items-center gap-6">
           <BrandLogo size="md" href="/" />
@@ -121,11 +121,11 @@ export function Navbar() {
         <div className="flex items-center gap-2 md:hidden">
           <Link
             href="/explore?tab=map"
-            className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/90 bg-emerald-50/80 px-3 py-1.5 text-xs font-bold text-emerald-800 transition active:scale-95 shadow-xs hover:bg-emerald-100"
+            className="inline-flex items-center gap-1 rounded-full border border-emerald-200/90 bg-emerald-50/80 px-2.5 py-1 text-[11px] font-bold text-emerald-800 transition active:scale-95 shadow-xs hover:bg-emerald-100"
             title="Xem bản đồ sân cầu lông"
           >
-            <MapPin className="h-3.5 w-3.5 text-emerald-600" />
-            <span>Bản Đồ Sân</span>
+            <MapPin className="h-3 w-3 text-emerald-600" />
+            <span>Bản Đồ</span>
           </Link>
         </div>
       </div>

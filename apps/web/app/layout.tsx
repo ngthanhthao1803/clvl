@@ -18,7 +18,7 @@ export default function RootLayout({
       <body>
         <AppProviders>
           <Navbar />
-          <main className="mx-auto min-h-[calc(100vh-4rem)] max-w-7xl px-4 pb-24 pt-6 text-slate-900 sm:px-6 lg:px-8">
+          <main className="mx-auto min-h-[calc(100vh-3.5rem)] max-w-7xl px-3 pb-24 pt-3 sm:px-6 sm:pt-6 lg:px-8 text-slate-900">
             {children}
           </main>
           <BottomNavigation />

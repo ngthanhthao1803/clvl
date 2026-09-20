@@ -35,8 +35,8 @@ export function BottomNavigation() {
         <Link
           href="/"
           className={`flex flex-col items-center gap-0.5 py-1 text-center transition-all ${isHome
-              ? "text-emerald-600 dark:text-emerald-400 font-bold"
-              : "text-slate-500 hover:text-slate-800 dark:text-slate-400 font-medium"
+            ? "text-emerald-600 dark:text-emerald-400 font-bold"
+            : "text-slate-500 hover:text-slate-800 dark:text-slate-400 font-medium"
             }`}
         >
           <Home className={`h-5 w-5 transition-transform ${isHome ? "scale-110" : ""}`} />
@@ -47,8 +47,8 @@ export function BottomNavigation() {
         <Link
           href="/explore"
           className={`flex flex-col items-center gap-0.5 py-1 text-center transition-all ${isExplore
-              ? "text-emerald-600 dark:text-emerald-400 font-bold"
-              : "text-slate-500 hover:text-slate-800 dark:text-slate-400 font-medium"
+            ? "text-emerald-600 dark:text-emerald-400 font-bold"
+            : "text-slate-500 hover:text-slate-800 dark:text-slate-400 font-medium"
             }`}
         >
           <Compass className={`h-5 w-5 transition-transform ${isExplore ? "scale-110" : ""}`} />
@@ -63,37 +63,26 @@ export function BottomNavigation() {
         >
           {/* Elevated Circular Action Button */}
           <div
-            className={`relative -top-3.5 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-tr from-emerald-600 via-teal-500 to-emerald-400 text-white shadow-[0_8px_20px_-3px_rgba(5,150,105,0.45)] ring-4 ring-white dark:ring-slate-900 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] transform-gpu group-hover:scale-105 group-active:scale-95 ${
-              isCreate
-                ? "ring-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.55)] scale-105"
-                : ""
-            }`}
+            className={`relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-tr from-emerald-600 via-teal-500 to-emerald-400 text-white shadow-[0_8px_20px_-3px_rgba(5,150,105,0.45)] ring-4 ring-white dark:ring-slate-900 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] transform-gpu group-hover:scale-105 group-active:scale-95 ${isCreate
+              ? "ring-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.55)] scale-105"
+              : ""
+              }`}
           >
             <Plus
-              className={`h-6 w-6 stroke-[2.5] transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] transform-gpu group-hover:rotate-90 group-active:rotate-90 ${
-                isCreate ? "rotate-45" : ""
-              }`}
+              className={`h-6 w-6 stroke-[2.5] transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] transform-gpu group-hover:rotate-90 group-active:rotate-90 ${isCreate ? "rotate-45" : ""
+                }`}
             />
           </div>
 
-          {/* Label with comfortable breathing room & aligned baseline */}
-          <span
-            className={`-mt-1.5 text-[10px] tracking-tight transition-colors ${
-              isCreate
-                ? "text-emerald-600 font-bold dark:text-emerald-400"
-                : "text-slate-600 dark:text-slate-400 font-medium group-hover:text-emerald-700"
-            }`}
-          >
-            Tạo kèo
-          </span>
+
         </Link>
 
         {/* 4. Thông báo */}
         <Link
           href="/notifications"
           className={`relative flex flex-col items-center gap-0.5 py-1 text-center transition-all ${isNotifications
-              ? "text-emerald-600 dark:text-emerald-400 font-bold"
-              : "text-slate-500 hover:text-slate-800 dark:text-slate-400 font-medium"
+            ? "text-emerald-600 dark:text-emerald-400 font-bold"
+            : "text-slate-500 hover:text-slate-800 dark:text-slate-400 font-medium"
             }`}
         >
           <div className="relative inline-flex">
@@ -111,15 +100,15 @@ export function BottomNavigation() {
         <Link
           href={(user ? `/profile/${user.id}` : "/login") as any}
           className={`flex flex-col items-center gap-0.5 py-1 text-center transition-all ${isProfile
-              ? "text-emerald-600 dark:text-emerald-400 font-bold"
-              : "text-slate-500 hover:text-slate-800 dark:text-slate-400 font-medium"
+            ? "text-emerald-600 dark:text-emerald-400 font-bold"
+            : "text-slate-500 hover:text-slate-800 dark:text-slate-400 font-medium"
             }`}
         >
           {user ? (
             <div
               className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-black text-white shadow-xs transition-transform ${isProfile
-                  ? "bg-gradient-to-br from-emerald-500 to-teal-600 ring-2 ring-emerald-500 scale-110"
-                  : "bg-gradient-to-br from-slate-600 to-slate-800"
+                ? "bg-gradient-to-br from-emerald-500 to-teal-600 ring-2 ring-emerald-500 scale-110"
+                : "bg-gradient-to-br from-slate-600 to-slate-800"
                 }`}
             >
               {(user.name?.[0] || "U").toUpperCase()}
