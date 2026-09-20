@@ -14,7 +14,7 @@ const positions = ["front", "back", "left", "right", "all-round"];
 
 export const updateUserSchema = z.object({
   name: z.string().min(2).max(80).optional(),
-  avatar: z.string().url().optional(),
+  avatar: z.string().max(400_000).optional(),
   bio: z.string().max(400).optional(),
   gender: z.enum(genders).optional(),
   skillLevel: z.enum(skillLevels).optional(),

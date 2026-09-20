@@ -76,9 +76,11 @@ export const venuesApi = {
 };
 
 export const notificationsApi = {
+  listNotifications: () => api.get(`/notifications`),
   getUnreadCount: () => api.get(`/notifications/unread-count`),
   markRead: (notificationId: string) =>
     api.patch(`/notifications/${notificationId}/read`),
+  markAllRead: () => api.patch(`/notifications/read-all`),
   deleteNotification: (notificationId: string) =>
     api.delete(`/notifications/${notificationId}`),
 };
