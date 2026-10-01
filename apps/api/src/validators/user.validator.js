@@ -1,12 +1,26 @@
 import { z } from "zod";
 
 const skillLevels = [
+  "Newbie",
+  "Yếu",
+  "Yếu+",
+  "TBY-",
+  "TBY",
+  "TBY+",
+  "TB-",
+  "TB",
+  "TB+",
+  "Khá-",
+  "Khá",
+  "Khá+",
+  "Pro",
+  "Bán chuyên",
+  "Trình giải",
   "Beginner",
   "Intermediate",
   "Intermediate+",
   "Advanced",
   "Advanced+",
-  "Pro",
 ];
 const genders = ["male", "female", "other", "prefer_not_say"];
 const hands = ["left", "right", "ambidextrous"];

@@ -3,24 +3,8 @@
 import React, { useRef, useState, useMemo, useCallback, useEffect } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { SkillBadge } from "@/components/ui/SkillBadge";
-
-export const ALL_SKILLS = [
-  "Newbie",      // 0
-  "Yếu",         // 1
-  "Yếu+",        // 2
-  "TBY-",        // 3
-  "TBY",         // 4
-  "TBY+",        // 5
-  "TB-",         // 6
-  "TB",          // 7
-  "TB+",         // 8
-  "Khá-",        // 9
-  "Khá",         // 10
-  "Khá+",        // 11
-  "Pro",         // 12
-  "Bán chuyên",  // 13
-  "Trình giải",  // 14
-] as const;
+import { ALL_SKILLS } from "@/lib/skills";
+export { ALL_SKILLS };
 
 export const SKILL_PRESETS = [
   {

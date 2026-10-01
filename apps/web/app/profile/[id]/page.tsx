@@ -33,6 +33,8 @@ import { useAuthStore } from "@/stores/auth-store";
 import { signOutSession } from "@/lib/auth";
 import { AvatarUploadModal } from "@/components/profile/AvatarUploadModal";
 import { getDefaultAvatar } from "@/lib/badminton-avatars";
+import { VIETNAM_PROVINCES, getDistricts } from "@/lib/vietnam-locations";
+import { SKILL_OPTIONS } from "@/lib/skills";
 
 const BANK_LIST = [
   { id: "MB", name: "MBBank (Quân Đội)" },
@@ -50,24 +52,6 @@ const BANK_LIST = [
   { id: "STB", name: "Sacombank" },
   { id: "VIB", name: "VIB" },
   { id: "MSB", name: "MSB (Hàng Hải)" },
-];
-
-const SKILL_OPTIONS = [
-  "Newbie",
-  "Yếu",
-  "Yếu+",
-  "TBY-",
-  "TBY",
-  "TBY+",
-  "TB-",
-  "TB",
-  "TB+",
-  "Khá-",
-  "Khá",
-  "Khá+",
-  "Pro",
-  "Bán chuyên",
-  "Trình giải",
 ];
 
 export default function ProfilePage() {
@@ -382,9 +366,8 @@ export default function ProfilePage() {
                 Uy tín
               </div>
               <div
-                className={`mt-0.5 text-sm font-black sm:text-base ${
-                  isLowReputation ? "text-rose-600" : "text-slate-900"
-                }`}
+                className={`mt-0.5 text-sm font-black sm:text-base ${isLowReputation ? "text-rose-600" : "text-slate-900"
+                  }`}
               >
                 {reputation}/100
               </div>
@@ -422,20 +405,18 @@ export default function ProfilePage() {
         <button
           type="button"
           onClick={() => setActiveTab("sessions")}
-          className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition ${
-            activeTab === "sessions"
-              ? "bg-emerald-600 text-white shadow-xs"
-              : "border border-slate-200/80 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-          }`}
+          className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition ${activeTab === "sessions"
+            ? "bg-emerald-600 text-white shadow-xs"
+            : "border border-slate-200/80 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+            }`}
         >
           <Trophy className="h-3.5 w-3.5" />
           <span>Kèo đã tổ chức</span>
           <span
-            className={`rounded-full px-1.5 py-0.2 text-[10px] font-bold ${
-              activeTab === "sessions"
-                ? "bg-white/20 text-white"
-                : "bg-slate-100 text-slate-600"
-            }`}
+            className={`rounded-full px-1.5 py-0.2 text-[10px] font-bold ${activeTab === "sessions"
+              ? "bg-white/20 text-white"
+              : "bg-slate-100 text-slate-600"
+              }`}
           >
             {createdSessions.length}
           </span>
@@ -446,11 +427,10 @@ export default function ProfilePage() {
             <button
               type="button"
               onClick={() => setActiveTab("bank")}
-              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition ${
-                activeTab === "bank"
-                  ? "bg-emerald-600 text-white shadow-xs"
-                  : "border border-slate-200/80 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition ${activeTab === "bank"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "border border-slate-200/80 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                }`}
             >
               <Building2 className="h-3.5 w-3.5" />
               <span>Tài khoản nhận tiền Host</span>
@@ -459,11 +439,10 @@ export default function ProfilePage() {
             <button
               type="button"
               onClick={() => setActiveTab("edit")}
-              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition ${
-                activeTab === "edit"
-                  ? "bg-emerald-600 text-white shadow-xs"
-                  : "border border-slate-200/80 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition ${activeTab === "edit"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "border border-slate-200/80 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                }`}
             >
               <Edit3 className="h-3.5 w-3.5" />
               <span>Sửa hồ sơ & Cài đặt</span>
@@ -684,12 +663,16 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       setEditForm((p) => ({ ...p, skillLevel: e.target.value }))
                     }
-                    className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-xs font-semibold text-slate-900 outline-none focus:border-emerald-500 focus:bg-white"
+                    className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-xs font-semibold text-slate-900 outline-none focus:border-emerald-500 focus:bg-white cursor-pointer"
                   >
-                    {SKILL_OPTIONS.map((s) => (
-                      <option key={s} value={s}>
-                        {s}
-                      </option>
+                    {Array.from(new Set(SKILL_OPTIONS.map((s) => s.group))).map((group) => (
+                      <optgroup key={group} label={group}>
+                        {SKILL_OPTIONS.filter((s) => s.group === group).map((s) => (
+                          <option key={s.value} value={s.value}>
+                            {s.value} · {s.desc}
+                          </option>
+                        ))}
+                      </optgroup>
                     ))}
                   </select>
                 </div>
@@ -712,7 +695,7 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600">
                     Vị trí ưa thích:
@@ -735,17 +718,59 @@ export default function ProfilePage() {
 
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600">
-                    Khu vực (Quận/Huyện):
+                    Tỉnh / Thành phố:
                   </label>
+                  <select
+                    value={editForm.city}
+                    onChange={(e) => {
+                      const newCity = e.target.value;
+                      const dists = getDistricts(newCity);
+                      setEditForm((p) => ({
+                        ...p,
+                        city: newCity,
+                        district: dists[0] || "",
+                      }));
+                    }}
+                    className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-xs font-semibold text-slate-900 outline-none focus:border-emerald-500 focus:bg-white cursor-pointer"
+                  >
+                    <optgroup label="">
+                      {VIETNAM_PROVINCES.filter((p) => p.isHot).map((p) => (
+                        <option key={p.name} value={p.name}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="">
+                      {VIETNAM_PROVINCES.filter((p) => !p.isHot).map((p) => (
+                        <option key={p.name} value={p.name}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600">
+                  Quận / Huyện thường chơi:
+                </label>
+                <div className="relative mt-1">
                   <input
                     type="text"
+                    list="profile-district-options"
                     value={editForm.district}
                     onChange={(e) =>
                       setEditForm((p) => ({ ...p, district: e.target.value }))
                     }
-                    placeholder="Quận 10, Tân Bình..."
-                    className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-xs font-semibold text-slate-900 outline-none focus:border-emerald-500 focus:bg-white"
+                    placeholder="Chọn hoặc nhập quận/huyện..."
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-xs font-semibold text-slate-900 outline-none focus:border-emerald-500 focus:bg-white"
                   />
+                  <datalist id="profile-district-options">
+                    {getDistricts(editForm.city).map((d) => (
+                      <option key={d} value={d} />
+                    ))}
+                  </datalist>
                 </div>
               </div>
             </div>

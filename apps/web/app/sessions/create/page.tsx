@@ -31,6 +31,7 @@ import { MatchCard } from "@/components/cards/MatchCard";
 import { DualSkillRangeSlider } from "@/components/ui/DualSkillRangeSlider";
 import { api, sessionsApi, venuesApi } from "@/lib/api";
 import { BADMINTON_COVER_PRESETS } from "@/lib/badminton-covers";
+import { VIETNAM_PROVINCES, getDistricts } from "@/lib/vietnam-locations";
 
 type SessionFormState = {
   title: string;
@@ -661,6 +662,7 @@ function CreateSessionForm() {
                       </label>
                       <input
                         type="text"
+                        list="session-create-districts"
                         value={form.district}
                         onChange={(e) =>
                           setForm((prev) => ({
@@ -668,23 +670,34 @@ function CreateSessionForm() {
                             district: e.target.value,
                           }))
                         }
-                        placeholder="Ví dụ: Quận 10, Tân Bình..."
+                        placeholder="Ví dụ: Quận 10, Tân Bình, Cầu Giấy..."
                         className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-xs font-medium text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-100 sm:text-sm"
                       />
+                      <datalist id="session-create-districts">
+                        {getDistricts(form.city).map((d) => (
+                          <option key={d} value={d} />
+                        ))}
+                      </datalist>
                     </div>
                     <div>
                       <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600">
-                        Thành phố
+                        Thành phố / Tỉnh <span className="text-rose-500">*</span>
                       </label>
                       <input
                         type="text"
+                        list="session-create-cities"
                         value={form.city}
                         onChange={(e) =>
                           setForm((prev) => ({ ...prev, city: e.target.value }))
                         }
-                        placeholder="Hồ Chí Minh"
+                        placeholder="Hồ Chí Minh, Hà Nội, Đà Nẵng..."
                         className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-xs font-medium text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-100 sm:text-sm"
                       />
+                      <datalist id="session-create-cities">
+                        {VIETNAM_PROVINCES.map((p) => (
+                          <option key={p.name} value={p.name} />
+                        ))}
+                      </datalist>
                     </div>
                   </div>
 

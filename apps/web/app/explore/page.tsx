@@ -21,6 +21,8 @@ import {
   Bookmark,
 } from "lucide-react";
 import { useSavedSessionsStore } from "@/stores/saved-sessions-store";
+import { VIETNAM_PROVINCES, getDistricts } from "@/lib/vietnam-locations";
+import { SKILL_OPTIONS } from "@/lib/skills";
 
 const fallbackSessions = [
   {
@@ -518,11 +520,10 @@ export default function ExplorePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setViewMode("list")}
-              className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold transition ${
-                viewMode === "list"
-                  ? "bg-white text-emerald-800 shadow-xs"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
+              className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold transition ${viewMode === "list"
+                ? "bg-white text-emerald-800 shadow-xs"
+                : "text-slate-500 hover:text-slate-800"
+                }`}
               title="Danh sách ngang gọn"
             >
               <LayoutList className="h-3.5 w-3.5" />
@@ -532,11 +533,10 @@ export default function ExplorePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setViewMode("grid")}
-              className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold transition ${
-                viewMode === "grid"
-                  ? "bg-white text-emerald-800 shadow-xs"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
+              className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold transition ${viewMode === "grid"
+                ? "bg-white text-emerald-800 shadow-xs"
+                : "text-slate-500 hover:text-slate-800"
+                }`}
               title="Lưới 2 cột gọn"
             >
               <LayoutGrid className="h-3.5 w-3.5" />
@@ -600,11 +600,10 @@ export default function ExplorePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setActiveChip("all")}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "all"
-                  ? "bg-slate-900 text-white shadow-xs"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "all"
+                ? "bg-slate-900 text-white shadow-xs"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                }`}
             >
               Tất cả
             </button>
@@ -616,25 +615,22 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "saved" ? "all" : "saved")
               }
-              className={`shrink-0 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold transition ${
-                activeChip === "saved"
-                  ? "bg-amber-500 text-white shadow-xs"
-                  : "border border-amber-300/80 bg-amber-50/70 text-amber-800 hover:bg-amber-100"
-              }`}
+              className={`shrink-0 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold transition ${activeChip === "saved"
+                ? "bg-amber-500 text-white shadow-xs"
+                : "border border-amber-300/80 bg-amber-50/70 text-amber-800 hover:bg-amber-100"
+                }`}
             >
               <Bookmark
-                className={`h-3 w-3 ${
-                  activeChip === "saved" ? "fill-white text-white" : "fill-amber-600 text-amber-600"
-                }`}
+                className={`h-3 w-3 ${activeChip === "saved" ? "fill-white text-white" : "fill-amber-600 text-amber-600"
+                  }`}
               />
               <span>Đã lưu</span>
               {savedCount > 0 && (
                 <span
-                  className={`rounded-full px-1.5 py-0.2 text-[9.5px] font-black ${
-                    activeChip === "saved"
-                      ? "bg-white text-amber-700"
-                      : "bg-amber-200 text-amber-900"
-                  }`}
+                  className={`rounded-full px-1.5 py-0.2 text-[9.5px] font-black ${activeChip === "saved"
+                    ? "bg-white text-amber-700"
+                    : "bg-amber-200 text-amber-900"
+                    }`}
                 >
                   {savedCount}
                 </span>
@@ -646,11 +642,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "upcoming" ? "all" : "upcoming")
               }
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "upcoming"
-                  ? "bg-emerald-600 text-white shadow-xs font-bold"
-                  : "border border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
-              }`}
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "upcoming"
+                ? "bg-emerald-600 text-white shadow-xs font-bold"
+                : "border border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+                }`}
             >
               ⚡ Sắp tới
             </button>
@@ -660,11 +655,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "today" ? "all" : "today")
               }
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "today"
-                  ? "bg-emerald-600 text-white shadow-xs font-bold"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "today"
+                ? "bg-emerald-600 text-white shadow-xs font-bold"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                }`}
             >
               🔥 Hôm nay
             </button>
@@ -674,11 +668,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "tonight" ? "all" : "tonight")
               }
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "tonight"
-                  ? "bg-emerald-600 text-white shadow-xs"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "tonight"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                }`}
             >
               🌙 Tối nay
             </button>
@@ -688,11 +681,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "tomorrow" ? "all" : "tomorrow")
               }
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "tomorrow"
-                  ? "bg-sky-600 text-white shadow-xs"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "tomorrow"
+                ? "bg-sky-600 text-white shadow-xs"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                }`}
             >
               📅 Ngày mai
             </button>
@@ -702,11 +694,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "escrow" ? "all" : "escrow")
               }
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "escrow"
-                  ? "bg-emerald-600 text-white shadow-xs"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "escrow"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                }`}
             >
               🛡️ Ký quỹ
             </button>
@@ -716,11 +707,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "tb" ? "all" : "tb")
               }
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "tb"
-                  ? "bg-emerald-600 text-white shadow-xs"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "tb"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                }`}
             >
               🏸 Trình TB/TB+
             </button>
@@ -730,11 +720,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "mixed" ? "all" : "mixed")
               }
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "mixed"
-                  ? "bg-emerald-600 text-white shadow-xs"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "mixed"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                }`}
             >
               👥 Đôi Nam Nữ
             </button>
@@ -744,11 +733,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "available" ? "all" : "available")
               }
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "available"
-                  ? "bg-emerald-600 text-white shadow-xs"
-                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "available"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                }`}
             >
               🔥 Còn chỗ
             </button>
@@ -758,11 +746,10 @@ export default function ExplorePage() {
               onClick={() =>
                 setActiveChip(activeChip === "past" ? "all" : "past")
               }
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "past"
-                  ? "bg-slate-700 text-white shadow-xs font-bold"
-                  : "border border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100"
-              }`}
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "past"
+                ? "bg-slate-700 text-white shadow-xs font-bold"
+                : "border border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100"
+                }`}
             >
               🕒 Đã kết thúc
             </button>
@@ -782,15 +769,46 @@ export default function ExplorePage() {
         {/* Expandable Advanced Filters */}
         {showAdvancedFilters && (
           <div className="mt-2.5 border-t border-slate-100 pt-2.5">
-            <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-4">
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+              <label className="text-[11px] text-slate-600 font-medium">
+                Tỉnh / Thành phố
+                <select
+                  value={uiFilters.city}
+                  onChange={(e) => updateUiFilter("city", e.target.value)}
+                  className="mt-0.5 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-900 outline-none focus:border-emerald-400 cursor-pointer"
+                >
+                  <option value="">Tất cả tỉnh thành</option>
+                  <optgroup label="">
+                    {VIETNAM_PROVINCES.filter((p) => p.isHot).map((p) => (
+                      <option key={p.name} value={p.name}>
+                        {p.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="">
+                    {VIETNAM_PROVINCES.filter((p) => !p.isHot).map((p) => (
+                      <option key={p.name} value={p.name}>
+                        {p.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                </select>
+              </label>
+
               <label className="text-[11px] text-slate-600 font-medium">
                 Quận / Huyện
                 <input
+                  list="explore-district-options"
                   value={uiFilters.district}
                   onChange={(e) => updateUiFilter("district", e.target.value)}
-                  placeholder="Quận 10, Tân Bình, Phú Nhuận..."
+                  placeholder="Quận 10, Cầu Giấy, Hải Châu..."
                   className="mt-0.5 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-900 outline-none focus:border-emerald-400"
                 />
+                <datalist id="explore-district-options">
+                  {getDistricts(uiFilters.city).map((d) => (
+                    <option key={d} value={d} />
+                  ))}
+                </datalist>
               </label>
 
               <label className="text-[11px] text-slate-600 font-medium">
@@ -801,14 +819,15 @@ export default function ExplorePage() {
                   className="mt-0.5 w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-900 outline-none focus:border-emerald-400 cursor-pointer"
                 >
                   <option value="">Tất cả trình độ</option>
-                  <option value="Newbie">Newbie</option>
-                  <option value="Yếu">Yếu</option>
-                  <option value="Yếu+">Yếu+</option>
-                  <option value="TB-">TB-</option>
-                  <option value="TB">TB</option>
-                  <option value="TB+">TB+</option>
-                  <option value="Khá">Khá</option>
-                  <option value="Pro">Pro</option>
+                  {Array.from(new Set(SKILL_OPTIONS.map((s) => s.group))).map((group) => (
+                    <optgroup key={group} label={group}>
+                      {SKILL_OPTIONS.filter((s) => s.group === group).map((s) => (
+                        <option key={s.value} value={s.value}>
+                          {s.value} ({s.desc.split(" · ")[0]})
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
                 </select>
               </label>
 
@@ -851,9 +870,8 @@ export default function ExplorePage() {
       <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-12">
         {/* Left Column: Match Cards (60% on desktop) */}
         <div
-          className={`space-y-2 sm:space-y-2.5 lg:col-span-7 ${
-            mobileView === "map" ? "hidden lg:block" : "block"
-          }`}
+          className={`space-y-2 sm:space-y-2.5 lg:col-span-7 ${mobileView === "map" ? "hidden lg:block" : "block"
+            }`}
         >
           {filteredSessions.length === 0 ? (
             activeChip === "saved" ? (
@@ -908,11 +926,10 @@ export default function ExplorePage() {
                   <div
                     key={sId}
                     onMouseEnter={() => setSelectedSessionId(sId)}
-                    className={`transition-all duration-200 ${
-                      isSelected
-                        ? "ring-2 ring-emerald-500/80 rounded-2xl scale-[1.005]"
-                        : ""
-                    }`}
+                    className={`transition-all duration-200 ${isSelected
+                      ? "ring-2 ring-emerald-500/80 rounded-2xl scale-[1.005]"
+                      : ""
+                      }`}
                   >
                     <MatchCard session={session} layout="horizontal" />
                   </div>
@@ -934,11 +951,10 @@ export default function ExplorePage() {
                   <div
                     key={sId}
                     onMouseEnter={() => setSelectedSessionId(sId)}
-                    className={`transition-all duration-200 ${
-                      isSelected
-                        ? "ring-2 ring-emerald-500/80 rounded-2xl scale-[1.01]"
-                        : ""
-                    }`}
+                    className={`transition-all duration-200 ${isSelected
+                      ? "ring-2 ring-emerald-500/80 rounded-2xl scale-[1.01]"
+                      : ""
+                      }`}
                   >
                     <MatchCard session={session} layout="grid" />
                   </div>
@@ -950,9 +966,8 @@ export default function ExplorePage() {
 
         {/* Right Column: Sticky Interactive Leaflet Map (40% on desktop) */}
         <div
-          className={`lg:col-span-5 ${
-            mobileView === "list" ? "hidden lg:block" : "block"
-          }`}
+          className={`lg:col-span-5 ${mobileView === "list" ? "hidden lg:block" : "block"
+            }`}
         >
           <div className="sticky top-16 sm:top-20">
             <div className="flex items-center justify-between px-1 pb-1.5 text-xs">

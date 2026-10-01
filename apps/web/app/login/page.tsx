@@ -21,6 +21,8 @@ import { authApi } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth-store";
 import { GoogleLoginButton } from "@/components/auth/GoogleLoginButton";
 import { BrandLogo } from "@/components/ui/BrandLogo";
+import { VIETNAM_PROVINCES, getDistricts, DEFAULT_PROVINCE } from "@/lib/vietnam-locations";
+import { SKILL_OPTIONS } from "@/lib/skills";
 
 function AuthFormContent() {
   const router = useRouter();
@@ -42,7 +44,20 @@ function AuthFormContent() {
   const [showRegPassword, setShowRegPassword] = useState(false);
   const [regPhone, setRegPhone] = useState("");
   const [regSkillLevel, setRegSkillLevel] = useState("TB");
+  const [regCity, setRegCity] = useState(DEFAULT_PROVINCE);
   const [regDistrict, setRegDistrict] = useState("Quận 10");
+  const [isCustomDistrict, setIsCustomDistrict] = useState(false);
+  const [regCustomDistrict, setRegCustomDistrict] = useState("");
+
+  const currentDistricts = getDistricts(regCity);
+
+  const handleCityChange = (newCity: string) => {
+    setRegCity(newCity);
+    const districts = getDistricts(newCity);
+    setRegDistrict(districts[0] || "");
+    setIsCustomDistrict(false);
+    setRegCustomDistrict("");
+  };
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -132,14 +147,18 @@ function AuthFormContent() {
 
     setLoading(true);
     try {
+      const finalDistrict = isCustomDistrict
+        ? regCustomDistrict.trim() || "Chung"
+        : regDistrict;
+
       const res = await authApi.register({
         name: regName.trim(),
         email: regEmail.trim(),
         password: regPassword,
         phone: regPhone.trim(),
         skillLevel: regSkillLevel,
-        district: regDistrict,
-        city: "Hồ Chí Minh",
+        district: finalDistrict,
+        city: regCity,
       });
 
       const { user, token } = res.data.data;
@@ -190,11 +209,10 @@ function AuthFormContent() {
               setTab("login");
               setErrorMsg(null);
             }}
-            className={`flex-1 rounded-xl py-2 text-xs font-bold transition ${
-              tab === "login"
-                ? "bg-white text-slate-900 shadow-sm"
-                : "text-slate-500 hover:text-slate-900"
-            }`}
+            className={`flex-1 rounded-xl py-2 text-xs font-bold transition ${tab === "login"
+              ? "bg-white text-slate-900 shadow-sm"
+              : "text-slate-500 hover:text-slate-900"
+              }`}
           >
             Đăng Nhập
           </button>
@@ -204,11 +222,10 @@ function AuthFormContent() {
               setTab("register");
               setErrorMsg(null);
             }}
-            className={`flex-1 rounded-xl py-2 text-xs font-bold transition ${
-              tab === "register"
-                ? "bg-white text-slate-900 shadow-sm"
-                : "text-slate-500 hover:text-slate-900"
-            }`}
+            className={`flex-1 rounded-xl py-2 text-xs font-bold transition ${tab === "register"
+              ? "bg-white text-slate-900 shadow-sm"
+              : "text-slate-500 hover:text-slate-900"
+              }`}
           >
             Tạo Tài Khoản
           </button>
@@ -294,24 +311,25 @@ function AuthFormContent() {
         {/* TAB 2: REGISTER */}
         {tab === "register" && (
           <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
-            <div>
-              <label className="block text-xs font-bold text-slate-700">
-                Họ và tên hiển thị trên sân
-              </label>
-              <div className="relative mt-1">
-                <User className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                <input
-                  type="text"
-                  required
-                  value={regName}
-                  onChange={(e) => setRegName(e.target.value)}
-                  placeholder="Nguyễn Văn A"
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-4 text-xs font-medium text-slate-900 outline-none focus:border-emerald-400 focus:bg-white transition"
-                />
-              </div>
-            </div>
-
+            {/* Tên & Số điện thoại */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-slate-700">
+                  Họ và tên <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative mt-1">
+                  <User className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    required
+                    value={regName}
+                    onChange={(e) => setRegName(e.target.value)}
+                    placeholder="Nguyễn Văn A"
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-4 text-xs font-medium text-slate-900 outline-none focus:border-emerald-400 focus:bg-white transition"
+                  />
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs font-bold text-slate-700">
                   Số điện thoại
@@ -327,52 +345,115 @@ function AuthFormContent() {
                   />
                 </div>
               </div>
+            </div>
+
+            {/* Khu vực thường chơi: Tỉnh/Thành phố & Quận/Huyện khắp Việt Nam */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-slate-700">
+                  Tỉnh / Thành phố
+                </label>
+                <div className="relative mt-1">
+                  <MapPin className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                  <select
+                    value={regCity}
+                    onChange={(e) => handleCityChange(e.target.value)}
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-4 text-xs font-medium text-slate-900 outline-none focus:border-emerald-400 focus:bg-white transition cursor-pointer"
+                  >
+                    <optgroup label="">
+                      {VIETNAM_PROVINCES.filter((p) => p.isHot).map((p) => (
+                        <option key={p.name} value={p.name}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="">
+                      {VIETNAM_PROVINCES.filter((p) => !p.isHot).map((p) => (
+                        <option key={p.name} value={p.name}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  </select>
+                </div>
+              </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700">
-                  Khu vực thường chơi
+                  Quận / Huyện thường chơi
                 </label>
                 <div className="relative mt-1">
-                  <MapPin className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                  <select
-                    value={regDistrict}
-                    onChange={(e) => setRegDistrict(e.target.value)}
-                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-4 text-xs font-medium text-slate-900 outline-none focus:border-emerald-400 focus:bg-white transition cursor-pointer"
-                  >
-                    <option value="Quận 1">Quận 1</option>
-                    <option value="Quận 3">Quận 3</option>
-                    <option value="Quận 7">Quận 7</option>
-                    <option value="Quận 10">Quận 10</option>
-                    <option value="Tân Bình">Tân Bình</option>
-                    <option value="Bình Thạnh">Bình Thạnh</option>
-                    <option value="Thủ Đức">TP. Thủ Đức</option>
-                    <option value="Phú Nhuận">Phú Nhuận</option>
-                    <option value="Gò Vấp">Gò Vấp</option>
-                    <option value="Hóc Môn">Hóc Môn</option>
-                    <option value="Bình Tân">Bình Tân</option>
-                  </select>
+                  <MapPin className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                  {isCustomDistrict ? (
+                    <div className="flex gap-1.5">
+                      <input
+                        type="text"
+                        value={regCustomDistrict}
+                        onChange={(e) => setRegCustomDistrict(e.target.value)}
+                        placeholder="Nhập tên quận/huyện..."
+                        className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-3 text-xs font-medium text-slate-900 outline-none focus:border-emerald-400 focus:bg-white transition"
+                        autoFocus
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setIsCustomDistrict(false)}
+                        className="rounded-2xl border border-slate-200 bg-white px-2.5 text-[11px] font-semibold text-slate-600 hover:bg-slate-50 whitespace-nowrap"
+                        title="Chọn lại từ danh sách"
+                      >
+                        Chọn lại
+                      </button>
+                    </div>
+                  ) : (
+                    <select
+                      value={regDistrict}
+                      onChange={(e) => {
+                        if (e.target.value === "__custom__") {
+                          setIsCustomDistrict(true);
+                          setRegCustomDistrict("");
+                        } else {
+                          setRegDistrict(e.target.value);
+                        }
+                      }}
+                      className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-4 text-xs font-medium text-slate-900 outline-none focus:border-emerald-400 focus:bg-white transition cursor-pointer"
+                    >
+                      {currentDistricts.map((d) => (
+                        <option key={d} value={d}>
+                          {d}
+                        </option>
+                      ))}
+                      <option value="__custom__">➕ Khác (Nhập tay...)</option>
+                    </select>
+                  )}
                 </div>
               </div>
             </div>
 
+            {/* Trình độ người chơi: Đồng nhất 15 cấp độ */}
             <div>
-              <label className="block text-xs font-bold text-slate-700">
-                Trình độ chơi hiện tại
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-bold text-slate-700">
+                  Trình độ chơi hiện tại
+                </label>
+                <span className="hidden sm:inline text-[10.5px] font-medium text-emerald-600 truncate max-w-[200px]">
+                  {SKILL_OPTIONS.find((s) => s.value === regSkillLevel)?.desc || ""}
+                </span>
+              </div>
               <div className="relative mt-1">
-                <Trophy className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <Trophy className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
                 <select
                   value={regSkillLevel}
                   onChange={(e) => setRegSkillLevel(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-4 text-xs font-medium text-slate-900 outline-none focus:border-emerald-400 focus:bg-white transition cursor-pointer"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-4 text-xs font-semibold text-slate-900 outline-none focus:border-emerald-400 focus:bg-white transition cursor-pointer"
                 >
-                  <option value="Newbie">Newbie · Người mới bắt đầu</option>
-                  <option value="Yếu">Yếu · Biết luật, giao cầu cơ bản</option>
-                  <option value="TB-">TB- · Trung bình yếu</option>
-                  <option value="TB">TB · Trung bình phong trào đều</option>
-                  <option value="TB+">TB+ · Trung bình khá</option>
-                  <option value="Khá">Khá · Kỹ thuật & phản xạ tốt</option>
-                  <option value="Pro">Pro · Trình giải / Bán chuyên</option>
+                  {Array.from(new Set(SKILL_OPTIONS.map((s) => s.group))).map((group) => (
+                    <optgroup key={group} label={group}>
+                      {SKILL_OPTIONS.filter((s) => s.group === group).map((s) => (
+                        <option key={s.value} value={s.value}>
+                          {s.value} · {s.desc}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
                 </select>
               </div>
             </div>
