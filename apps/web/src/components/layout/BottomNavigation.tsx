@@ -105,14 +105,22 @@ export function BottomNavigation() {
             }`}
         >
           {user ? (
-            <div
-              className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-black text-white shadow-xs transition-transform ${isProfile
-                ? "bg-gradient-to-br from-emerald-500 to-teal-600 ring-2 ring-emerald-500 scale-110"
-                : "bg-gradient-to-br from-slate-600 to-slate-800"
-                }`}
-            >
-              {(user.name?.[0] || "U").toUpperCase()}
-            </div>
+            user.avatar || (user.gender === "female" ? "/images/avatars/warrior-female.jpg" : user.gender === "male" ? "/images/avatars/warrior-male.jpg" : "") ? (
+              <img
+                src={user.avatar || (user.gender === "female" ? "/images/avatars/warrior-female.jpg" : "/images/avatars/warrior-male.jpg")}
+                alt={user.name}
+                className={`h-5 w-5 rounded-full object-cover shadow-xs transition-transform ${isProfile ? "ring-2 ring-emerald-500 scale-110" : ""}`}
+              />
+            ) : (
+              <div
+                className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-black text-white shadow-xs transition-transform ${isProfile
+                  ? "bg-gradient-to-br from-emerald-500 to-teal-600 ring-2 ring-emerald-500 scale-110"
+                  : "bg-gradient-to-br from-slate-600 to-slate-800"
+                  }`}
+              >
+                {(user.name?.[0] || "U").toUpperCase()}
+              </div>
+            )
           ) : (
             <UserRound className={`h-5 w-5 transition-transform ${isProfile ? "scale-110" : ""}`} />
           )}

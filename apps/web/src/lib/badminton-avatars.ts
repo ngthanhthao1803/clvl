@@ -14,7 +14,22 @@ function svgToDataUrl(svgString: string): string {
   return `data:image/svg+xml;utf8,${encodeURIComponent(svgString.trim())}`;
 }
 
+export const DEFAULT_MALE_AVATAR = "/images/avatars/warrior-male.jpg";
+export const DEFAULT_FEMALE_AVATAR = "/images/avatars/warrior-female.jpg";
+
 export const BADMINTON_AVATAR_PRESETS: AvatarPreset[] = [
+  {
+    id: "warrior-male",
+    name: "Chiến Binh Lông Thủ Nam",
+    tag: "Nam Mặc Định",
+    dataUrl: DEFAULT_MALE_AVATAR,
+  },
+  {
+    id: "warrior-female",
+    name: "Chiến Binh Lông Thủ Nữ",
+    tag: "Nữ Mặc Định",
+    dataUrl: DEFAULT_FEMALE_AVATAR,
+  },
   {
     id: "smash-ace",
     name: "Tay Đập Sấm Sét",
@@ -179,9 +194,16 @@ export const BADMINTON_AVATAR_PRESETS: AvatarPreset[] = [
 ];
 
 /**
- * Returns a deterministic fallback avatar SVG data URL based on user's name
+ * Returns default warrior avatar if gender is known, or a deterministic fallback avatar SVG data URL
  */
-export function getDefaultAvatar(name = "Player", id = ""): string {
+export function getDefaultAvatar(name = "Player", id = "", gender?: string): string {
+  if (gender === "female") {
+    return DEFAULT_FEMALE_AVATAR;
+  }
+  if (gender === "male") {
+    return DEFAULT_MALE_AVATAR;
+  }
+
   const initial = (name.trim().charAt(0) || "C").toUpperCase();
 
   // Pick a distinct sport gradient based on name/id charCode sum

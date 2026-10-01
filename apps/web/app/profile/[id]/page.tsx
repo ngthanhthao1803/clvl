@@ -191,7 +191,7 @@ export default function ProfilePage() {
     );
   }
 
-  const avatarUrl = user.avatar || getDefaultAvatar(user.name, user.id);
+  const avatarUrl = user.avatar || getDefaultAvatar(user.name, user.id, user.gender);
   const isVerifiedHost = user.isVerifiedHost || (user.hostedMatchesCount ?? 0) >= 3;
   const reputation = user.reputation ?? 100;
   const isLowReputation = reputation < 70;
@@ -266,11 +266,11 @@ export default function ProfilePage() {
             {/* Avatar & Basic Info */}
             <div className="flex items-end gap-3.5 -mt-12 sm:-mt-14">
               {/* Avatar Circle with edit button */}
-              <div className="group relative h-22 w-22 sm:h-26 sm:w-26 flex-shrink-0 rounded-full border-4 border-white bg-slate-100 shadow-md ring-1 ring-slate-200/80 overflow-hidden">
+              <div className="group relative h-24 w-24 sm:h-28 sm:w-28 aspect-square flex-shrink-0 rounded-full border-4 border-white bg-slate-100 shadow-md ring-1 ring-slate-200/80 overflow-hidden">
                 <img
                   src={avatarUrl}
                   alt={user.name}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover rounded-full aspect-square"
                 />
 
                 {isOwner && (

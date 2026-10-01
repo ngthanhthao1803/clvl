@@ -128,9 +128,17 @@ export function Navbar() {
                 href={`/profile/${user.id}`}
                 className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-emerald-300 hover:bg-emerald-50 transition shadow-sm"
               >
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-[11px] font-black text-white shadow-sm">
-                  {(user.name?.[0] || "U").toUpperCase()}
-                </div>
+                {user.avatar || (user.gender === "female" ? "/images/avatars/warrior-female.jpg" : user.gender === "male" ? "/images/avatars/warrior-male.jpg" : "") ? (
+                  <img
+                    src={user.avatar || (user.gender === "female" ? "/images/avatars/warrior-female.jpg" : "/images/avatars/warrior-male.jpg")}
+                    alt={user.name}
+                    className="h-6 w-6 rounded-full object-cover shadow-xs border border-emerald-300"
+                  />
+                ) : (
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-[11px] font-black text-white shadow-sm">
+                    {(user.name?.[0] || "U").toUpperCase()}
+                  </div>
+                )}
                 <span className="max-w-[130px] truncate">{user.name}</span>
               </Link>
             </div>

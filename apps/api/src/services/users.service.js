@@ -6,13 +6,22 @@ export function toUserDto(user) {
     return null;
   }
 
+  let avatar = user.avatar;
+  if (!avatar) {
+    if (user.gender === "female") {
+      avatar = "/images/avatars/warrior-female.jpg";
+    } else if (user.gender === "male") {
+      avatar = "/images/avatars/warrior-male.jpg";
+    }
+  }
+
   return {
     id: user._id.toString(),
     firebaseUid: user.firebaseUid,
     name: user.name,
     email: user.email,
     phone: user.phone || "",
-    avatar: user.avatar,
+    avatar,
     bio: user.bio,
     gender: user.gender,
     skillLevel: user.skillLevel,
@@ -73,6 +82,17 @@ export async function getUserById(userId) {
 }
 
 export async function updateMe(userId, updates) {
+  if (updates.gender) {
+    const existing = await User.findById(userId);
+    if (existing && (!existing.avatar || existing.avatar.includes("/images/avatars/warrior-"))) {
+      if (updates.gender === "female") {
+        updates.avatar = "/images/avatars/warrior-female.jpg";
+      } else if (updates.gender === "male") {
+        updates.avatar = "/images/avatars/warrior-male.jpg";
+      }
+    }
+  }
+
   const user = await User.findOneAndUpdate(
     { _id: userId, isActive: true },
     { $set: updates },

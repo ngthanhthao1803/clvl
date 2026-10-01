@@ -241,11 +241,13 @@ export default function ExplorePage() {
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
 
+  const [mounted, setMounted] = useState(false);
   const savedIds = useSavedSessionsStore((s) => s.savedIds);
   const getSavedList = useSavedSessionsStore((s) => s.getSavedList);
-  const savedCount = savedIds.length;
+  const savedCount = mounted ? savedIds.length : 0;
 
   useEffect(() => {
+    setMounted(true);
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const chip = params.get("chip") || params.get("filter");
@@ -578,6 +580,7 @@ export default function ExplorePage() {
             <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
+              suppressHydrationWarning
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
               placeholder="Tìm tên sân, quận huyện, trình độ, host..."
@@ -586,6 +589,7 @@ export default function ExplorePage() {
             {searchKeyword && (
               <button
                 type="button"
+                suppressHydrationWarning
                 onClick={() => setSearchKeyword("")}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-slate-400 hover:text-slate-600"
               >
@@ -757,6 +761,7 @@ export default function ExplorePage() {
             {/* Advanced Filters Trigger */}
             <button
               type="button"
+              suppressHydrationWarning
               onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
               className="ml-auto shrink-0 flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-50 transition"
             >

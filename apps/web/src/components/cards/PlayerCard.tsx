@@ -7,6 +7,7 @@ export type PlayerCardProps = {
     id: string;
     name: string;
     avatar?: string;
+    gender?: string;
     city?: string;
     district?: string;
     rating?: number;
@@ -22,7 +23,7 @@ export function PlayerCard({ player }: PlayerCardProps) {
   const isVerified =
     player.isVerifiedHost || (player.hostedMatchesCount ?? 0) >= 3;
   const isLowReputation = (player.reputation ?? 100) < 70;
-  const avatarUrl = player.avatar || getDefaultAvatar(player.name, player.id);
+  const avatarUrl = player.avatar || getDefaultAvatar(player.name, player.id, player.gender);
 
   return (
     <article className="rounded-3xl border border-slate-200/90 bg-white p-5 shadow-xs">

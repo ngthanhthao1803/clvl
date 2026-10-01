@@ -515,9 +515,17 @@ export default function SessionDetailsPage() {
         {/* Quick Time & Host Strip below Image */}
         <div className="p-3.5 sm:p-4 bg-slate-50/70 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-800 font-black text-xs shrink-0 border border-emerald-200">
-              {(hostName?.[0] || "H").toUpperCase()}
-            </div>
+            {host?.avatar || (host?.gender === "female" ? "/images/avatars/warrior-female.jpg" : host?.gender === "male" ? "/images/avatars/warrior-male.jpg" : "") ? (
+              <img
+                src={host?.avatar || (host?.gender === "female" ? "/images/avatars/warrior-female.jpg" : "/images/avatars/warrior-male.jpg")}
+                alt={hostName}
+                className="h-8 w-8 rounded-full object-cover shrink-0 border border-emerald-200 shadow-xs"
+              />
+            ) : (
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-800 font-black text-xs shrink-0 border border-emerald-200">
+                {(hostName?.[0] || "H").toUpperCase()}
+              </div>
+            )}
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="font-bold text-slate-900">{hostName}</span>
@@ -577,9 +585,17 @@ export default function SessionDetailsPage() {
                     className="flex items-center justify-between gap-3 py-2.5 hover:bg-slate-50/70 rounded-xl px-2 transition"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-700 font-bold text-xs shrink-0 border border-slate-200">
-                        {(p.user?.name?.[0] || "P").toUpperCase()}
-                      </div>
+                      {p.user?.avatar || (p.user?.gender === "female" ? "/images/avatars/warrior-female.jpg" : p.user?.gender === "male" ? "/images/avatars/warrior-male.jpg" : "") ? (
+                        <img
+                          src={p.user?.avatar || (p.user?.gender === "female" ? "/images/avatars/warrior-female.jpg" : "/images/avatars/warrior-male.jpg")}
+                          alt={p.user?.name || "Player"}
+                          className="h-8 w-8 rounded-full object-cover shrink-0 border border-slate-200 shadow-xs"
+                        />
+                      ) : (
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-700 font-bold text-xs shrink-0 border border-slate-200">
+                          {(p.user?.name?.[0] || "P").toUpperCase()}
+                        </div>
+                      )}
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
                           <span className="font-bold text-xs text-slate-900 truncate">

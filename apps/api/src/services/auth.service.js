@@ -23,11 +23,19 @@ export async function registerWithEmailPassword(payload) {
 
   try {
     const localUid = `local_${new mongoose.Types.ObjectId()}`;
+    const defaultAvatar =
+      gender === "female"
+        ? "/images/avatars/warrior-female.jpg"
+        : gender === "male"
+          ? "/images/avatars/warrior-male.jpg"
+          : "";
+
     const user = await User.create({
       firebaseUid: localUid,
       name: name.trim(),
       email: email.toLowerCase().trim(),
       password,
+      avatar: defaultAvatar,
       phone: phone ? phone.trim() : "",
       gender: gender || "prefer_not_say",
       skillLevel: skillLevel || "TB",

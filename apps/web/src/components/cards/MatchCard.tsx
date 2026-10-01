@@ -265,7 +265,13 @@ export function MatchCard({
   }, [initialCover]);
 
   // Saved / Bookmark & Share logic
-  const isSaved = useSavedSessionsStore((s) => s.isSaved(sessionId));
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const rawIsSaved = useSavedSessionsStore((s) => s.isSaved(sessionId));
+  const isSaved = mounted ? rawIsSaved : false;
   const toggleSave = useSavedSessionsStore((s) => s.toggleSave);
 
   const handleToggleSave = (e: React.MouseEvent) => {
@@ -438,6 +444,7 @@ export function MatchCard({
             {/* Quick Share */}
             <button
               type="button"
+              suppressHydrationWarning
               onClick={handleShare}
               title="Chia sẻ kèo đấu"
               className="p-1 rounded-md text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition active:scale-90"
@@ -448,6 +455,7 @@ export function MatchCard({
             {/* Quick Bookmark / Save */}
             <button
               type="button"
+              suppressHydrationWarning
               onClick={handleToggleSave}
               title={isSaved ? "Bỏ lưu kèo" : "Lưu kèo xem sau"}
               className={clsx(
@@ -584,6 +592,7 @@ export function MatchCard({
             {/* Quick Share */}
             <button
               type="button"
+              suppressHydrationWarning
               onClick={handleShare}
               title="Chia sẻ kèo đấu"
               className="p-1 rounded-md bg-black/55 backdrop-blur-xs text-white/85 hover:text-white hover:bg-black/75 border border-white/20 transition active:scale-90"
@@ -594,6 +603,7 @@ export function MatchCard({
             {/* Quick Bookmark / Save */}
             <button
               type="button"
+              suppressHydrationWarning
               onClick={handleToggleSave}
               title={isSaved ? "Bỏ lưu kèo" : "Lưu kèo xem sau"}
               className={clsx(
