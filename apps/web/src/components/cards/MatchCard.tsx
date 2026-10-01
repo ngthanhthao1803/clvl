@@ -10,9 +10,14 @@ import {
   ShieldCheck,
   ArrowRight,
   Sparkles,
+  Bookmark,
+  Share2,
 } from "lucide-react";
 import { SkillBadge } from "@/components/ui/SkillBadge";
 import { BADMINTON_COVER_PRESETS, resolveCoverImage } from "@/lib/badminton-covers";
+import { useSavedSessionsStore } from "@/stores/saved-sessions-store";
+import { shareSession } from "@/lib/share";
+import { toast } from "@/stores/toast-store";
 
 export type MatchCardProps = {
   session: {
@@ -257,6 +262,33 @@ export function MatchCard({
     setImageSrc(initialCover);
   }, [initialCover]);
 
+  // Saved / Bookmark & Share logic
+  const isSaved = useSavedSessionsStore((s) => s.isSaved(sessionId));
+  const toggleSave = useSavedSessionsStore((s) => s.toggleSave);
+
+  const handleToggleSave = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const saved = toggleSave(session);
+    if (saved) {
+      toast.success("Đã lưu kèo vào danh sách!", "Bạn có thể xem lại tại tab 'Đã lưu' bất cứ lúc nào.");
+    } else {
+      toast.info("Đã bỏ lưu kèo");
+    }
+  };
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await shareSession({
+      id: sessionId,
+      title: session.title,
+      venueName: session.venueName,
+      datetime: session.datetime,
+      price: session.price,
+    });
+  };
+
   // Host Info
   const host = typeof session.host === "object" ? session.host : null;
   const hostName = host?.name || "CLVL Host";
@@ -400,6 +432,31 @@ export function MatchCard({
                 <span className="hidden sm:inline">Ký quỹ</span>
               </span>
             )}
+
+            {/* Quick Share */}
+            <button
+              type="button"
+              onClick={handleShare}
+              title="Chia sẻ kèo đấu"
+              className="p-1 rounded-md text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition active:scale-90"
+            >
+              <Share2 className="h-3.5 w-3.5" />
+            </button>
+
+            {/* Quick Bookmark / Save */}
+            <button
+              type="button"
+              onClick={handleToggleSave}
+              title={isSaved ? "Bỏ lưu kèo" : "Lưu kèo xem sau"}
+              className={clsx(
+                "p-1 rounded-md transition active:scale-90",
+                isSaved
+                  ? "text-amber-500 bg-amber-50 hover:bg-amber-100"
+                  : "text-slate-400 hover:text-amber-500 hover:bg-slate-100",
+              )}
+            >
+              <Bookmark className={clsx("h-3.5 w-3.5", isSaved && "fill-amber-500")} />
+            </button>
           </div>
         </div>
 
@@ -508,7 +565,34 @@ export function MatchCard({
               </span>
             )}
           </div>
-          <div>{thumbnailStatusBadge}</div>
+          <div className="flex items-center gap-1 pointer-events-auto">
+            {thumbnailStatusBadge}
+
+            {/* Quick Share */}
+            <button
+              type="button"
+              onClick={handleShare}
+              title="Chia sẻ kèo đấu"
+              className="p-1 rounded-md bg-black/55 backdrop-blur-xs text-white/85 hover:text-white hover:bg-black/75 border border-white/20 transition active:scale-90"
+            >
+              <Share2 className="h-3 w-3" />
+            </button>
+
+            {/* Quick Bookmark / Save */}
+            <button
+              type="button"
+              onClick={handleToggleSave}
+              title={isSaved ? "Bỏ lưu kèo" : "Lưu kèo xem sau"}
+              className={clsx(
+                "p-1 rounded-md backdrop-blur-xs border transition active:scale-90",
+                isSaved
+                  ? "bg-amber-500 text-white border-amber-400"
+                  : "bg-black/55 text-white/85 hover:text-white hover:bg-black/75 border-white/20",
+              )}
+            >
+              <Bookmark className={clsx("h-3 w-3", isSaved && "fill-white")} />
+            </button>
+          </div>
         </div>
 
         {/* Bottom Price on Image */}

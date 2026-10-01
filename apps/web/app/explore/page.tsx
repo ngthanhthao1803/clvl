@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { MatchCard } from "@/components/cards/MatchCard";
@@ -18,7 +18,9 @@ import {
   Search,
   ShieldCheck,
   X,
+  Bookmark,
 } from "lucide-react";
+import { useSavedSessionsStore } from "@/stores/saved-sessions-store";
 
 const fallbackSessions = [
   {
@@ -237,6 +239,23 @@ export default function ExplorePage() {
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
 
+  const savedIds = useSavedSessionsStore((s) => s.savedIds);
+  const getSavedList = useSavedSessionsStore((s) => s.getSavedList);
+  const savedCount = savedIds.length;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const chip = params.get("chip") || params.get("filter");
+      if (chip === "saved") {
+        setActiveChip("saved");
+      }
+      if (params.get("tab") === "map") {
+        setMobileView("map");
+      }
+    }
+  }, []);
+
   const [uiFilters, setUiFilters] = useState({
     city: "",
     district: "",
@@ -362,6 +381,17 @@ export default function ExplorePage() {
         const max = s.maxPlayers || 8;
         return max - current > 0 && !isPastSession(s);
       });
+    } else if (activeChip === "saved") {
+      const savedFromList = list.filter((s) =>
+        savedIds.includes(String(s.id || s._id))
+      );
+      const extraSaved = getSavedList().filter(
+        (stored: any) =>
+          !savedFromList.some(
+            (s) => String(s.id || s._id) === String(stored.id || stored._id)
+          )
+      );
+      list = [...savedFromList, ...extraSaved];
     }
 
     // Advanced datetime range filter
@@ -388,7 +418,7 @@ export default function ExplorePage() {
       const timeB = new Date(b.datetime).getTime() || 0;
       return timeA - timeB;
     });
-  }, [sessionsQuery.data, searchKeyword, activeChip, uiFilters]);
+  }, [sessionsQuery.data, searchKeyword, activeChip, uiFilters, savedIds, getSavedList]);
 
   // Transform sessions into map venue markers
   const mapVenues = useMemo(() => {
@@ -576,7 +606,39 @@ export default function ExplorePage() {
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
               }`}
             >
-              Tất cả ({filteredSessions.length})
+              Tất cả
+            </button>
+
+            {/* Chip: Đã lưu (Saved) */}
+            <button
+              type="button"
+              suppressHydrationWarning
+              onClick={() =>
+                setActiveChip(activeChip === "saved" ? "all" : "saved")
+              }
+              className={`shrink-0 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold transition ${
+                activeChip === "saved"
+                  ? "bg-amber-500 text-white shadow-xs"
+                  : "border border-amber-300/80 bg-amber-50/70 text-amber-800 hover:bg-amber-100"
+              }`}
+            >
+              <Bookmark
+                className={`h-3 w-3 ${
+                  activeChip === "saved" ? "fill-white text-white" : "fill-amber-600 text-amber-600"
+                }`}
+              />
+              <span>Đã lưu</span>
+              {savedCount > 0 && (
+                <span
+                  className={`rounded-full px-1.5 py-0.2 text-[9.5px] font-black ${
+                    activeChip === "saved"
+                      ? "bg-white text-amber-700"
+                      : "bg-amber-200 text-amber-900"
+                  }`}
+                >
+                  {savedCount}
+                </span>
+              )}
             </button>
             <button
               type="button"
@@ -794,22 +856,43 @@ export default function ExplorePage() {
           }`}
         >
           {filteredSessions.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
-              <span className="text-3xl">🏸</span>
-              <h3 className="mt-2 text-sm font-bold text-slate-800">
-                Không tìm thấy buổi chơi nào
-              </h3>
-              <p className="mt-1 max-w-xs text-xs text-slate-500">
-                Hãy thử chọn quận khác, xóa từ khóa tìm kiếm hoặc đổi bộ lọc.
-              </p>
-              <button
-                type="button"
-                onClick={clearAllFilters}
-                className="mt-3 rounded-full bg-emerald-500 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-emerald-600 transition"
-              >
-                Đặt lại bộ lọc
-              </button>
-            </div>
+            activeChip === "saved" ? (
+              <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-amber-300 bg-amber-50/40 p-8 text-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-600 mb-2 border border-amber-200">
+                  <Bookmark className="h-6 w-6" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-900">
+                  Bạn chưa lưu kèo nào
+                </h3>
+                <p className="mt-1 max-w-xs text-xs text-slate-500 leading-relaxed">
+                  Khi lướt các buổi chơi, hãy bấm biểu tượng lưu (🔖) trên thẻ kèo để lưu lại xem sau mà chưa cần đăng ký ngay!
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setActiveChip("all")}
+                  className="mt-3.5 rounded-full bg-slate-900 px-4 py-1.5 text-xs font-bold text-white hover:bg-emerald-600 transition shadow-sm"
+                >
+                  Khám phá tất cả các kèo
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
+                <span className="text-3xl">🏸</span>
+                <h3 className="mt-2 text-sm font-bold text-slate-800">
+                  Không tìm thấy buổi chơi nào
+                </h3>
+                <p className="mt-1 max-w-xs text-xs text-slate-500">
+                  Hãy thử chọn quận khác, xóa từ khóa tìm kiếm hoặc đổi bộ lọc.
+                </p>
+                <button
+                  type="button"
+                  onClick={clearAllFilters}
+                  className="mt-3 rounded-full bg-emerald-500 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-emerald-600 transition"
+                >
+                  Đặt lại bộ lọc
+                </button>
+              </div>
+            )
           ) : viewMode === "list" ? (
             /* LIST VIEW: Compact Horizontal Cards */
             <div className="flex flex-col gap-2 sm:gap-2.5">

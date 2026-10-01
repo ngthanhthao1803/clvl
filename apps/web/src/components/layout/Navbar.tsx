@@ -10,14 +10,17 @@ import {
   PlusCircle,
   UserRound,
   Crown,
+  Bookmark,
 } from "lucide-react";
 import { notificationsApi } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth-store";
+import { useSavedSessionsStore } from "@/stores/saved-sessions-store";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export function Navbar() {
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
+  const savedCount = useSavedSessionsStore((state) => state.savedIds.length);
 
   const unreadCountQuery = useQuery({
     queryKey: ["notifications", "unread-count"],
@@ -77,6 +80,20 @@ export function Navbar() {
           >
             <PlusCircle className="h-4 w-4" />
             <span>Tạo Buổi Chơi</span>
+          </Link>
+
+          {/* Saved Sessions Bookmark */}
+          <Link
+            href="/explore?chip=saved"
+            className="relative rounded-full border border-slate-200 bg-white p-2.5 text-slate-600 transition hover:border-amber-300 hover:bg-amber-50 hover:text-amber-700 shadow-sm"
+            title="Kèo đã lưu xem sau"
+          >
+            <Bookmark className={`h-4 w-4 ${savedCount > 0 ? "text-amber-500 fill-amber-500" : ""}`} />
+            {savedCount > 0 ? (
+              <span className="absolute -right-1 -top-1 min-w-4 h-4 rounded-full bg-amber-500 px-1 text-[9px] font-black leading-tight text-white flex items-center justify-center shadow-xs">
+                {savedCount > 99 ? "99+" : savedCount}
+              </span>
+            ) : null}
           </Link>
 
           {/* Notification Bell */}
@@ -141,6 +158,19 @@ export function Navbar() {
               <span>Admin</span>
             </Link>
           )}
+
+          <Link
+            href="/explore?chip=saved"
+            className="relative flex items-center justify-center rounded-full border border-slate-200 bg-white p-2 text-slate-600 transition active:scale-95 shadow-xs"
+            title="Kèo đã lưu xem sau"
+          >
+            <Bookmark className={`h-4 w-4 ${savedCount > 0 ? "text-amber-500 fill-amber-500" : "text-slate-500"}`} />
+            {savedCount > 0 && (
+              <span className="absolute -right-1 -top-1 min-w-3.5 h-3.5 rounded-full bg-amber-500 px-1 text-[8.5px] font-black leading-tight text-white flex items-center justify-center shadow-xs">
+                {savedCount}
+              </span>
+            )}
+          </Link>
 
           <Link
             href="/explore?tab=map"

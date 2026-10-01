@@ -4,13 +4,19 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import { Navbar } from "./Navbar";
 import { BottomNavigation } from "./BottomNavigation";
+import { ToastContainer } from "@/components/ui/ToastContainer";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith("/admin");
 
   if (isAdmin) {
-    return <>{children}</>;
+    return (
+      <>
+        {children}
+        <ToastContainer />
+      </>
+    );
   }
 
   return (
@@ -20,6 +26,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <BottomNavigation />
+      <ToastContainer />
     </>
   );
 }
