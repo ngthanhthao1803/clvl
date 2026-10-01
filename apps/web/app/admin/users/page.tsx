@@ -316,7 +316,7 @@ export default function AdminUsersPage() {
                           <div className="h-9 w-9 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-black text-xs text-white shrink-0">
                             {(u.name?.[0] || "U").toUpperCase()}
                           </div>
-                          <div className="min-w-0 max-w-[160px]">
+                          <div className="min-w-0 max-w-xs sm:max-w-sm">
                             <p className="font-bold text-white truncate flex items-center gap-1">
                               {u.name}
                               {isCurrentAdmin && (

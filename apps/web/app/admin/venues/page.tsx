@@ -274,11 +274,11 @@ export default function AdminVenuesPage() {
                 venues.map((v: any) => (
                   <tr key={v._id} className="hover:bg-slate-800/40 transition">
                     <td className="py-3.5 px-4">
-                      <p className="font-bold text-white max-w-[200px] truncate">{v.name}</p>
+                      <p className="font-bold text-white max-w-xs sm:max-w-sm truncate">{v.name}</p>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <p className="text-slate-300 max-w-[220px] truncate">{v.address}</p>
+                      <p className="text-slate-300 max-w-sm sm:max-w-md truncate">{v.address}</p>
                       <p className="text-[11px] text-slate-500">{v.district}, {v.city}</p>
                     </td>
 

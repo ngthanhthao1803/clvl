@@ -279,6 +279,37 @@ export default function ExplorePage() {
   // Client-side filtering
   const filteredSessions = useMemo(() => {
     let list = (sessionsQuery.data ?? []) as any[];
+    const now = Date.now();
+
+    const isPastSession = (s: any) => {
+      const matchStart = new Date(s.datetime).getTime();
+      if (isNaN(matchStart)) return false;
+      const matchEnd = matchStart + (s.duration || 120) * 60 * 1000;
+      return now > matchEnd || s.status === "completed";
+    };
+
+    const isTodaySession = (s: any) => {
+      const d = new Date(s.datetime);
+      if (isNaN(d.getTime())) return false;
+      const nowDate = new Date();
+      return (
+        d.getDate() === nowDate.getDate() &&
+        d.getMonth() === nowDate.getMonth() &&
+        d.getFullYear() === nowDate.getFullYear()
+      );
+    };
+
+    const isTomorrowSession = (s: any) => {
+      const d = new Date(s.datetime);
+      if (isNaN(d.getTime())) return false;
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      return (
+        d.getDate() === tomorrow.getDate() &&
+        d.getMonth() === tomorrow.getMonth() &&
+        d.getFullYear() === tomorrow.getFullYear()
+      );
+    };
 
     // Keyword search (venue, title, district, court, host)
     if (searchKeyword.trim()) {
@@ -294,17 +325,23 @@ export default function ExplorePage() {
     }
 
     // Quick Chip filters
-    if (activeChip === "tonight") {
+    if (activeChip === "upcoming") {
+      list = list.filter((s) => !isPastSession(s));
+    } else if (activeChip === "today") {
+      list = list.filter((s) => isTodaySession(s));
+    } else if (activeChip === "tomorrow") {
+      list = list.filter((s) => isTomorrowSession(s));
+    } else if (activeChip === "tonight") {
       list = list.filter((s) => {
+        const d = new Date(s.datetime);
+        if (!isNaN(d.getTime())) {
+          return isTodaySession(s) && d.getHours() >= 18;
+        }
         const str = String(s.datetime || "").toLowerCase();
-        return (
-          str.includes("tối") ||
-          str.includes("18:") ||
-          str.includes("19:") ||
-          str.includes("20:") ||
-          str.includes("21:")
-        );
+        return str.includes("tối");
       });
+    } else if (activeChip === "past") {
+      list = list.filter((s) => isPastSession(s));
     } else if (activeChip === "escrow") {
       list = list.filter((s) => s.depositRequired || s.price > 0);
     } else if (activeChip === "tb") {
@@ -323,7 +360,7 @@ export default function ExplorePage() {
       list = list.filter((s) => {
         const current = s.currentPlayers ?? s.currentPlayersCount ?? 0;
         const max = s.maxPlayers || 8;
-        return max - current > 0;
+        return max - current > 0 && !isPastSession(s);
       });
     }
 
@@ -342,7 +379,15 @@ export default function ExplorePage() {
       });
     }
 
-    return list;
+    // Smart Sorting: Kèo sắp diễn ra xếp trước, kèo đã qua tự động xếp xuống cuối
+    return list.slice().sort((a, b) => {
+      const pastA = isPastSession(a);
+      const pastB = isPastSession(b);
+      if (pastA !== pastB) return pastA ? 1 : -1;
+      const timeA = new Date(a.datetime).getTime() || 0;
+      const timeB = new Date(b.datetime).getTime() || 0;
+      return timeA - timeB;
+    });
   }, [sessionsQuery.data, searchKeyword, activeChip, uiFilters]);
 
   // Transform sessions into map venue markers
@@ -441,6 +486,7 @@ export default function ExplorePage() {
           <div className="flex items-center rounded-xl bg-slate-100 p-0.5 border border-slate-200/80">
             <button
               type="button"
+              suppressHydrationWarning
               onClick={() => setViewMode("list")}
               className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold transition ${
                 viewMode === "list"
@@ -454,6 +500,7 @@ export default function ExplorePage() {
             </button>
             <button
               type="button"
+              suppressHydrationWarning
               onClick={() => setViewMode("grid")}
               className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold transition ${
                 viewMode === "grid"
@@ -471,6 +518,7 @@ export default function ExplorePage() {
           <div className="flex items-center lg:hidden">
             <button
               type="button"
+              suppressHydrationWarning
               onClick={() =>
                 setMobileView(mobileView === "list" ? "map" : "list")
               }
@@ -520,6 +568,7 @@ export default function ExplorePage() {
           <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 lg:pb-0 scrollbar-none">
             <button
               type="button"
+              suppressHydrationWarning
               onClick={() => setActiveChip("all")}
               className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
                 activeChip === "all"
@@ -531,6 +580,35 @@ export default function ExplorePage() {
             </button>
             <button
               type="button"
+              suppressHydrationWarning
+              onClick={() =>
+                setActiveChip(activeChip === "upcoming" ? "all" : "upcoming")
+              }
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
+                activeChip === "upcoming"
+                  ? "bg-emerald-600 text-white shadow-xs font-bold"
+                  : "border border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+              }`}
+            >
+              ⚡ Sắp tới
+            </button>
+            <button
+              type="button"
+              suppressHydrationWarning
+              onClick={() =>
+                setActiveChip(activeChip === "today" ? "all" : "today")
+              }
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
+                activeChip === "today"
+                  ? "bg-emerald-600 text-white shadow-xs font-bold"
+                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              🔥 Hôm nay
+            </button>
+            <button
+              type="button"
+              suppressHydrationWarning
               onClick={() =>
                 setActiveChip(activeChip === "tonight" ? "all" : "tonight")
               }
@@ -544,6 +622,21 @@ export default function ExplorePage() {
             </button>
             <button
               type="button"
+              suppressHydrationWarning
+              onClick={() =>
+                setActiveChip(activeChip === "tomorrow" ? "all" : "tomorrow")
+              }
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
+                activeChip === "tomorrow"
+                  ? "bg-sky-600 text-white shadow-xs"
+                  : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              📅 Ngày mai
+            </button>
+            <button
+              type="button"
+              suppressHydrationWarning
               onClick={() =>
                 setActiveChip(activeChip === "escrow" ? "all" : "escrow")
               }
@@ -557,6 +650,7 @@ export default function ExplorePage() {
             </button>
             <button
               type="button"
+              suppressHydrationWarning
               onClick={() =>
                 setActiveChip(activeChip === "tb" ? "all" : "tb")
               }
@@ -566,10 +660,11 @@ export default function ExplorePage() {
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
               }`}
             >
-              ⚡ Trình TB/TB+
+              🏸 Trình TB/TB+
             </button>
             <button
               type="button"
+              suppressHydrationWarning
               onClick={() =>
                 setActiveChip(activeChip === "mixed" ? "all" : "mixed")
               }
@@ -583,6 +678,7 @@ export default function ExplorePage() {
             </button>
             <button
               type="button"
+              suppressHydrationWarning
               onClick={() =>
                 setActiveChip(activeChip === "available" ? "all" : "available")
               }
@@ -593,6 +689,20 @@ export default function ExplorePage() {
               }`}
             >
               🔥 Còn chỗ
+            </button>
+            <button
+              type="button"
+              suppressHydrationWarning
+              onClick={() =>
+                setActiveChip(activeChip === "past" ? "all" : "past")
+              }
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
+                activeChip === "past"
+                  ? "bg-slate-700 text-white shadow-xs font-bold"
+                  : "border border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100"
+              }`}
+            >
+              🕒 Đã kết thúc
             </button>
 
             {/* Advanced Filters Trigger */}

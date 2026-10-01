@@ -100,15 +100,15 @@ export default function AdminDisputesPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-black text-white tracking-tight">
-              Tòa Phán Quyết Khiếu Nại & Tranh Chấp (Disputes)
+            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+              Xử Lý Khiếu Nại & Tranh Chấp
             </h1>
             <span className="rounded-full bg-rose-500/20 px-2.5 py-0.5 text-xs font-bold text-rose-400 border border-rose-500/30">
               {pagination.total} vụ việc
             </span>
           </div>
           <p className="mt-1 text-xs text-slate-400">
-            Quyền lực tài phán tối cao của Admin: Xem xét chứng cứ, quyết định hoàn tiền cọc người chơi hoặc giải ngân cho Host.
+            Xem xét chứng cứ, giải quyết hoàn cọc cho người chơi hoặc giải ngân cho Host.
           </p>
         </div>
 

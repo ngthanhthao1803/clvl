@@ -83,7 +83,7 @@ export default function ChatPage() {
   return (
     <RequireAuth>
       <ChatUI
-        title={`Chat buổi chơi ${params.sessionId}`}
+        title={`Chat ${params.sessionId}`}
         messages={messages}
         onSendMessage={async (content) => {
           socket.emit("message:send", { sessionId: params.sessionId, content });

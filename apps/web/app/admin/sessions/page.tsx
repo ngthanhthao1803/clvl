@@ -250,7 +250,7 @@ export default function AdminSessionsPage() {
                     <tr key={s._id} className="hover:bg-slate-800/40 transition">
                       {/* Title */}
                       <td className="py-3.5 px-4">
-                        <div className="max-w-[200px]">
+                        <div className="max-w-xs sm:max-w-md">
                           <p className="font-bold text-white truncate" title={s.title}>
                             {s.title}
                           </p>
@@ -262,7 +262,7 @@ export default function AdminSessionsPage() {
 
                       {/* Host */}
                       <td className="py-3.5 px-4">
-                        <p className="font-bold text-slate-200 truncate max-w-[130px]">
+                        <p className="font-bold text-slate-200 truncate max-w-[180px]">
                           {s.host?.name || "Ẩn danh"}
                         </p>
                         <p className="text-[11px] text-slate-400">{s.host?.phone || ""}</p>
@@ -270,7 +270,7 @@ export default function AdminSessionsPage() {
 
                       {/* Venue */}
                       <td className="py-3.5 px-4">
-                        <p className="font-bold text-slate-200 truncate max-w-[150px]">
+                        <p className="font-bold text-slate-200 truncate max-w-[220px]">
                           {s.venueName}
                         </p>
                         <p className="text-[11px] text-slate-400">{s.district}, {s.city}</p>

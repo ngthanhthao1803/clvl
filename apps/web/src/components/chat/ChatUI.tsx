@@ -37,7 +37,7 @@ export function ChatUI({
     <section className="flex h-[70vh] flex-col rounded-[2rem] border border-slate-200 bg-white shadow-glow">
       <div className="border-b border-slate-200 px-5 py-4">
         <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
-        <p className="text-sm text-slate-500">Chat buổi chơi thời gian thực</p>
+        <p className="text-sm text-slate-500">Chat buổi chơi</p>
       </div>
 
       <div className="flex-1 space-y-3 overflow-y-auto px-5 py-4">

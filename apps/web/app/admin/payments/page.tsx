@@ -162,22 +162,22 @@ export default function AdminPaymentsPage() {
                         <span className="font-mono font-bold text-amber-400">
                           {p.orderCode}
                         </span>
-                        <p className="text-[11px] text-slate-500 truncate max-w-[150px]">
+                        <p className="text-[11px] text-slate-500 truncate max-w-xs">
                           {p.transferContent}
                         </p>
                       </td>
 
                       <td className="py-3.5 px-4">
-                        <p className="font-bold text-white truncate max-w-[130px]">
+                        <p className="font-bold text-white truncate max-w-[200px]">
                           {p.payer?.name || "---"}
                         </p>
-                        <p className="text-[11px] text-slate-400 truncate max-w-[130px]">
+                        <p className="text-[11px] text-slate-400 truncate max-w-[200px]">
                           {p.payer?.email || p.payer?.phone || ""}
                         </p>
                       </td>
 
                       <td className="py-3.5 px-4">
-                        <p className="text-slate-200 truncate max-w-[150px]">
+                        <p className="text-slate-200 truncate max-w-xs sm:max-w-sm">
                           {p.session?.title || "Buổi chơi"}
                         </p>
                         <p className="text-[11px] text-slate-500">

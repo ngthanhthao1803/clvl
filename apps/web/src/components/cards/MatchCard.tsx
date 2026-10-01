@@ -70,46 +70,162 @@ function formatMatchType(type?: string): string {
   return type;
 }
 
-function parseDateTime(datetimeStr?: string): {
+export type TimeStatus = {
   time: string;
   date: string;
+  dateLabel: string;
   isTonight: boolean;
-} {
-  if (!datetimeStr) {
-    return { time: "--:--", date: "Chưa định", isTonight: false };
-  }
+  isToday: boolean;
+  isTomorrow: boolean;
+  isPast: boolean;
+  isLive: boolean;
+  isStartingSoon: boolean;
+  statusText: string;
+  badgeStyle: {
+    bg: string;
+    text: string;
+    border: string;
+  };
+};
+
+function parseDateTime(datetimeStr?: string, durationMinutes = 120): TimeStatus {
+  const defaultStatus: TimeStatus = {
+    time: "--:--",
+    date: "Chưa định",
+    dateLabel: "Chưa định",
+    isTonight: false,
+    isToday: false,
+    isTomorrow: false,
+    isPast: false,
+    isLive: false,
+    isStartingSoon: false,
+    statusText: "",
+    badgeStyle: {
+      bg: "bg-emerald-50",
+      text: "text-emerald-800",
+      border: "border-emerald-200/70",
+    },
+  };
+
+  if (!datetimeStr) return defaultStatus;
 
   const d = new Date(datetimeStr);
-  if (!isNaN(d.getTime())) {
-    const time = d.toLocaleTimeString("vi-VN", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-    const now = new Date();
-    const isToday = d.toDateString() === now.toDateString();
-    const isTonight = isToday && d.getHours() >= 18;
-
-    let date = d.toLocaleDateString("vi-VN", {
-      weekday: "short",
-      day: "2-digit",
-      month: "2-digit",
-    });
-    if (isTonight) date = "Tối nay";
-    else if (isToday) date = "Hôm nay";
-
-    return { time, date, isTonight };
+  if (isNaN(d.getTime())) {
+    const isTonight = datetimeStr.toLowerCase().includes("tối");
+    return {
+      ...defaultStatus,
+      time: datetimeStr,
+      date: isTonight ? "Tối nay" : "Sắp tới",
+      dateLabel: isTonight ? "Tối nay" : "Sắp tới",
+      isTonight,
+    };
   }
 
-  const parts = datetimeStr.split(",");
-  if (parts.length >= 2) {
-    const dStr = parts[0].trim();
-    const isTonight = dStr.toLowerCase().includes("tối");
-    return { date: dStr, time: parts[1].trim(), isTonight };
+  const now = new Date();
+  const startTime = d.getTime();
+  const endTime = startTime + (durationMinutes || 120) * 60 * 1000;
+  const nowTime = now.getTime();
+
+  const isPast = nowTime > endTime;
+  const isLive = nowTime >= startTime && nowTime <= endTime;
+  const diffMs = startTime - nowTime;
+  const isStartingSoon = diffMs > 0 && diffMs <= 2 * 60 * 60 * 1000; // trong vòng 2h tới
+
+  // Tính số ngày chênh lệch (chỉ so sánh phần ngày)
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const targetDayStart = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  const dayDiff = Math.round((targetDayStart - todayStart) / (1000 * 60 * 60 * 24));
+
+  const isToday = dayDiff === 0;
+  const isTomorrow = dayDiff === 1;
+  const isTonight = isToday && d.getHours() >= 18;
+
+  const time = d.toLocaleTimeString("vi-VN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  const formattedDate = d.toLocaleDateString("vi-VN", {
+    weekday: "short",
+    day: "2-digit",
+    month: "2-digit",
+  });
+
+  let dateLabel = formattedDate;
+  let statusText = "";
+  let badgeStyle = {
+    bg: "bg-emerald-50",
+    text: "text-emerald-800",
+    border: "border-emerald-200/70",
+  };
+
+  if (isPast) {
+    statusText = "Đã diễn ra";
+    dateLabel = dayDiff === 0 ? "Hôm nay (Đã qua)" : `${formattedDate} (Đã qua)`;
+    badgeStyle = {
+      bg: "bg-slate-100",
+      text: "text-slate-500",
+      border: "border-slate-200",
+    };
+  } else if (isLive) {
+    statusText = "Đang diễn ra";
+    dateLabel = "Đang đánh ngay lúc này";
+    badgeStyle = {
+      bg: "bg-rose-50",
+      text: "text-rose-700",
+      border: "border-rose-200",
+    };
+  } else if (isStartingSoon) {
+    const minutesLeft = Math.max(1, Math.round(diffMs / (60 * 1000)));
+    statusText = `Bắt đầu sau ${minutesLeft} phút`;
+    dateLabel = `Sắp đấu (${minutesLeft}p)`;
+    badgeStyle = {
+      bg: "bg-amber-50",
+      text: "text-amber-800",
+      border: "border-amber-300",
+    };
+  } else if (isTonight) {
+    statusText = "Tối nay";
+    dateLabel = "Tối nay";
+    badgeStyle = {
+      bg: "bg-emerald-100/90",
+      text: "text-emerald-900",
+      border: "border-emerald-300",
+    };
+  } else if (isToday) {
+    statusText = "Hôm nay";
+    dateLabel = "Hôm nay";
+    badgeStyle = {
+      bg: "bg-emerald-100/90",
+      text: "text-emerald-900",
+      border: "border-emerald-300",
+    };
+  } else if (isTomorrow) {
+    statusText = "Ngày mai";
+    dateLabel = "Ngày mai";
+    badgeStyle = {
+      bg: "bg-sky-50",
+      text: "text-sky-800",
+      border: "border-sky-200",
+    };
+  } else if (dayDiff > 1 && dayDiff <= 6) {
+    dateLabel = `${formattedDate} (${dayDiff} ngày tới)`;
   }
 
-  const isTonight = datetimeStr.toLowerCase().includes("tối");
-  return { time: datetimeStr, date: isTonight ? "Tối nay" : "Sắp tới", isTonight };
+  return {
+    time,
+    date: dateLabel,
+    dateLabel,
+    isTonight,
+    isToday,
+    isTomorrow,
+    isPast,
+    isLive,
+    isStartingSoon,
+    statusText,
+    badgeStyle,
+  };
 }
 
 export function MatchCard({
@@ -121,7 +237,10 @@ export function MatchCard({
   const skillLevel =
     session.skillRequirements ?? session.skillRequirement ?? "TB";
 
-  const { time, date } = parseDateTime(session.datetime);
+  const timeInfo = parseDateTime(
+    session.datetime,
+    (session as any).duration || 120,
+  );
   const matchType = formatMatchType(session.matchType);
 
   const currentCount =
@@ -145,14 +264,28 @@ export function MatchCard({
   const isVerifiedHost = Boolean(host?.isVerifiedHost);
 
   // Status conditions
-  const isFull = slotsLeft === 0 || session.status === "full";
+  const isPastSession = timeInfo.isPast || session.status === "completed";
   const isCancelled = session.status === "cancelled";
+  const isFull = slotsLeft === 0 || session.status === "full";
   const isAlmostFull = slotsLeft > 0 && slotsLeft <= 2;
 
   // Mini badge on image
   const thumbnailStatusBadge = isCancelled ? (
     <span className="inline-flex items-center rounded-md bg-rose-600/90 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-xs">
       Đã hủy
+    </span>
+  ) : isPastSession ? (
+    <span className="inline-flex items-center gap-0.5 rounded-md bg-slate-800/90 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-bold text-slate-300 border border-white/10 shadow-xs">
+      Đã diễn ra
+    </span>
+  ) : timeInfo.isLive ? (
+    <span className="inline-flex items-center gap-1 rounded-md bg-rose-600/95 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs animate-pulse">
+      <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping" />
+      🔴 Đang đánh
+    </span>
+  ) : timeInfo.isStartingSoon ? (
+    <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/95 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs animate-pulse">
+      ⚡ Sắp đánh
     </span>
   ) : isFull ? (
     <span className="inline-flex items-center rounded-md bg-slate-900/80 px-1.5 py-0.5 text-[9px] font-medium text-slate-200">
@@ -173,6 +306,15 @@ export function MatchCard({
   const inlineStatusPill = isCancelled ? (
     <span className="inline-flex items-center rounded-md bg-rose-50 px-1.5 py-0.5 text-[9.5px] font-bold text-rose-700 border border-rose-200">
       Đã hủy
+    </span>
+  ) : isPastSession ? (
+    <span className="inline-flex items-center rounded-md bg-slate-100 px-1.5 py-0.5 text-[9.5px] font-medium text-slate-500 border border-slate-200">
+      Đã kết thúc
+    </span>
+  ) : timeInfo.isLive ? (
+    <span className="inline-flex items-center gap-1 rounded-md bg-rose-50 px-1.5 py-0.5 text-[9.5px] font-bold text-rose-700 border border-rose-200">
+      <span className="h-1 w-1 rounded-full bg-rose-500 animate-ping" />
+      Đang diễn ra
     </span>
   ) : isFull ? (
     <span className="inline-flex items-center rounded-md bg-slate-100 px-1.5 py-0.5 text-[9.5px] font-medium text-slate-600 border border-slate-200">
@@ -198,7 +340,8 @@ export function MatchCard({
       href={`/sessions/${sessionId}`}
       className={clsx(
         "group flex items-stretch gap-2.5 sm:gap-3 rounded-2xl border border-slate-200/90 bg-white p-2 sm:p-2.5 shadow-xs transition-all duration-200 hover:border-emerald-400 hover:shadow-md active:scale-[0.995]",
-        className
+        isPastSession && "opacity-75 hover:opacity-100 bg-slate-50/70 border-slate-200",
+        className,
       )}
     >
       {/* Left Thumbnail (Fixed compact width, full height) */}
@@ -208,7 +351,10 @@ export function MatchCard({
           alt={session.title}
           onError={() => setImageSrc(BADMINTON_COVER_PRESETS[0].url)}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          className={clsx(
+            "h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105",
+            isPastSession && "grayscale-[30%]",
+          )}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30 pointer-events-none" />
 
@@ -229,11 +375,19 @@ export function MatchCard({
       <div className="flex-1 flex flex-col justify-between min-w-0 py-0.5">
         {/* Row 1: Datetime Badge + Escrow / Status */}
         <div className="flex items-center justify-between gap-1">
-          <div className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/70 leading-tight">
-            <Clock className="h-3 w-3 shrink-0 text-emerald-600" />
-            <span>{time}</span>
-            <span className="text-emerald-400">·</span>
-            <span>{date}</span>
+          <div
+            suppressHydrationWarning
+            className={clsx(
+              "inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md border leading-tight transition-colors",
+              timeInfo.badgeStyle.bg,
+              timeInfo.badgeStyle.text,
+              timeInfo.badgeStyle.border,
+            )}
+          >
+            <Clock className="h-3 w-3 shrink-0" />
+            <span suppressHydrationWarning>{timeInfo.time}</span>
+            <span className="opacity-50">·</span>
+            <span suppressHydrationWarning>{timeInfo.date}</span>
           </div>
 
           <div className="flex items-center gap-1 shrink-0">
@@ -321,7 +475,8 @@ export function MatchCard({
       href={`/sessions/${sessionId}`}
       className={clsx(
         "group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-400 hover:shadow-md active:scale-[0.995]",
-        className
+        isPastSession && "opacity-75 hover:opacity-100 bg-slate-50/70 border-slate-200",
+        className,
       )}
     >
       {/* Compact Image Header */}
@@ -331,7 +486,10 @@ export function MatchCard({
           alt={session.title}
           onError={() => setImageSrc(BADMINTON_COVER_PRESETS[0].url)}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          className={clsx(
+            "h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105",
+            isPastSession && "grayscale-[30%]",
+          )}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/35 pointer-events-none" />
 
@@ -368,9 +526,17 @@ export function MatchCard({
       <div className="p-2 sm:p-2.5 flex-1 flex flex-col justify-between">
         <div>
           {/* Time highlight */}
-          <div className="flex items-center gap-1 text-[10.5px] font-bold text-emerald-700 leading-tight">
-            <Clock className="h-3 w-3 shrink-0 text-emerald-600" />
-            <span className="truncate">{time} · {date}</span>
+          <div
+            suppressHydrationWarning
+            className={clsx(
+              "inline-flex items-center gap-1 text-[10.5px] font-bold px-1.5 py-0.5 rounded-md border leading-tight mb-0.5",
+              timeInfo.badgeStyle.bg,
+              timeInfo.badgeStyle.text,
+              timeInfo.badgeStyle.border,
+            )}
+          >
+            <Clock className="h-3 w-3 shrink-0" />
+            <span suppressHydrationWarning className="truncate">{timeInfo.time} · {timeInfo.date}</span>
           </div>
 
           {/* Venue & District */}

@@ -135,48 +135,48 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col lg:flex-row font-sans">
       {/* Sidebar Desktop */}
-      <aside className="hidden lg:flex w-72 flex-col border-r border-slate-800/80 bg-slate-900/90 backdrop-blur-xl">
+      <aside className="hidden lg:flex w-64 flex-col border-r border-slate-800/80 bg-slate-900/90 backdrop-blur-xl shrink-0">
         {/* Brand Header */}
-        <div className="p-5 border-b border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/30">
-              <Crown className="h-5 w-5" />
+        <div className="p-4 border-b border-slate-800/80 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-500/20">
+              <Crown className="h-4 w-4" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-base font-black tracking-tight text-white">
+                <span className="text-sm font-black tracking-tight text-white">
                   CLVL Admin
                 </span>
-                <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-black text-emerald-400 border border-emerald-500/30">
+                <span className="rounded bg-emerald-500/20 px-1.5 py-0.5 text-[9px] font-black text-emerald-400 border border-emerald-500/30">
                   ROOT
                 </span>
               </div>
-              <p className="text-[11px] font-medium text-slate-400">
-                Hệ thống Quản trị Tối cao
+              <p className="text-[10px] font-medium text-slate-400">
+                Quản trị hệ thống
               </p>
             </div>
           </div>
         </div>
 
         {/* Current Admin Card */}
-        <div className="p-4 mx-4 mt-4 rounded-xl bg-slate-800/60 border border-slate-700/50 flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 font-black shadow">
+        <div className="p-3 mx-3 mt-3 rounded-xl bg-slate-800/50 border border-slate-800/80 flex items-center gap-2.5">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 font-black text-xs shadow">
             {(user?.name?.[0] || "A").toUpperCase()}
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-xs font-bold text-white truncate">
               {user?.name || "Admin"}
             </p>
-            <p className="text-[10px] text-amber-400 flex items-center gap-1">
-              <Crown className="h-3 w-3 shrink-0" />
-              <span>Toàn quyền hệ thống</span>
+            <p className="text-[10px] text-emerald-400 flex items-center gap-1 font-semibold">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Super Admin</span>
             </p>
           </div>
         </div>
 
         {/* Navigation Links */}
-        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
-          <div className="px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+          <div className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
             Quản Lý Nghiệp Vụ
           </div>
 
@@ -191,13 +191,13 @@ export default function AdminLayout({
               <Link
                 key={item.href}
                 href={item.href as any}
-                className={`group flex items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-bold transition-all ${
+                className={`group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-bold transition-all ${
                   isActive
-                    ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/30"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
                 }`}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2.5">
                   <Icon
                     className={`h-4 w-4 transition-transform group-hover:scale-110 ${
                       isActive ? "text-white" : "text-slate-400 group-hover:text-emerald-400"
@@ -221,36 +221,36 @@ export default function AdminLayout({
             );
           })}
 
-          <div className="pt-6 px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-            Lối tắt & Thoát
+          <div className="pt-4 px-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+            Lối tắt
           </div>
 
           <Link
             href="/"
             target="_blank"
-            className="group flex items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800/70 transition"
+            className="group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <ExternalLink className="h-4 w-4 text-teal-400" />
-              <span>Xem trang Web chính</span>
+              <span>Xem trang chính</span>
             </div>
-            <span className="text-[10px] text-slate-500">Mở tab mới</span>
+            <span className="text-[10px] text-slate-500">Tab mới</span>
           </Link>
 
           <button
             onClick={handleLogout}
-            className="w-full group flex items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-semibold text-rose-400 hover:bg-rose-500/10 transition"
+            className="w-full group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold text-rose-400 hover:bg-rose-500/10 transition"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <LogOut className="h-4 w-4" />
-              <span>Đăng xuất Admin</span>
+              <span>Đăng xuất</span>
             </div>
           </button>
         </nav>
 
         {/* Footer info */}
-        <div className="p-4 border-t border-slate-800 text-[11px] text-slate-500 text-center">
-          CLVL Badminton Platform v1.0 • Admin Master
+        <div className="p-3 border-t border-slate-800/80 text-[10px] text-slate-500 text-center">
+          CLVL Admin v1.0
         </div>
       </aside>
 
@@ -345,7 +345,7 @@ export default function AdminLayout({
 
       {/* Main Content Area */}
       <main className="flex-1 min-w-0 bg-slate-950 overflow-y-auto">
-        <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">{children}</div>
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-6">{children}</div>
       </main>
     </div>
   );

@@ -35,33 +35,33 @@ export default function AdminDashboardPage() {
   const recent = data?.recent;
 
   return (
-    <div className="space-y-8 pb-12">
-      {/* Top Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-900/60 via-slate-900 to-slate-900 border border-emerald-500/20 p-6 sm:p-8">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-400 border border-emerald-500/20 mb-2">
-              <Crown className="h-3.5 w-3.5" />
-              <span>Tài khoản Quyền lực Tối cao (Root Admin)</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Bảng Điều Khiển Quản Trị Hệ Thống
+    <div className="space-y-6 pb-12">
+      {/* Top Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800/80">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+              Bảng Điều Khiển Tổng Quan
             </h1>
-            <p className="mt-1 text-xs sm:text-sm text-slate-400 max-w-2xl">
-              Giám sát toàn diện người chơi, buổi đấu cầu lông, mạng lưới sân bãi, 
-              khiếu nại tranh chấp và dòng tiền cọc ký quỹ (Escrow) theo thời gian thực.
-            </p>
+            <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-bold text-emerald-400 border border-emerald-500/20">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Live
+            </span>
           </div>
+          <p className="mt-1 text-xs text-slate-400">
+            Giám sát vận hành toàn diện: thành viên, buổi chơi, mạng lưới sân và quỹ Escrow
+          </p>
+        </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => refetch()}
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-800 px-4 py-2.5 text-xs font-bold text-slate-200 hover:bg-slate-700 border border-slate-700 transition"
-            >
-              <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
-              Làm mới số liệu
-            </button>
-          </div>
+        <div className="flex items-center gap-2.5 shrink-0">
+          <button
+            onClick={() => refetch()}
+            disabled={isLoading}
+            className="inline-flex items-center gap-2 rounded-xl bg-slate-800 hover:bg-slate-700/80 px-3.5 py-2 text-xs font-bold text-slate-200 border border-slate-700/80 transition active:scale-95 disabled:opacity-50"
+          >
+            <TrendingUp className={`h-3.5 w-3.5 text-emerald-400 ${isLoading ? "animate-spin" : ""}`} />
+            Làm mới số liệu
+          </button>
         </div>
       </div>
 
