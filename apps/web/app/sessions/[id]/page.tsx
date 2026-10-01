@@ -107,19 +107,25 @@ export default function SessionDetailsPage() {
 
   const cancelBookingMutation = useMutation({
     mutationFn: async () => {
-      const confirmed = window.confirm(
-        `Chính sách hủy: Nếu hủy trước ${session.cancelPolicyHours || 12}h, bạn được HOÀN CỌC 100%. Nếu hủy sát giờ, tiền cọc sẽ bồi thường cho Host và bạn bị trừ 15 điểm uy tín. Bạn có chắc chắn muốn hủy?`,
-      );
+      const confirmMsg = session?.depositRequired
+        ? `Chính sách hủy: Nếu hủy trước ${session.cancelPolicyHours || 12}h, bạn được HOÀN CỌC 100%. Nếu hủy sát giờ, tiền cọc sẽ bồi thường cho Host và bạn bị trừ 15 điểm uy tín. Bạn có chắc chắn muốn hủy?`
+        : "Bạn có chắc chắn muốn hủy đăng ký tham gia buổi chơi này không?";
+      const confirmed = window.confirm(confirmMsg);
       if (!confirmed) return;
       return paymentsApi.cancelBooking(params.id ?? "");
     },
     onSuccess: (res: any) => {
       sessionQuery.refetch();
       const data = res?.data?.data;
-      if (data?.isFullRefund) {
+      if (!session?.depositRequired && !data?.hadDeposit) {
         setNotice({
           type: "success",
-          text: `Đã hủy slot và HOÀN CỌC 100% (${data.refundAmount?.toLocaleString()}đ) vì hủy trước ${data.policyHours}h.`,
+          text: "Đã hủy đăng ký tham gia buổi chơi thành công.",
+        });
+      } else if (data?.isFullRefund) {
+        setNotice({
+          type: "success",
+          text: `Đã hủy slot và HOÀN CỌC 100% (${(data.refundAmount || session?.depositAmount || 0).toLocaleString()}đ) vì hủy trước ${data.policyHours || session?.cancelPolicyHours || 12}h.`,
         });
       } else {
         setNotice({
@@ -223,18 +229,33 @@ export default function SessionDetailsPage() {
                   Chính Sách Chống Bùng Kèo & Bảo Vệ Người Chơi (CLVL Escrow)
                 </span>
               </div>
-              <p className="text-sm font-semibold text-slate-900">
-                {session.depositRequired
-                  ? `Yêu cầu đặt cọc: ${(session.depositAmount || 50000).toLocaleString()} đ/người`
-                  : "Không yêu cầu cọc"}
-              </p>
-              <p className="text-xs text-slate-600">
-                • Hủy trước <strong>{session.cancelPolicyHours || 12} tiếng</strong>: Hoàn cọc <strong>100%</strong>.
-                <br />
-                • Hủy sát giờ hoặc không đến: <strong>Mất cọc</strong> đền bù cho Host & trừ 15-25 điểm uy tín.
-                <br />
-                • Kèo ảo / Host vắng mặt: Nền tảng phong tỏa tiền và <strong>hoàn tiền 100%</strong> cho người chơi.
-              </p>
+              {session.depositRequired ? (
+                <>
+                  <p className="text-sm font-semibold text-slate-900">
+                    Yêu cầu đặt cọc giữ chỗ: {(session.depositAmount || 50000).toLocaleString()} đ/người
+                  </p>
+                  <p className="text-xs text-slate-600">
+                    • Hủy trước <strong>{session.cancelPolicyHours || 12} tiếng</strong>: Được hoàn cọc <strong>100%</strong>.
+                    <br />
+                    • Hủy sát giờ (&lt; {session.cancelPolicyHours || 12}h) hoặc không đến: <strong>Mất cọc</strong> bồi thường cho Host & trừ 15-25 điểm uy tín.
+                    <br />
+                    • Kèo ảo / Host vắng mặt: Nền tảng phong tỏa tiền và <strong>hoàn tiền 100%</strong> cho người chơi.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm font-semibold text-emerald-700 flex items-center gap-1.5">
+                    <span>Buổi chơi không yêu cầu đặt cọc trước</span>
+                  </p>
+                  <p className="text-xs text-slate-600">
+                    • Thành viên thanh toán tiền sân trực tiếp cho Host tại sân sau khi chơi.
+                    <br />
+                    • Nếu không thể tham gia, vui lòng hủy slot sớm trước <strong>{session.cancelPolicyHours || 12} tiếng</strong> để nhường chỗ cho người khác.
+                    <br />
+                    • Hủy sát giờ hoặc vắng mặt không lý do sẽ bị trừ 15-25 điểm uy tín trên nền tảng.
+                  </p>
+                </>
+              )}
             </div>
 
             <div className="rounded-2xl border border-emerald-300 bg-white px-4 py-2.5 text-center">
@@ -305,26 +326,33 @@ export default function SessionDetailsPage() {
           {myPlayer && !canEdit && (
             <>
               {/* Deposit Action */}
-              {!hasPaidDeposit ? (
-                <button
-                  onClick={() => createDepositMutation.mutate()}
-                  disabled={createDepositMutation.isPending}
-                  className="flex items-center gap-2 rounded-full bg-amber-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-amber-500/20 hover:bg-amber-600 disabled:opacity-50"
-                >
-                  <CreditCard className="h-4 w-4" />
-                  {createDepositMutation.isPending
-                    ? "Đang tạo mã..."
-                    : `Đặt cọc VietQR (${(session.depositAmount || 50000).toLocaleString()}đ)`}
-                </button>
+              {session.depositRequired ? (
+                !hasPaidDeposit ? (
+                  <button
+                    onClick={() => createDepositMutation.mutate()}
+                    disabled={createDepositMutation.isPending}
+                    className="flex items-center gap-2 rounded-full bg-amber-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-amber-500/20 hover:bg-amber-600 disabled:opacity-50"
+                  >
+                    <CreditCard className="h-4 w-4" />
+                    {createDepositMutation.isPending
+                      ? "Đang tạo mã..."
+                      : `Đặt cọc VietQR (${(session.depositAmount || 50000).toLocaleString()}đ)`}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setIsReceiptModalOpen(true)}
+                    className="flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2.5 text-xs font-bold text-emerald-700 hover:bg-emerald-100 transition shadow-xs"
+                    title="Bấm để xem biên lai ký quỹ CLVL Escrow"
+                  >
+                    <ShieldCheck className="h-4 w-4" /> Đã cọc giữ chỗ • Xem biên lai
+                  </button>
+                )
               ) : (
-                <button
-                  type="button"
-                  onClick={() => setIsReceiptModalOpen(true)}
-                  className="flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2.5 text-xs font-bold text-emerald-700 hover:bg-emerald-100 transition shadow-xs"
-                  title="Bấm để xem biên lai ký quỹ CLVL Escrow"
-                >
-                  <ShieldCheck className="h-4 w-4" /> Đã cọc giữ chỗ • Xem biên lai
-                </button>
+                <div className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                  <span>Miễn phí cọc • Thanh toán tại sân</span>
+                </div>
               )}
 
               {/* Check-In Action */}

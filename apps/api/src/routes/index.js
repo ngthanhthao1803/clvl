@@ -7,6 +7,7 @@ import messageRoutes from "./messages.routes.js";
 import notificationRoutes from "./notifications.routes.js";
 import ratingRoutes from "./ratings.routes.js";
 import paymentRoutes from "./payments.routes.js";
+import adminRoutes from "./admin.routes.js";
 
 const router = Router();
 
@@ -19,6 +20,7 @@ router.use("/users", userRoutes);
 router.use("/sessions", sessionRoutes);
 router.use("/venues", venueRoutes);
 router.use("/payments", paymentRoutes);
+router.use("/admin", adminRoutes);
 router.use("/", messageRoutes);
 router.use("/notifications", notificationRoutes);
 router.use("/", ratingRoutes);

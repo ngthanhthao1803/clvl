@@ -45,13 +45,18 @@ export async function createDepositOrder({ sessionId, userId }) {
     throw new AppError("Buổi chơi đã bị hủy", 400);
   }
 
+  if (!session.depositRequired) {
+    throw new AppError("Buổi chơi này không yêu cầu đặt cọc giữ chỗ.", 400);
+  }
+
   const user = await User.findById(userId);
   if (!user) {
     throw new AppError("Người dùng không tồn tại", 404);
   }
 
+  const uidStr = String(userId);
   const participant = session.players.find(
-    (p) => p.user.toString() === userId && p.status !== "left",
+    (p) => p.user.toString() === uidStr && p.status !== "left",
   );
   if (!participant) {
     throw new AppError("Bạn cần đăng ký tham gia buổi chơi trước khi đặt cọc", 400);
@@ -300,14 +305,15 @@ export async function cancelBookingWithRefund({ sessionId, userId, reason = "" }
     throw new AppError("Không tìm thấy buổi chơi", 404);
   }
 
+  const uidStr = String(userId);
   const participant = session.players.find(
-    (p) => p.user.toString() === userId && p.status !== "left",
+    (p) => p.user.toString() === uidStr && p.status !== "left",
   );
   if (!participant) {
     throw new AppError("Bạn không tham gia buổi chơi này", 400);
   }
 
-  if (session.host.toString() === userId) {
+  if (session.host.toString() === uidStr) {
     throw new AppError("Host không thể hủy tham gia, hãy chọn hủy toàn bộ buổi chơi", 400);
   }
 
@@ -325,66 +331,101 @@ export async function cancelBookingWithRefund({ sessionId, userId, reason = "" }
   const isEligibleForFullRefund = diffHours >= policyHours;
 
   if (isEligibleForFullRefund) {
-    // 100% refund
     if (payment) {
       payment.status = "refunded";
       payment.refundedAt = new Date();
       payment.refundReason = reason || `Hủy trước ${policyHours}h (Đạt điều kiện hoàn 100%)`;
       await payment.save();
       session.totalEscrowHeld = Math.max(0, (session.totalEscrowHeld || 0) - payment.amount);
+      participant.paymentStatus = "refunded";
+
+      await createNotification({
+        recipient: userId,
+        type: "system",
+        title: "Hủy slot thành công (Hoàn cọc 100%)",
+        message: `Bạn đã hủy trước thời hạn quy định (${policyHours}h). Khoản cọc ${payment.amount.toLocaleString()}đ đã được hoàn lại đầy đủ.`,
+        session: session._id,
+      });
+
+      await createNotification({
+        recipient: session.host,
+        type: "system",
+        title: "Thành viên hủy slot trước hạn",
+        message: `Một người chơi đã hủy slot buổi "${session.title}" trước hạn ${policyHours}h. Slot đã được mở lại cho người khác.`,
+        session: session._id,
+      });
+    } else {
+      participant.paymentStatus = "unpaid";
+
+      await createNotification({
+        recipient: userId,
+        type: "system",
+        title: "Hủy tham gia thành công",
+        message: `Bạn đã hủy tham gia buổi chơi "${session.title}" trước thời hạn ${policyHours}h.`,
+        session: session._id,
+      });
+
+      await createNotification({
+        recipient: session.host,
+        type: "system",
+        title: "Thành viên hủy tham gia",
+        message: `Một người chơi đã hủy tham gia buổi "${session.title}". Slot đã được mở lại cho người khác.`,
+        session: session._id,
+      });
     }
 
     participant.status = "left";
     participant.attendanceStatus = "cancelled_refund";
-    participant.paymentStatus = "refunded";
-
-    await createNotification({
-      recipient: userId,
-      type: "system",
-      title: "Hủy slot thành công (Hoàn cọc 100%)",
-      message: `Bạn đã hủy trước thời hạn quy định. Khoản cọc đã được hoàn lại đầy đủ.`,
-      session: session._id,
-    });
-
-    await createNotification({
-      recipient: session.host,
-      type: "system",
-      title: "Thành viên hủy slot trước hạn",
-      message: `Một người chơi đã hủy slot buổi "${session.title}". Slot đã được mở lại cho người khác.`,
-      session: session._id,
-    });
   } else {
     // Penalty: Last-minute cancellation / No-show
     if (payment) {
       payment.status = "forfeited_to_host";
       payment.refundReason = `Hủy sát giờ (< ${policyHours}h) - Tiền cọc được bồi thường cho Host`;
       await payment.save();
+      participant.paymentStatus = "forfeited";
+
+      await createNotification({
+        recipient: userId,
+        type: "system",
+        title: "Hủy slot muộn - Mất cọc & Trừ điểm uy tín",
+        message: `Bạn hủy sát giờ (< ${policyHours}h). Tiền cọc được bồi thường tiền sân cho Host và bạn bị trừ 15 điểm uy tín.`,
+        session: session._id,
+      });
+
+      await createNotification({
+        recipient: session.host,
+        type: "system",
+        title: "Thành viên hủy muộn - Đã giữ cọc đền bù",
+        message: `Một người chơi đã hủy sát giờ. Tiền cọc ${payment.amount.toLocaleString()}đ của người này sẽ được giải ngân đền bù cho bạn.`,
+        session: session._id,
+      });
+    } else {
+      participant.paymentStatus = "unpaid";
+
+      await createNotification({
+        recipient: userId,
+        type: "system",
+        title: "Hủy tham gia sát giờ - Trừ điểm uy tín",
+        message: `Bạn hủy tham gia sát giờ (< ${policyHours}h) gây ảnh hưởng tới buổi chơi và bị trừ 15 điểm uy tín.`,
+        session: session._id,
+      });
+
+      await createNotification({
+        recipient: session.host,
+        type: "system",
+        title: "Thành viên hủy tham gia sát giờ",
+        message: `Một người chơi đã hủy tham gia sát giờ (< ${policyHours}h). Buổi chơi này không có cọc ký quỹ.`,
+        session: session._id,
+      });
     }
 
-    // Deduct reputation
+    // Deduct reputation for last-minute cancellation
     await User.findByIdAndUpdate(userId, {
       $inc: { reputation: -15 },
     });
 
     participant.status = "left";
     participant.attendanceStatus = "no_show";
-    participant.paymentStatus = "forfeited";
-
-    await createNotification({
-      recipient: userId,
-      type: "system",
-      title: "Hủy slot muộn - Mất cọc & Trừ điểm uy tín",
-      message: `Bạn hủy sát giờ (< ${policyHours}h). Tiền cọc được bồi thường tiền sân cho Host và bạn bị trừ 15 điểm uy tín.`,
-      session: session._id,
-    });
-
-    await createNotification({
-      recipient: session.host,
-      type: "system",
-      title: "Thành viên hủy muộn - Đã giữ cọc đền bù",
-      message: `Một người chơi đã hủy sát giờ. Tiền cọc của người này sẽ được giải ngân đền bù cho bạn.`,
-      session: session._id,
-    });
   }
 
   // Update session counts
@@ -401,6 +442,7 @@ export async function cancelBookingWithRefund({ sessionId, userId, reason = "" }
     policyHours,
     refundAmount: isEligibleForFullRefund && payment ? payment.amount : 0,
     penaltyApplied: !isEligibleForFullRefund,
+    hadDeposit: Boolean(payment),
   };
 }
 
@@ -414,8 +456,9 @@ export async function checkInPlayer({ sessionId, userId, checkInCode }) {
     throw new AppError("Mã Check-in không chính xác. Vui lòng xem mã từ Host tại sân!", 400);
   }
 
+  const uidStr = String(userId);
   const participant = session.players.find(
-    (p) => p.user.toString() === userId && p.status !== "left",
+    (p) => p.user.toString() === uidStr && p.status !== "left",
   );
   if (!participant) {
     throw new AppError("Bạn không có trong danh sách thành viên của buổi chơi", 400);
@@ -699,7 +742,7 @@ export async function releasePayoutToHost({ sessionId, hostId, io = null }) {
     throw new AppError("Không tìm thấy buổi chơi", 404);
   }
 
-  if (session.host.toString() !== hostId) {
+  if (session.host.toString() !== hostId.toString()) {
     throw new AppError("Chỉ Host của buổi chơi mới có thể yêu cầu giải ngân", 403);
   }
 

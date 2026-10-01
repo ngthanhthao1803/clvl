@@ -9,6 +9,7 @@ import {
   MapPin,
   PlusCircle,
   UserRound,
+  Crown,
 } from "lucide-react";
 import { notificationsApi } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth-store";
@@ -95,6 +96,17 @@ export function Navbar() {
           {/* Auth State */}
           {user ? (
             <div className="flex items-center gap-2">
+              {(user.role === "admin" || user.role === "superadmin") && (
+                <Link
+                  href={"/admin" as any}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 px-3 py-1.5 text-xs font-black text-slate-950 shadow-sm shadow-amber-500/30 hover:brightness-105 transition"
+                  title="Trang quản trị tối cao"
+                >
+                  <Crown className="h-3.5 w-3.5" />
+                  <span>Quản Trị</span>
+                </Link>
+              )}
+
               <Link
                 href={`/profile/${user.id}`}
                 className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:border-emerald-300 hover:bg-emerald-50 transition shadow-sm"
@@ -119,6 +131,17 @@ export function Navbar() {
         {/* 3. Mobile Right Quick Action (md:hidden) */}
         {/* De-duplicated: "Tạo Kèo", "Thông báo", and "Tài khoản" are housed in BottomNavigation */}
         <div className="flex items-center gap-2 md:hidden">
+          {user && (user.role === "admin" || user.role === "superadmin") && (
+            <Link
+              href={"/admin" as any}
+              className="inline-flex items-center gap-1 rounded-full bg-amber-500/20 px-2 py-1 text-[11px] font-black text-amber-700 border border-amber-500/40"
+              title="Trang quản trị"
+            >
+              <Crown className="h-3 w-3" />
+              <span>Admin</span>
+            </Link>
+          )}
+
           <Link
             href="/explore?tab=map"
             className="inline-flex items-center gap-1 rounded-full border border-emerald-200/90 bg-emerald-50/80 px-2.5 py-1 text-[11px] font-bold text-emerald-800 transition active:scale-95 shadow-xs hover:bg-emerald-100"

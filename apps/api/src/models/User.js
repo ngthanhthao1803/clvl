@@ -73,7 +73,7 @@ const userSchema = new mongoose.Schema(
     totalMatches: { type: Number, default: 0, min: 0 },
     role: {
       type: String,
-      enum: ["player", "owner", "admin"],
+      enum: ["player", "owner", "admin", "superadmin"],
       default: "player",
     },
     bankAccount: {

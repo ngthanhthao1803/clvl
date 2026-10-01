@@ -10,7 +10,8 @@
     "start": "node src/server.js",
     "lint": "echo \"Add API linting after dependency install\"",
     "seed": "node scripts/seed.js",
-    "seed:venues": "node scripts/seed-venues.mjs"
+    "seed:venues": "node scripts/seed-venues.mjs",
+    "seed:admin": "node scripts/seed-admin.mjs"
   },
   "dependencies": {
     "@payos/node": "^2.0.5",

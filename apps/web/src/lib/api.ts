@@ -119,3 +119,33 @@ export const paymentsApi = {
     api.get(`/payments/session/${sessionId}`),
 };
 
+export const adminApi = {
+  getStats: () => api.get("/admin/stats"),
+  getUsers: (params: Record<string, unknown> = {}) =>
+    api.get("/admin/users", { params }),
+  getUser: (id: string) => api.get(`/admin/users/${id}`),
+  updateUser: (id: string, payload: Record<string, unknown>) =>
+    api.patch(`/admin/users/${id}`, payload),
+  deleteUser: (id: string) => api.delete(`/admin/users/${id}`),
+  getSessions: (params: Record<string, unknown> = {}) =>
+    api.get("/admin/sessions", { params }),
+  updateSessionStatus: (id: string, payload: { status?: string; cancelReason?: string }) =>
+    api.patch(`/admin/sessions/${id}/status`, payload),
+  deleteSession: (id: string) => api.delete(`/admin/sessions/${id}`),
+  getVenues: (params: Record<string, unknown> = {}) =>
+    api.get("/admin/venues", { params }),
+  createVenue: (payload: Record<string, unknown>) =>
+    api.post("/admin/venues", payload),
+  updateVenue: (id: string, payload: Record<string, unknown>) =>
+    api.patch(`/admin/venues/${id}`, payload),
+  deleteVenue: (id: string) => api.delete(`/admin/venues/${id}`),
+  getDisputes: (params: Record<string, unknown> = {}) =>
+    api.get("/admin/disputes", { params }),
+  resolveDispute: (
+    id: string,
+    payload: { action: "refund" | "dismiss"; resolutionNote?: string },
+  ) => api.post(`/admin/disputes/${id}/resolve`, payload),
+  getPayments: (params: Record<string, unknown> = {}) =>
+    api.get("/admin/payments", { params }),
+};
+
