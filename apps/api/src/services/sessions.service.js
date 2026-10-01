@@ -180,6 +180,8 @@ export async function updateSession(sessionId, hostId, updates) {
     "maxPlayers",
     "matchType",
     "price",
+    "hasGenderPricing",
+    "priceFemale",
     "notes",
     "isPrivate",
     "chatEnabled",

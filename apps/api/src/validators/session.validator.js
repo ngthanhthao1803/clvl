@@ -32,6 +32,8 @@ export const createSessionSchema = z
     maxPlayers: z.number().int().min(2).max(32),
     matchType: z.enum(matchTypes),
     price: z.number().min(0),
+    hasGenderPricing: z.boolean().optional(),
+    priceFemale: z.number().min(0).optional().nullable(),
     notes: z.string().max(1000).optional(),
     coverImage: z.string().optional().nullable(),
     imageUrl: z.string().optional().nullable(),

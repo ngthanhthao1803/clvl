@@ -69,12 +69,45 @@ export async function createDepositOrder({ sessionId, userId }) {
     throw new AppError("Bạn đã hoàn tất đặt cọc cho buổi chơi này", 400);
   }
 
-  const amount =
+  const isFemale = user.gender === "female";
+  const userPrice = session.hasGenderPricing && isFemale
+    ? (session.priceFemale !== undefined ? session.priceFemale : session.price || 0)
+    : (session.price || 0);
+
+  // If session has gender pricing and female is free (0đ)
+  if (session.hasGenderPricing && isFemale && userPrice === 0) {
+    participant.paymentStatus = "paid";
+    participant.escrowAmount = 0;
+    participant.paidAt = new Date();
+    await session.save();
+
+    return {
+      orderCode: `FREE-${Date.now().toString().slice(-6)}`,
+      amount: 0,
+      isFree: true,
+      transferContent: "Miễn phí vé Nữ",
+      qrCodeUrl: "",
+      checkoutUrl: "",
+      bankInfo: null,
+      cancelPolicyHours: session.cancelPolicyHours || 12,
+      metadata: {
+        isFree: true,
+        reason: "Miễn phí thành viên Nữ theo chính sách kèo đấu",
+      },
+    };
+  }
+
+  let amount =
     session.depositAmount && session.depositAmount > 0
       ? session.depositAmount
-      : session.price && session.price > 0
-        ? Math.min(session.price, 50000)
+      : userPrice > 0
+        ? Math.min(userPrice, 50000)
         : 50000;
+
+  // Deposit amount shouldn't exceed user ticket price if ticket price > 0
+  if (userPrice > 0 && amount > userPrice) {
+    amount = userPrice;
+  }
 
   // Generate unique numeric order code (safe integer for PayOS compatibility)
   const randomSuffix = Math.floor(1000 + Math.random() * 9000);

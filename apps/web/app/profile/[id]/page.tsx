@@ -99,6 +99,7 @@ export default function ProfilePage() {
   const [editForm, setEditForm] = useState({
     name: "",
     bio: "",
+    gender: "male",
     skillLevel: "TB",
     dominantHand: "right",
     preferredPosition: "all-round",
@@ -119,6 +120,7 @@ export default function ProfilePage() {
       setEditForm({
         name: user.name || "",
         bio: user.bio || "",
+        gender: user.gender || "male",
         skillLevel: user.skillLevel || "TB",
         dominantHand: user.dominantHand || "right",
         preferredPosition: user.preferredPosition || "all-round",
@@ -292,6 +294,16 @@ export default function ProfilePage() {
                 </div>
                 <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
                   <SkillBadge level={user.skillLevel ?? "TB"} />
+                  {user.gender === "female" && (
+                    <span className="inline-flex items-center gap-0.5 rounded-full bg-rose-50 px-2 py-0.5 text-[11px] font-bold text-rose-700 ring-1 ring-rose-200">
+                      ♀ Nữ
+                    </span>
+                  )}
+                  {user.gender === "male" && (
+                    <span className="inline-flex items-center gap-0.5 rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-bold text-blue-700 ring-1 ring-blue-200">
+                      ♂ Nam
+                    </span>
+                  )}
                   <span>·</span>
                   <span className="flex items-center gap-1 font-medium">
                     <MapPin className="h-3 w-3 text-emerald-600" />
@@ -653,7 +665,24 @@ export default function ProfilePage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600">
+                    Giới tính:
+                  </label>
+                  <select
+                    value={editForm.gender}
+                    onChange={(e) =>
+                      setEditForm((p) => ({ ...p, gender: e.target.value }))
+                    }
+                    className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-xs font-semibold text-slate-900 outline-none focus:border-emerald-500 focus:bg-white cursor-pointer"
+                  >
+                    <option value="male">♂ Nam</option>
+                    <option value="female">♀ Nữ</option>
+                    <option value="prefer_not_say">Khác / Ẩn</option>
+                  </select>
+                </div>
+
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600">
                     Trình độ:

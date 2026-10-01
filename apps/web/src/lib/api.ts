@@ -35,6 +35,7 @@ export const authApi = {
     email: string;
     password: string;
     phone?: string;
+    gender?: string;
     skillLevel?: string;
     district?: string;
     city?: string;

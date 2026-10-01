@@ -44,6 +44,8 @@ type SessionFormState = {
   maxPlayers: number;
   matchType: string;
   price: number;
+  hasGenderPricing: boolean;
+  priceFemale: number;
   priceSplit: boolean;
   depositRequired: boolean;
   depositAmount: number;
@@ -164,6 +166,8 @@ const emptyForm: SessionFormState = {
   maxPlayers: 8,
   matchType: "doubles",
   price: 0,
+  hasGenderPricing: false,
+  priceFemale: 50000,
   priceSplit: true,
   depositRequired: true,
   depositAmount: 50000,
@@ -243,6 +247,8 @@ function CreateSessionForm() {
       maxPlayers: session.maxPlayers ?? 8,
       matchType: session.matchType ?? "doubles",
       price: session.price ?? 0,
+      hasGenderPricing: Boolean(session.hasGenderPricing),
+      priceFemale: session.priceFemale ?? 50000,
       priceSplit: (session.price ?? 0) === 0,
       depositRequired: session.depositRequired ?? true,
       depositAmount: session.depositAmount ?? 50000,
@@ -285,6 +291,11 @@ function CreateSessionForm() {
           ? new Date(form.datetime).toISOString()
           : form.datetime,
         price: form.priceSplit ? 0 : Number(form.price) || 0,
+        hasGenderPricing: !form.priceSplit && Boolean(form.hasGenderPricing),
+        priceFemale:
+          !form.priceSplit && form.hasGenderPricing
+            ? Number(form.priceFemale) || 0
+            : 0,
         depositAmount: form.depositRequired
           ? Number(form.depositAmount) || 50000
           : 0,
@@ -342,6 +353,11 @@ function CreateSessionForm() {
           : ["TB"],
       matchType: form.matchType,
       price: form.priceSplit ? 0 : Number(form.price) || 0,
+      hasGenderPricing: !form.priceSplit && Boolean(form.hasGenderPricing),
+      priceFemale:
+        !form.priceSplit && form.hasGenderPricing
+          ? Number(form.priceFemale) || 0
+          : 0,
       depositRequired: form.depositRequired,
       depositAmount: form.depositAmount,
       status: "open",
@@ -881,43 +897,165 @@ function CreateSessionForm() {
 
                     {/* Fixed Price Settings */}
                     {!form.priceSplit && (
-                      <div className="mt-2 flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-slate-50/60 p-2.5">
-                        <div className="flex items-center gap-1.5">
-                          <input
-                            type="number"
-                            step={10000}
-                            min={0}
-                            value={form.price}
-                            onChange={(e) =>
-                              setForm((prev) => ({
-                                ...prev,
-                                price: Number(e.target.value),
-                              }))
-                            }
-                            className="w-28 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-bold text-slate-900 outline-none focus:border-emerald-400 sm:text-sm"
-                          />
-                          <span className="text-xs text-slate-500 font-medium">
-                            đ / người
-                          </span>
+                      <div className="mt-2 space-y-2.5 rounded-xl border border-slate-200 bg-slate-50/60 p-3">
+                        {/* Toggle Gender Pricing */}
+                        <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-200/80">
+                          <div>
+                            <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                              <span>👫</span> Chế độ tiền Nam / Nữ khác nhau
+                            </span>
+                            <p className="text-[10.5px] text-slate-500">
+                              Áp dụng mức phí riêng cho Nam và Nữ (Ưu đãi nữ chơi cầu)
+                            </p>
+                          </div>
+                          <label className="relative inline-flex cursor-pointer items-center shrink-0">
+                            <input
+                              type="checkbox"
+                              checked={form.hasGenderPricing}
+                              onChange={(e) =>
+                                setForm((prev) => ({
+                                  ...prev,
+                                  hasGenderPricing: e.target.checked,
+                                }))
+                              }
+                              className="peer sr-only"
+                            />
+                            <div className="h-5 w-9 rounded-full bg-slate-200 transition after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:bg-emerald-600 peer-checked:after:translate-x-full peer-focus:outline-none" />
+                          </label>
                         </div>
 
-                        <div className="ml-auto flex flex-wrap gap-1">
-                          {[50000, 70000, 80000, 100000].map((amt) => (
-                            <button
-                              key={amt}
-                              type="button"
-                              onClick={() =>
-                                setForm((prev) => ({ ...prev, price: amt }))
-                              }
-                              className={`rounded-md border px-2 py-0.5 text-[10.5px] font-medium transition ${form.price === amt
-                                ? "border-emerald-400 bg-emerald-100 text-emerald-800 font-bold"
-                                : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
-                                }`}
-                            >
-                              {(amt / 1000)}k
-                            </button>
-                          ))}
-                        </div>
+                        {form.hasGenderPricing ? (
+                          /* Two-column pricing: Nam & Nữ */
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                            {/* Tiền Nam */}
+                            <div className="rounded-xl border border-blue-200 bg-white p-2.5">
+                              <div className="flex items-center justify-between text-xs font-bold text-blue-900 mb-1">
+                                <span className="flex items-center gap-1">
+                                  <span className="text-blue-600">♂</span> Tiền Nam
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-1.5">
+                                <input
+                                  type="number"
+                                  step={5000}
+                                  min={0}
+                                  value={form.price}
+                                  onChange={(e) =>
+                                    setForm((prev) => ({
+                                      ...prev,
+                                      price: Number(e.target.value),
+                                    }))
+                                  }
+                                  className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-2.5 py-1 text-xs font-bold text-slate-900 outline-none focus:border-blue-400 focus:bg-white"
+                                />
+                                <span className="text-[11px] text-slate-500 shrink-0">đ</span>
+                              </div>
+                              <div className="mt-1.5 flex flex-wrap gap-1">
+                                {[60000, 70000, 80000, 100000].map((amt) => (
+                                  <button
+                                    key={amt}
+                                    type="button"
+                                    onClick={() => setForm((prev) => ({ ...prev, price: amt }))}
+                                    className={`rounded px-1.5 py-0.5 text-[10px] font-semibold transition ${
+                                      form.price === amt
+                                        ? "bg-blue-100 text-blue-800 font-bold border border-blue-300"
+                                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                                    }`}
+                                  >
+                                    {amt / 1000}k
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Tiền Nữ */}
+                            <div className="rounded-xl border border-rose-200 bg-white p-2.5">
+                              <div className="flex items-center justify-between text-xs font-bold text-rose-900 mb-1">
+                                <span className="flex items-center gap-1">
+                                  <span className="text-rose-600">♀</span> Tiền Nữ
+                                </span>
+                                {form.priceFemale === 0 && (
+                                  <span className="text-[10px] bg-rose-100 text-rose-700 px-1.5 rounded-full font-bold">
+                                    Free Nữ
+                                  </span>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-1.5">
+                                <input
+                                  type="number"
+                                  step={5000}
+                                  min={0}
+                                  value={form.priceFemale}
+                                  onChange={(e) =>
+                                    setForm((prev) => ({
+                                      ...prev,
+                                      priceFemale: Number(e.target.value),
+                                    }))
+                                  }
+                                  className="w-full rounded-lg border border-slate-200 bg-slate-50/50 px-2.5 py-1 text-xs font-bold text-slate-900 outline-none focus:border-rose-400 focus:bg-white"
+                                />
+                                <span className="text-[11px] text-slate-500 shrink-0">đ</span>
+                              </div>
+                              <div className="mt-1.5 flex flex-wrap gap-1">
+                                {[0, 40000, 50000, 60000].map((amt) => (
+                                  <button
+                                    key={amt}
+                                    type="button"
+                                    onClick={() => setForm((prev) => ({ ...prev, priceFemale: amt }))}
+                                    className={`rounded px-1.5 py-0.5 text-[10px] font-semibold transition ${
+                                      form.priceFemale === amt
+                                        ? "bg-rose-100 text-rose-800 font-bold border border-rose-300"
+                                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                                    }`}
+                                  >
+                                    {amt === 0 ? "0đ (Free)" : `${amt / 1000}k`}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          /* Standard Single Price */
+                          <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                            <div className="flex items-center gap-1.5">
+                              <input
+                                type="number"
+                                step={10000}
+                                min={0}
+                                value={form.price}
+                                onChange={(e) =>
+                                  setForm((prev) => ({
+                                    ...prev,
+                                    price: Number(e.target.value),
+                                  }))
+                                }
+                                className="w-28 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-bold text-slate-900 outline-none focus:border-emerald-400 sm:text-sm"
+                              />
+                              <span className="text-xs text-slate-500 font-medium">
+                                đ / người
+                              </span>
+                            </div>
+
+                            <div className="flex flex-wrap gap-1">
+                              {[50000, 70000, 80000, 100000].map((amt) => (
+                                <button
+                                  key={amt}
+                                  type="button"
+                                  onClick={() =>
+                                    setForm((prev) => ({ ...prev, price: amt }))
+                                  }
+                                  className={`rounded-md border px-2 py-0.5 text-[10.5px] font-medium transition ${
+                                    form.price === amt
+                                      ? "border-emerald-400 bg-emerald-100 text-emerald-800 font-bold"
+                                      : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                                  }`}
+                                >
+                                  {amt / 1000}k
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

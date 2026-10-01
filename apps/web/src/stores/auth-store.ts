@@ -8,6 +8,7 @@ export type AuthUser = {
   email?: string;
   phone?: string;
   avatar?: string;
+  gender?: string;
   skillLevel?: string;
   district?: string;
   city?: string;

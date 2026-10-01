@@ -86,6 +86,8 @@ const sessionSchema = new mongoose.Schema(
       index: true,
     },
     price: { type: Number, default: 0, min: 0 },
+    hasGenderPricing: { type: Boolean, default: false },
+    priceFemale: { type: Number, default: 0, min: 0 },
     notes: { type: String, trim: true, maxlength: 1000, default: "" },
     coverImage: { type: String, trim: true, default: "" },
     imageUrl: { type: String, trim: true, default: "" },

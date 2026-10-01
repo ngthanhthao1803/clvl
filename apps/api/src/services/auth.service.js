@@ -6,7 +6,7 @@ import { signJwt } from "../utils/token.js";
 import { toUserDto, upsertFirebaseUser } from "./users.service.js";
 
 export async function registerWithEmailPassword(payload) {
-  const { email, password, name, phone, skillLevel, district, city } = payload;
+  const { email, password, name, phone, skillLevel, district, city, gender } = payload;
 
   if (!email || !password || !name) {
     throw new AppError("Vui lòng điền đầy đủ họ tên, email và mật khẩu", 400);
@@ -29,6 +29,7 @@ export async function registerWithEmailPassword(payload) {
       email: email.toLowerCase().trim(),
       password,
       phone: phone ? phone.trim() : "",
+      gender: gender || "prefer_not_say",
       skillLevel: skillLevel || "TB",
       district: district ? district.trim() : "",
       city: city ? city.trim() : "Hồ Chí Minh",

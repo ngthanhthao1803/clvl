@@ -153,6 +153,14 @@ export default function SessionDetailsPage() {
       return res.data.data;
     },
     onSuccess: (data) => {
+      if (data?.isFree) {
+        sessionQuery.refetch();
+        setNotice({
+          type: "success",
+          text: "Xác nhận thành công! Bạn là Nữ và được miễn phí vé tham gia buổi chơi này.",
+        });
+        return;
+      }
       setPaymentOrderData(data);
       setIsPaymentModalOpen(true);
     },
@@ -577,6 +585,12 @@ export default function SessionDetailsPage() {
                           <span className="font-bold text-xs text-slate-900 truncate">
                             {p.user?.name ?? "Người chơi"}
                           </span>
+                          {p.user?.gender === "female" && (
+                            <span className="text-[11px] text-rose-500 font-bold" title="Nữ">♀</span>
+                          )}
+                          {p.user?.gender === "male" && (
+                            <span className="text-[11px] text-blue-500 font-bold" title="Nam">♂</span>
+                          )}
                           {isHost && (
                             <span className="rounded-md bg-slate-900 px-1.5 py-0.2 text-[9px] font-black text-white">
                               HOST
@@ -769,20 +783,67 @@ export default function SessionDetailsPage() {
           {/* Main Booking Card (Sticky) */}
           <div className="sticky top-20 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-md">
             {/* Price Header */}
-            <div className="flex items-baseline justify-between pb-3 border-b border-slate-100">
-              <div>
-                <span className="text-2xl font-black text-emerald-600">
-                  {session.price > 0 ? `${session.price.toLocaleString("vi-VN")} đ` : "Miễn phí"}
-                </span>
-                <span className="text-xs text-slate-500 font-medium ml-1">/ người</span>
-              </div>
+            {session.hasGenderPricing && session.priceFemale !== undefined ? (
+              <div className="pb-3 border-b border-slate-100 space-y-2">
+                <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                  <span className="flex items-center gap-1">
+                    <span>👫</span> Phí sân theo giới tính
+                  </span>
+                  {session.depositRequired && (
+                    <span className="text-[10.5px] font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">
+                      Cọc {(session.depositAmount || 50000).toLocaleString()}đ
+                    </span>
+                  )}
+                </div>
 
-              {session.depositRequired && (
-                <span className="text-[11px] font-bold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200">
-                  Cọc {(session.depositAmount || 50000).toLocaleString()}đ
-                </span>
-              )}
-            </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="rounded-xl border border-blue-200 bg-blue-50/60 p-2.5 text-center">
+                    <div className="text-[11px] font-bold text-blue-700 flex items-center justify-center gap-1">
+                      <span>♂</span> Tiền Nam
+                    </div>
+                    <div className="text-base font-black text-blue-900 mt-0.5">
+                      {session.price > 0 ? `${session.price.toLocaleString("vi-VN")}đ` : "Miễn phí"}
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-rose-200 bg-rose-50/60 p-2.5 text-center">
+                    <div className="text-[11px] font-bold text-rose-700 flex items-center justify-center gap-1">
+                      <span>♀</span> Tiền Nữ
+                    </div>
+                    <div className="text-base font-black text-rose-900 mt-0.5">
+                      {session.priceFemale > 0 ? `${session.priceFemale.toLocaleString("vi-VN")}đ` : "Miễn phí (Free)"}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Personalized price indicator for the logged-in user */}
+                {user && (
+                  <div className="text-[11px] text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-100 flex items-center justify-between">
+                    <span>Mức phí áp dụng cho bạn:</span>
+                    <span className="font-bold text-emerald-700">
+                      {user.gender === "female"
+                        ? (session.priceFemale > 0 ? `${session.priceFemale.toLocaleString("vi-VN")}đ (Nữ)` : "Miễn phí (Nữ)")
+                        : `${session.price.toLocaleString("vi-VN")}đ (Nam)`}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-baseline justify-between pb-3 border-b border-slate-100">
+                <div>
+                  <span className="text-2xl font-black text-emerald-600">
+                    {session.price > 0 ? `${session.price.toLocaleString("vi-VN")} đ` : "Miễn phí"}
+                  </span>
+                  <span className="text-xs text-slate-500 font-medium ml-1">/ người</span>
+                </div>
+
+                {session.depositRequired && (
+                  <span className="text-[11px] font-bold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200">
+                    Cọc {(session.depositAmount || 50000).toLocaleString()}đ
+                  </span>
+                )}
+              </div>
+            )}
 
             {/* Slots Meter */}
             <div className="py-3">
@@ -836,17 +897,41 @@ export default function SessionDetailsPage() {
                     <span>{isPending ? "Đang chờ Host xét duyệt" : "Bạn đã có slot tham gia!"}</span>
                   </div>
 
-                  {session.depositRequired && !hasPaidDeposit && !canEdit && (
-                    <button
-                      type="button"
-                      onClick={() => createDepositMutation.mutate()}
-                      disabled={createDepositMutation.isPending}
-                      className="w-full rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 py-2.5 text-xs font-bold text-white shadow-md transition active:scale-[0.98] flex items-center justify-center gap-2"
-                    >
-                      <CreditCard className="h-4 w-4" />
-                      <span>{createDepositMutation.isPending ? "Đang tạo mã..." : `Đặt cọc VietQR (${(session.depositAmount || 50000).toLocaleString()}đ)`}</span>
-                    </button>
-                  )}
+                  {session.depositRequired && !hasPaidDeposit && !canEdit && (() => {
+                    const isFemaleUser = user?.gender === "female";
+                    const femaleFree = Boolean(session.hasGenderPricing && isFemaleUser && (session.priceFemale === 0 || session.priceFemale === undefined));
+                    const effectivePrice = session.hasGenderPricing && isFemaleUser
+                      ? (session.priceFemale ?? 0)
+                      : session.price;
+                    const depAmount = femaleFree
+                      ? 0
+                      : Math.min(
+                          session.depositAmount || 50000,
+                          effectivePrice > 0 ? effectivePrice : session.depositAmount || 50000,
+                        );
+
+                    return (
+                      <button
+                        type="button"
+                        onClick={() => createDepositMutation.mutate()}
+                        disabled={createDepositMutation.isPending}
+                        className={`w-full rounded-xl py-2.5 text-xs font-bold text-white shadow-md transition active:scale-[0.98] flex items-center justify-center gap-2 ${
+                          femaleFree
+                            ? "bg-rose-500 hover:bg-rose-600"
+                            : "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+                        }`}
+                      >
+                        <CreditCard className="h-4 w-4" />
+                        <span>
+                          {createDepositMutation.isPending
+                            ? "Đang xử lý..."
+                            : femaleFree
+                              ? "Xác nhận giữ chỗ (Nữ Free 0đ)"
+                              : `Đặt cọc VietQR (${depAmount.toLocaleString("vi-VN")}đ)`}
+                        </span>
+                      </button>
+                    );
+                  })()}
 
                   {session.depositRequired && hasPaidDeposit && (
                     <button

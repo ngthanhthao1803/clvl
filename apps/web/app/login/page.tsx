@@ -43,6 +43,7 @@ function AuthFormContent() {
   const [regPassword, setRegPassword] = useState("");
   const [showRegPassword, setShowRegPassword] = useState(false);
   const [regPhone, setRegPhone] = useState("");
+  const [regGender, setRegGender] = useState<"male" | "female" | "prefer_not_say">("male");
   const [regSkillLevel, setRegSkillLevel] = useState("TB");
   const [regCity, setRegCity] = useState(DEFAULT_PROVINCE);
   const [regDistrict, setRegDistrict] = useState("Quận 10");
@@ -156,6 +157,7 @@ function AuthFormContent() {
         email: regEmail.trim(),
         password: regPassword,
         phone: regPhone.trim(),
+        gender: regGender,
         skillLevel: regSkillLevel,
         district: finalDistrict,
         city: regCity,
@@ -428,33 +430,65 @@ function AuthFormContent() {
               </div>
             </div>
 
-            {/* Trình độ người chơi: Đồng nhất 15 cấp độ */}
-            <div>
-              <div className="flex items-center justify-between">
+            {/* Giới tính & Trình độ người chơi */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
                 <label className="block text-xs font-bold text-slate-700">
-                  Trình độ chơi hiện tại
+                  Giới tính <span className="text-rose-500">*</span>
                 </label>
-                <span className="hidden sm:inline text-[10.5px] font-medium text-emerald-600 truncate max-w-[200px]">
-                  {SKILL_OPTIONS.find((s) => s.value === regSkillLevel)?.desc || ""}
-                </span>
+                <div className="mt-1 flex items-center rounded-2xl border border-slate-200 bg-slate-50/50 p-1">
+                  <button
+                    type="button"
+                    onClick={() => setRegGender("male")}
+                    className={`flex-1 rounded-xl py-2 text-xs font-bold transition flex items-center justify-center gap-1 ${
+                      regGender === "male"
+                        ? "bg-white text-blue-700 shadow-xs ring-1 ring-slate-200"
+                        : "text-slate-500 hover:text-slate-900"
+                    }`}
+                  >
+                    <span>♂</span> Nam
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setRegGender("female")}
+                    className={`flex-1 rounded-xl py-2 text-xs font-bold transition flex items-center justify-center gap-1 ${
+                      regGender === "female"
+                        ? "bg-white text-rose-600 shadow-xs ring-1 ring-slate-200"
+                        : "text-slate-500 hover:text-slate-900"
+                    }`}
+                  >
+                    <span>♀</span> Nữ
+                  </button>
+                </div>
               </div>
-              <div className="relative mt-1">
-                <Trophy className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                <select
-                  value={regSkillLevel}
-                  onChange={(e) => setRegSkillLevel(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-4 text-xs font-semibold text-slate-900 outline-none focus:border-emerald-400 focus:bg-white transition cursor-pointer"
-                >
-                  {Array.from(new Set(SKILL_OPTIONS.map((s) => s.group))).map((group) => (
-                    <optgroup key={group} label={group}>
-                      {SKILL_OPTIONS.filter((s) => s.group === group).map((s) => (
-                        <option key={s.value} value={s.value}>
-                          {s.value} · {s.desc}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
+
+              <div className="sm:col-span-2">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-bold text-slate-700">
+                    Trình độ chơi
+                  </label>
+                  <span className="hidden sm:inline text-[10.5px] font-medium text-emerald-600 truncate max-w-[140px]">
+                    {SKILL_OPTIONS.find((s) => s.value === regSkillLevel)?.desc || ""}
+                  </span>
+                </div>
+                <div className="relative mt-1">
+                  <Trophy className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                  <select
+                    value={regSkillLevel}
+                    onChange={(e) => setRegSkillLevel(e.target.value)}
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-2.5 pl-10 pr-4 text-xs font-semibold text-slate-900 outline-none focus:border-emerald-400 focus:bg-white transition cursor-pointer"
+                  >
+                    {Array.from(new Set(SKILL_OPTIONS.map((s) => s.group))).map((group) => (
+                      <optgroup key={group} label={group}>
+                        {SKILL_OPTIONS.filter((s) => s.group === group).map((s) => (
+                          <option key={s.value} value={s.value}>
+                            {s.value} · {s.desc}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
 

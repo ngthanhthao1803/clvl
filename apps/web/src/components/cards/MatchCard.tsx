@@ -36,6 +36,8 @@ export type MatchCardProps = {
     skillRequirements?: string[];
     matchType: string;
     price: number;
+    hasGenderPricing?: boolean;
+    priceFemale?: number;
     status?: string;
     courtNumber?: string | number;
     depositRequired?: boolean;
@@ -501,12 +503,23 @@ export function MatchCard({
 
         {/* Row 4: Price & Slots Left & CTA */}
         <div className="mt-1 flex items-center justify-between border-t border-slate-100 pt-1 text-xs">
-          <div className="flex items-baseline gap-1">
-            <span className="text-xs sm:text-[13px] font-black text-emerald-600 leading-none">
-              {session.price > 0 ? `${session.price.toLocaleString("vi-VN")}đ` : "Miễn phí"}
-            </span>
-            <span className="text-[9px] text-slate-400 font-medium">/người</span>
-          </div>
+          {session.hasGenderPricing && session.priceFemale !== undefined ? (
+            <div className="flex items-center gap-1.5 text-[11px] font-bold">
+              <span className="text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200/60 leading-none">
+                ♂ {session.price.toLocaleString("vi-VN")}đ
+              </span>
+              <span className="text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200/60 leading-none">
+                ♀ {session.priceFemale > 0 ? `${session.priceFemale.toLocaleString("vi-VN")}đ` : "Free"}
+              </span>
+            </div>
+          ) : (
+            <div className="flex items-baseline gap-1">
+              <span className="text-xs sm:text-[13px] font-black text-emerald-600 leading-none">
+                {session.price > 0 ? `${session.price.toLocaleString("vi-VN")}đ` : "Miễn phí"}
+              </span>
+              <span className="text-[9px] text-slate-400 font-medium">/người</span>
+            </div>
+          )}
 
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 text-[10px] text-slate-500 font-medium">
@@ -596,13 +609,23 @@ export function MatchCard({
         </div>
 
         {/* Bottom Price on Image */}
-        <div className="absolute bottom-1.5 right-2 rounded-md bg-slate-950/80 backdrop-blur-xs px-1.5 py-0.5 text-right border border-white/15 pointer-events-none">
-          <span className="text-[11px] sm:text-xs font-black text-emerald-400 leading-none">
-            {session.price > 0
-              ? `${session.price.toLocaleString("vi-VN")}đ`
-              : "Free"}
-          </span>
-          <span className="text-[8.5px] text-slate-300 ml-0.5 font-normal">/ng</span>
+        <div className="absolute bottom-1.5 right-2 rounded-md bg-slate-950/85 backdrop-blur-xs px-1.5 py-0.5 text-right border border-white/15 pointer-events-none">
+          {session.hasGenderPricing && session.priceFemale !== undefined ? (
+            <div className="flex items-center gap-1 text-[9.5px] font-bold leading-none">
+              <span className="text-blue-300">♂{session.price > 0 ? `${Math.round(session.price / 1000)}k` : "Free"}</span>
+              <span className="text-white/40">·</span>
+              <span className="text-rose-300">♀{session.priceFemale > 0 ? `${Math.round(session.priceFemale / 1000)}k` : "Free"}</span>
+            </div>
+          ) : (
+            <>
+              <span className="text-[11px] sm:text-xs font-black text-emerald-400 leading-none">
+                {session.price > 0
+                  ? `${session.price.toLocaleString("vi-VN")}đ`
+                  : "Free"}
+              </span>
+              <span className="text-[8.5px] text-slate-300 ml-0.5 font-normal">/ng</span>
+            </>
+          )}
         </div>
       </div>
 
