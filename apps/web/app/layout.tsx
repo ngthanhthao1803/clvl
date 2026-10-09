@@ -90,7 +90,7 @@ const jsonLdWebsite = {
     "Nền tảng kết nối lông thủ, tìm kèo cầu lông, ghép nhóm giao lưu, bản đồ sân và giữ chỗ uy tín toàn quốc.",
   potentialAction: {
     "@type": "SearchAction",
-    target: `${siteUrl}/explore?search={search_term_string}`,
+    target: `${siteUrl}/?search={search_term_string}`,
     "query-input": "required name=search_term_string",
   },
 };

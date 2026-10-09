@@ -7,7 +7,7 @@ export default function SavedRedirectPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/explore?chip=saved");
+    router.replace("/?chip=saved");
   }, [router]);
 
   return (

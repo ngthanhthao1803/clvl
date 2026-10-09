@@ -311,62 +311,62 @@ export function MatchCard({
 
   // Mini badge on image
   const thumbnailStatusBadge = isCancelled ? (
-    <span className="inline-flex items-center rounded-md bg-rose-600/90 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-xs">
+    <span suppressHydrationWarning className="inline-flex items-center rounded-md bg-rose-600/90 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-xs">
       Đã hủy
     </span>
   ) : isPastSession ? (
-    <span className="inline-flex items-center gap-0.5 rounded-md bg-slate-800/90 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-bold text-slate-300 border border-white/10 shadow-xs">
+    <span suppressHydrationWarning className="inline-flex items-center gap-0.5 rounded-md bg-slate-800/90 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-bold text-slate-300 border border-white/10 shadow-xs">
       Đã diễn ra
     </span>
   ) : timeInfo.isLive ? (
-    <span className="inline-flex items-center gap-1 rounded-md bg-rose-600/95 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs animate-pulse">
+    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-rose-600/95 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs animate-pulse">
       <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping" />
       🔴 Đang đánh
     </span>
   ) : timeInfo.isStartingSoon ? (
-    <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/95 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs animate-pulse">
+    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-amber-500/95 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs animate-pulse">
       ⚡ Sắp đánh
     </span>
   ) : isFull ? (
-    <span className="inline-flex items-center rounded-md bg-slate-900/80 px-1.5 py-0.5 text-[9px] font-medium text-slate-200">
+    <span suppressHydrationWarning className="inline-flex items-center rounded-md bg-slate-900/80 px-1.5 py-0.5 text-[9px] font-medium text-slate-200">
       Đã đủ
     </span>
   ) : isAlmostFull ? (
-    <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/95 px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs">
+    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-amber-500/95 px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs">
       <span className="h-1 w-1 rounded-full bg-white animate-pulse" />
       Còn {slotsLeft}
     </span>
   ) : (
-    <span className="inline-flex items-center gap-1 rounded-md bg-emerald-600/90 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-xs">
+    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-emerald-600/90 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-xs">
       Còn {slotsLeft} chỗ
     </span>
   );
 
   // Inline status pill for text rows
   const inlineStatusPill = isCancelled ? (
-    <span className="inline-flex items-center rounded-md bg-rose-50 px-1.5 py-0.5 text-[9.5px] font-bold text-rose-700 border border-rose-200">
+    <span suppressHydrationWarning className="inline-flex items-center rounded-md bg-rose-50 px-1.5 py-0.5 text-[9.5px] font-bold text-rose-700 border border-rose-200">
       Đã hủy
     </span>
   ) : isPastSession ? (
-    <span className="inline-flex items-center rounded-md bg-slate-100 px-1.5 py-0.5 text-[9.5px] font-medium text-slate-500 border border-slate-200">
+    <span suppressHydrationWarning className="inline-flex items-center rounded-md bg-slate-100 px-1.5 py-0.5 text-[9.5px] font-medium text-slate-500 border border-slate-200">
       Đã kết thúc
     </span>
   ) : timeInfo.isLive ? (
-    <span className="inline-flex items-center gap-1 rounded-md bg-rose-50 px-1.5 py-0.5 text-[9.5px] font-bold text-rose-700 border border-rose-200">
+    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-rose-50 px-1.5 py-0.5 text-[9.5px] font-bold text-rose-700 border border-rose-200">
       <span className="h-1 w-1 rounded-full bg-rose-500 animate-ping" />
       Đang diễn ra
     </span>
   ) : isFull ? (
-    <span className="inline-flex items-center rounded-md bg-slate-100 px-1.5 py-0.5 text-[9.5px] font-medium text-slate-600 border border-slate-200">
+    <span suppressHydrationWarning className="inline-flex items-center rounded-md bg-slate-100 px-1.5 py-0.5 text-[9.5px] font-medium text-slate-600 border border-slate-200">
       Đã đủ chỗ
     </span>
   ) : isAlmostFull ? (
-    <span className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-1.5 py-0.5 text-[9.5px] font-bold text-amber-700 border border-amber-200">
+    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-1.5 py-0.5 text-[9.5px] font-bold text-amber-700 border border-amber-200">
       <span className="h-1 w-1 rounded-full bg-amber-500 animate-ping" />
       Còn {slotsLeft} slot
     </span>
   ) : (
-    <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-1.5 py-0.5 text-[9.5px] font-bold text-emerald-700 border border-emerald-200">
+    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-1.5 py-0.5 text-[9.5px] font-bold text-emerald-700 border border-emerald-200">
       <span className="h-1 w-1 rounded-full bg-emerald-500" />
       Còn {slotsLeft} chỗ
     </span>
@@ -378,6 +378,7 @@ export function MatchCard({
   const renderHorizontal = () => (
     <Link
       href={`/sessions/${sessionId}`}
+      suppressHydrationWarning
       className={clsx(
         "group flex items-stretch gap-2.5 sm:gap-3 rounded-2xl border border-slate-200/90 bg-white p-2 sm:p-2.5 shadow-xs transition-all duration-200 hover:border-emerald-400 hover:shadow-md active:scale-[0.995]",
         isPastSession && "opacity-75 hover:opacity-100 bg-slate-50/70 border-slate-200",
@@ -551,6 +552,7 @@ export function MatchCard({
   const renderGrid = () => (
     <Link
       href={`/sessions/${sessionId}`}
+      suppressHydrationWarning
       className={clsx(
         "group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-400 hover:shadow-md active:scale-[0.995]",
         isPastSession && "opacity-75 hover:opacity-100 bg-slate-50/70 border-slate-200",

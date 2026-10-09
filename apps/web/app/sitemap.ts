@@ -12,13 +12,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/explore`,
+      url: `${baseUrl}/my-sessions`,
       lastModified: now,
       changeFrequency: "always",
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/explore?tab=map`,
+      url: `${baseUrl}/?tab=map`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.8,

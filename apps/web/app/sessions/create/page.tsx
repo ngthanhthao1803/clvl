@@ -328,7 +328,7 @@ function CreateSessionForm() {
         router.replace(`/sessions/${sessionId}`);
         return;
       }
-      router.replace("/explore");
+      router.replace("/");
     },
     onSettled: () => {
       submitLockRef.current = false;
@@ -1345,7 +1345,7 @@ function CreateSessionForm() {
 
                 <div className="flex items-center gap-2">
                   <Link
-                    href="/explore"
+                    href="/"
                     className="flex-1 sm:flex-initial text-center rounded-xl border border-slate-200 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
                   >
                     Hủy bỏ

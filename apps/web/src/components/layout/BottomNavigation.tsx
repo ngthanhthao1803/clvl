@@ -1,15 +1,21 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, Compass, Home, Plus, UserRound } from "lucide-react";
+import { Bell, CalendarCheck2, Home, Plus, UserRound } from "lucide-react";
 import { notificationsApi } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth-store";
 
 export function BottomNavigation() {
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const unreadCountQuery = useQuery({
     queryKey: ["notifications", "unread-count"],
@@ -17,13 +23,14 @@ export function BottomNavigation() {
       const response = await notificationsApi.getUnreadCount();
       return response.data.data.unreadCount as number;
     },
-    enabled: Boolean(user),
+    enabled: Boolean(user && mounted),
     staleTime: 30_000,
   });
-  const unreadCount = unreadCountQuery.data ?? 0;
+  const unreadCount = mounted ? (unreadCountQuery.data ?? 0) : 0;
+  const currentUser = mounted ? user : null;
 
   const isHome = pathname === "/";
-  const isExplore = pathname.startsWith("/explore");
+  const isMySessions = pathname.startsWith("/my-sessions");
   const isCreate = pathname.startsWith("/sessions/create");
   const isNotifications = pathname.startsWith("/notifications");
   const isProfile = pathname.startsWith("/profile") || pathname === "/login";
@@ -43,16 +50,16 @@ export function BottomNavigation() {
           <span className="text-[10px] tracking-tight">Trang chủ</span>
         </Link>
 
-        {/* 2. Khám phá */}
+        {/* 2. Kèo của tôi */}
         <Link
-          href="/explore"
-          className={`flex flex-col items-center gap-0.5 py-1 text-center transition-all ${isExplore
+          href="/my-sessions"
+          className={`flex flex-col items-center gap-0.5 py-1 text-center transition-all ${isMySessions
             ? "text-emerald-600 dark:text-emerald-400 font-bold"
             : "text-slate-500 hover:text-slate-800 dark:text-slate-400 font-medium"
             }`}
         >
-          <Compass className={`h-5 w-5 transition-transform ${isExplore ? "scale-110" : ""}`} />
-          <span className="text-[10px] tracking-tight">Khám phá</span>
+          <CalendarCheck2 className={`h-5 w-5 transition-transform ${isMySessions ? "scale-110" : ""}`} />
+          <span className="text-[10px] tracking-tight">Kèo của tôi</span>
         </Link>
 
         {/* 3. Center Elevated Action Button: Tạo Kèo */}
@@ -98,17 +105,18 @@ export function BottomNavigation() {
 
         {/* 5. Cá nhân / Tài khoản */}
         <Link
-          href={(user ? `/profile/${user.id}` : "/login") as any}
+          href={(currentUser ? `/profile/${currentUser.id}` : "/login") as any}
+          suppressHydrationWarning
           className={`flex flex-col items-center gap-0.5 py-1 text-center transition-all ${isProfile
             ? "text-emerald-600 dark:text-emerald-400 font-bold"
             : "text-slate-500 hover:text-slate-800 dark:text-slate-400 font-medium"
             }`}
         >
-          {user ? (
-            user.avatar || (user.gender === "female" ? "/images/avatars/warrior-female.jpg" : user.gender === "male" ? "/images/avatars/warrior-male.jpg" : "") ? (
+          {currentUser ? (
+            currentUser.avatar || (currentUser.gender === "female" ? "/images/avatars/warrior-female.jpg" : currentUser.gender === "male" ? "/images/avatars/warrior-male.jpg" : "") ? (
               <img
-                src={user.avatar || (user.gender === "female" ? "/images/avatars/warrior-female.jpg" : "/images/avatars/warrior-male.jpg")}
-                alt={user.name}
+                src={currentUser.avatar || (currentUser.gender === "female" ? "/images/avatars/warrior-female.jpg" : "/images/avatars/warrior-male.jpg")}
+                alt={currentUser.name}
                 className={`h-5 w-5 rounded-full object-cover shadow-xs transition-transform ${isProfile ? "ring-2 ring-emerald-500 scale-110" : ""}`}
               />
             ) : (
@@ -118,14 +126,14 @@ export function BottomNavigation() {
                   : "bg-gradient-to-br from-slate-600 to-slate-800"
                   }`}
               >
-                {(user.name?.[0] || "U").toUpperCase()}
+                {(currentUser.name?.[0] || "U").toUpperCase()}
               </div>
             )
           ) : (
             <UserRound className={`h-5 w-5 transition-transform ${isProfile ? "scale-110" : ""}`} />
           )}
           <span className="text-[10px] tracking-tight">
-            {user ? "Cá nhân" : "Đăng nhập"}
+            {currentUser ? "Cá nhân" : "Đăng nhập"}
           </span>
         </Link>
       </div>

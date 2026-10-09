@@ -72,6 +72,34 @@ export async function listSessions(filters = {}) {
   if (filters.matchType) query.matchType = filters.matchType;
   if (filters.status) query.status = filters.status;
 
+  if (filters.participant) {
+    query.$or = [
+      { host: filters.participant },
+      {
+        "players.user": filters.participant,
+        "players.status": { $nin: ["left", "rejected"] },
+      },
+    ];
+  } else if (filters.player) {
+    query["players.user"] = filters.player;
+    query["players.status"] = { $nin: ["left", "rejected"] };
+  }
+
+  if (filters.search) {
+    const reg = new RegExp(filters.search.trim(), "i");
+    const searchCondition = [
+      { title: reg },
+      { venueName: reg },
+      { district: reg },
+    ];
+    if (query.$or) {
+      query.$and = [{ $or: query.$or }, { $or: searchCondition }];
+      delete query.$or;
+    } else {
+      query.$or = searchCondition;
+    }
+  }
+
   return populateSession(
     Session.find(query).sort({ datetime: 1, createdAt: -1 }).limit(100),
   );
