@@ -37,6 +37,7 @@ export const metadata: Metadata = {
   creator: "CLVL - Đánh Cầu Lông",
   publisher: "CLVL - danhcaulong.com",
   applicationName: "Đánh Cầu Lông",
+  manifest: "/manifest.json",
   alternates: {
     canonical: siteUrl,
   },
@@ -59,7 +60,7 @@ export const metadata: Metadata = {
     siteName: "Đánh Cầu Lông - danhcaulong.com",
     images: [
       {
-        url: "/images/covers/cover-1.jpg",
+        url: "/images/covers/badminton.jpg",
         width: 1200,
         height: 630,
         alt: "Đánh Cầu Lông - danhcaulong.com",
@@ -73,7 +74,7 @@ export const metadata: Metadata = {
     title: "Đánh Cầu Lông - Nền tảng ghép trận & tìm sân cầu lông toàn quốc",
     description:
       "Kết nối lông thủ, tìm kèo cầu lông, ghép nhóm giao lưu và đặt sân uy tín khắp Việt Nam.",
-    images: ["/images/covers/cover-1.jpg"],
+    images: ["/images/covers/badminton.jpg"],
   },
   verification: {
     google: "AdkiqQPY_Vsgm3FAUIvFZpAwN3v2ZhepDsTH8CW60go",

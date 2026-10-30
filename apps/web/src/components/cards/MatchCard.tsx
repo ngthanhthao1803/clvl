@@ -9,12 +9,14 @@ import {
   Users,
   ShieldCheck,
   ArrowRight,
-  Sparkles,
   Bookmark,
   Share2,
 } from "lucide-react";
 import { SkillBadge } from "@/components/ui/SkillBadge";
-import { BADMINTON_COVER_PRESETS, resolveCoverImage } from "@/lib/badminton-covers";
+import {
+  DEFAULT_BADMINTON_COVER,
+  resolveCoverImage,
+} from "@/lib/badminton-covers";
 import { useSavedSessionsStore } from "@/stores/saved-sessions-store";
 import { shareSession } from "@/lib/share";
 import { toast } from "@/stores/toast-store";
@@ -53,9 +55,20 @@ export type MatchCardProps = {
       _id?: string;
       name?: string;
       avatar?: string;
+      gender?: string;
       reputation?: number;
       isVerifiedHost?: boolean;
     };
+    players?: Array<{
+      status?: string;
+      user?: {
+        _id?: string;
+        id?: string;
+        name?: string;
+        avatar?: string;
+        gender?: string;
+      };
+    }>;
     venue?: {
       name?: string;
       address?: string;
@@ -136,12 +149,21 @@ function parseDateTime(datetimeStr?: string, durationMinutes = 120): TimeStatus 
   const isPast = nowTime > endTime;
   const isLive = nowTime >= startTime && nowTime <= endTime;
   const diffMs = startTime - nowTime;
-  const isStartingSoon = diffMs > 0 && diffMs <= 2 * 60 * 60 * 1000; // trong vòng 2h tới
+  const isStartingSoon = diffMs > 0 && diffMs <= 2 * 60 * 60 * 1000;
 
-  // Tính số ngày chênh lệch (chỉ so sánh phần ngày)
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  const targetDayStart = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-  const dayDiff = Math.round((targetDayStart - todayStart) / (1000 * 60 * 60 * 24));
+  const todayStart = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+  ).getTime();
+  const targetDayStart = new Date(
+    d.getFullYear(),
+    d.getMonth(),
+    d.getDate(),
+  ).getTime();
+  const dayDiff = Math.round(
+    (targetDayStart - todayStart) / (1000 * 60 * 60 * 24),
+  );
 
   const isToday = dayDiff === 0;
   const isTomorrow = dayDiff === 1;
@@ -169,7 +191,8 @@ function parseDateTime(datetimeStr?: string, durationMinutes = 120): TimeStatus 
 
   if (isPast) {
     statusText = "Đã diễn ra";
-    dateLabel = dayDiff === 0 ? "Hôm nay (Đã qua)" : `${formattedDate} (Đã qua)`;
+    dateLabel =
+      dayDiff === 0 ? "Hôm nay (Đã qua)" : `${formattedDate} (Đã qua)`;
     badgeStyle = {
       bg: "bg-slate-100",
       text: "text-slate-500",
@@ -235,6 +258,14 @@ function parseDateTime(datetimeStr?: string, durationMinutes = 120): TimeStatus 
   };
 }
 
+const AVATAR_TONES = [
+  "bg-emerald-600 text-white",
+  "bg-teal-600 text-white",
+  "bg-sky-600 text-white",
+  "bg-amber-500 text-white",
+  "bg-indigo-600 text-white",
+];
+
 export function MatchCard({
   session,
   layout = "auto",
@@ -254,6 +285,10 @@ export function MatchCard({
     session.currentPlayers ?? session.currentPlayersCount ?? 0;
   const maxCount = session.maxPlayers || 8;
   const slotsLeft = Math.max(0, maxCount - currentCount);
+  const fillPercent = Math.min(
+    100,
+    Math.max(8, Math.round((currentCount / maxCount) * 100)),
+  );
 
   // Cover Image resolution
   const rawImage = session.coverImage || session.imageUrl || session.image;
@@ -279,7 +314,10 @@ export function MatchCard({
     e.stopPropagation();
     const saved = toggleSave(session);
     if (saved) {
-      toast.success("Đã lưu kèo vào danh sách!", "Bạn có thể xem lại tại tab 'Đã lưu' bất cứ lúc nào.");
+      toast.success(
+        "Đã lưu kèo vào danh sách!",
+        "Bạn có thể xem lại tại tab 'Đã lưu' bất cứ lúc nào.",
+      );
     } else {
       toast.info("Đã bỏ lưu kèo");
     }
@@ -303,73 +341,154 @@ export function MatchCard({
   const hostReputation = host?.reputation ?? 100;
   const isVerifiedHost = Boolean(host?.isVerifiedHost);
 
+  // Build overlapping Avatar Stack (up to 3 circles)
+  const joinedRoster = (session.players || []).filter(
+    (p) => p.status === "joined" || p.status === "host" || !p.status,
+  );
+  const avatarItems: Array<{ name: string; avatar?: string; tone: string }> = [];
+
+  if (joinedRoster.length > 0) {
+    joinedRoster.slice(0, 3).forEach((p, idx) => {
+      const uName = p.user?.name || (idx === 0 ? hostName : `Lông thủ ${idx + 1}`);
+      const uAvatar =
+        p.user?.avatar ||
+        (p.user?.gender === "female"
+          ? "/images/avatars/warrior-female.jpg"
+          : p.user?.gender === "male"
+            ? "/images/avatars/warrior-male.jpg"
+            : undefined);
+      avatarItems.push({
+        name: uName,
+        avatar: uAvatar,
+        tone: AVATAR_TONES[idx % AVATAR_TONES.length],
+      });
+    });
+  } else if (currentCount > 0) {
+    // Fallback when players array isn't populated on list endpoint
+    const countToShow = Math.min(3, currentCount);
+    const seedLetters = [
+      (hostName[0] || "H").toUpperCase(),
+      "T",
+      "M",
+    ];
+    for (let i = 0; i < countToShow; i++) {
+      avatarItems.push({
+        name: i === 0 ? hostName : seedLetters[i],
+        avatar: i === 0 ? host?.avatar : undefined,
+        tone: AVATAR_TONES[i % AVATAR_TONES.length],
+      });
+    }
+  }
+
+  const extraPlayersCount = Math.max(0, currentCount - avatarItems.length);
+
   // Status conditions
   const isPastSession = timeInfo.isPast || session.status === "completed";
   const isCancelled = session.status === "cancelled";
   const isFull = slotsLeft === 0 || session.status === "full";
   const isAlmostFull = slotsLeft > 0 && slotsLeft <= 2;
 
+  const progressBarColor = isPastSession
+    ? "bg-slate-300"
+    : isFull
+      ? "bg-rose-500"
+      : isAlmostFull
+        ? "bg-amber-500"
+        : "bg-emerald-500";
+
   // Mini badge on image
   const thumbnailStatusBadge = isCancelled ? (
-    <span suppressHydrationWarning className="inline-flex items-center rounded-md bg-rose-600/90 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-xs">
+    <span
+      suppressHydrationWarning
+      className="inline-flex items-center rounded-md bg-rose-600/90 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-xs"
+    >
       Đã hủy
     </span>
   ) : isPastSession ? (
-    <span suppressHydrationWarning className="inline-flex items-center gap-0.5 rounded-md bg-slate-800/90 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-bold text-slate-300 border border-white/10 shadow-xs">
+    <span
+      suppressHydrationWarning
+      className="inline-flex items-center gap-0.5 rounded-md bg-slate-800/90 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-bold text-slate-300 border border-white/10 shadow-xs"
+    >
       Đã diễn ra
     </span>
   ) : timeInfo.isLive ? (
-    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-rose-600/95 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs animate-pulse">
+    <span
+      suppressHydrationWarning
+      className="inline-flex items-center gap-1 rounded-md bg-rose-600/95 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs animate-pulse"
+    >
       <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping" />
       🔴 Đang đánh
     </span>
   ) : timeInfo.isStartingSoon ? (
-    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-amber-500/95 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs animate-pulse">
+    <span
+      suppressHydrationWarning
+      className="inline-flex items-center gap-1 rounded-md bg-amber-500/95 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs animate-pulse"
+    >
       ⚡ Sắp đánh
     </span>
   ) : isFull ? (
-    <span suppressHydrationWarning className="inline-flex items-center rounded-md bg-slate-900/80 px-1.5 py-0.5 text-[9px] font-medium text-slate-200">
+    <span
+      suppressHydrationWarning
+      className="inline-flex items-center rounded-md bg-slate-900/80 px-1.5 py-0.5 text-[9px] font-medium text-slate-200"
+    >
       Đã đủ
     </span>
   ) : isAlmostFull ? (
-    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-amber-500/95 px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs">
+    <span
+      suppressHydrationWarning
+      className="inline-flex items-center gap-1 rounded-md bg-amber-500/95 px-1.5 py-0.5 text-[9px] font-black text-white shadow-xs"
+    >
       <span className="h-1 w-1 rounded-full bg-white animate-pulse" />
       Còn {slotsLeft}
     </span>
   ) : (
-    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-emerald-600/90 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-xs">
+    <span
+      suppressHydrationWarning
+      className="inline-flex items-center gap-1 rounded-md bg-emerald-600/90 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-xs"
+    >
       Còn {slotsLeft} chỗ
     </span>
   );
 
-  // Inline status pill for text rows
-  const inlineStatusPill = isCancelled ? (
-    <span suppressHydrationWarning className="inline-flex items-center rounded-md bg-rose-50 px-1.5 py-0.5 text-[9.5px] font-bold text-rose-700 border border-rose-200">
-      Đã hủy
-    </span>
-  ) : isPastSession ? (
-    <span suppressHydrationWarning className="inline-flex items-center rounded-md bg-slate-100 px-1.5 py-0.5 text-[9.5px] font-medium text-slate-500 border border-slate-200">
-      Đã kết thúc
-    </span>
-  ) : timeInfo.isLive ? (
-    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-rose-50 px-1.5 py-0.5 text-[9.5px] font-bold text-rose-700 border border-rose-200">
-      <span className="h-1 w-1 rounded-full bg-rose-500 animate-ping" />
-      Đang diễn ra
-    </span>
-  ) : isFull ? (
-    <span suppressHydrationWarning className="inline-flex items-center rounded-md bg-slate-100 px-1.5 py-0.5 text-[9.5px] font-medium text-slate-600 border border-slate-200">
-      Đã đủ chỗ
-    </span>
-  ) : isAlmostFull ? (
-    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-1.5 py-0.5 text-[9.5px] font-bold text-amber-700 border border-amber-200">
-      <span className="h-1 w-1 rounded-full bg-amber-500 animate-ping" />
-      Còn {slotsLeft} slot
-    </span>
-  ) : (
-    <span suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-1.5 py-0.5 text-[9.5px] font-bold text-emerald-700 border border-emerald-200">
-      <span className="h-1 w-1 rounded-full bg-emerald-500" />
-      Còn {slotsLeft} chỗ
-    </span>
+  const renderAvatarStack = (sizeClass = "h-5 w-5 text-[9px]") => (
+    <div className="flex items-center -space-x-1.5 overflow-hidden">
+      {avatarItems.map((item, idx) =>
+        item.avatar ? (
+          <img
+            key={idx}
+            src={item.avatar}
+            alt={item.name}
+            title={item.name}
+            className={clsx(
+              "inline-block rounded-full object-cover ring-2 ring-white shrink-0",
+              sizeClass,
+            )}
+          />
+        ) : (
+          <span
+            key={idx}
+            title={item.name}
+            className={clsx(
+              "inline-flex items-center justify-center rounded-full font-black ring-2 ring-white shrink-0",
+              sizeClass,
+              item.tone,
+            )}
+          >
+            {(item.name?.[0] || "U").toUpperCase()}
+          </span>
+        ),
+      )}
+      {extraPlayersCount > 0 && (
+        <span
+          className={clsx(
+            "inline-flex items-center justify-center rounded-full bg-slate-100 text-slate-700 font-extrabold ring-2 ring-white shrink-0",
+            sizeClass,
+          )}
+        >
+          +{extraPlayersCount}
+        </span>
+      )}
+    </div>
   );
 
   /* -------------------------------------------------------------
@@ -381,16 +500,17 @@ export function MatchCard({
       suppressHydrationWarning
       className={clsx(
         "group flex items-stretch gap-2.5 sm:gap-3 rounded-2xl border border-slate-200/90 bg-white p-2 sm:p-2.5 shadow-xs transition-all duration-200 hover:border-emerald-400 hover:shadow-md active:scale-[0.995]",
-        isPastSession && "opacity-75 hover:opacity-100 bg-slate-50/70 border-slate-200",
+        isPastSession &&
+          "opacity-75 hover:opacity-100 bg-slate-50/70 border-slate-200",
         className,
       )}
     >
       {/* Left Thumbnail (Fixed compact width, full height) */}
-      <div className="relative w-24 sm:w-28 shrink-0 overflow-hidden rounded-xl bg-slate-900 self-stretch min-h-[96px]">
+      <div className="relative w-24 sm:w-28 shrink-0 overflow-hidden rounded-xl bg-slate-900 self-stretch min-h-[100px]">
         <img
           src={imageSrc}
           alt={session.title}
-          onError={() => setImageSrc(BADMINTON_COVER_PRESETS[0].url)}
+          onError={() => setImageSrc(DEFAULT_BADMINTON_COVER)}
           loading="lazy"
           className={clsx(
             "h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105",
@@ -407,8 +527,16 @@ export function MatchCard({
         </div>
 
         {/* Bottom Mini Pill: Slots Status */}
-        <div className="absolute bottom-1.5 inset-x-1.5 pointer-events-none text-center">
+        <div className="absolute bottom-2 inset-x-1.5 pointer-events-none text-center">
           {thumbnailStatusBadge}
+        </div>
+
+        {/* Bottom 3px Slot Progress Bar */}
+        <div className="absolute bottom-0 inset-x-0 h-1 bg-black/40 pointer-events-none">
+          <div
+            className={clsx("h-full transition-all duration-500", progressBarColor)}
+            style={{ width: `${fillPercent}%` }}
+          />
         </div>
       </div>
 
@@ -466,7 +594,9 @@ export function MatchCard({
                   : "text-slate-400 hover:text-amber-500 hover:bg-slate-100",
               )}
             >
-              <Bookmark className={clsx("h-3.5 w-3.5", isSaved && "fill-amber-500")} />
+              <Bookmark
+                className={clsx("h-3.5 w-3.5", isSaved && "fill-amber-500")}
+              />
             </button>
           </div>
         </div>
@@ -484,7 +614,9 @@ export function MatchCard({
           <p className="flex items-center gap-1 text-[10.5px] text-slate-500 line-clamp-1 leading-tight mt-0.5">
             <MapPin className="h-3 w-3 text-emerald-600 shrink-0" />
             <span className="truncate font-medium text-slate-600">
-              {session.district ? `${session.district}` : session.city || "TP.HCM"}
+              {session.district
+                ? `${session.district}`
+                : session.city || "TP.HCM"}
             </span>
             <span className="text-slate-300">·</span>
             <span className="truncate text-slate-400">{session.title}</span>
@@ -496,12 +628,16 @@ export function MatchCard({
           <SkillBadge level={skillLevel} className="text-[9.5px] px-1.5 py-0" />
 
           {hostName && (
-            <div className="inline-flex items-center gap-1 text-slate-600 text-[10.5px] truncate max-w-[140px] sm:max-w-none">
+            <div className="inline-flex items-center gap-1 text-slate-600 text-[10.5px] truncate max-w-[155px] sm:max-w-none">
               <span className="h-1 w-1 rounded-full bg-slate-300 shrink-0" />
               <span className="text-slate-400">Host:</span>
-              <span className="font-semibold text-slate-700 truncate">{hostName}</span>
+              <span className="font-semibold text-slate-700 truncate">
+                {hostName}
+              </span>
               {hostReputation > 0 && (
-                <span className="text-amber-600 font-bold shrink-0">⭐{hostReputation}</span>
+                <span className="text-amber-600 font-bold shrink-0">
+                  ⭐{hostReputation}
+                </span>
               )}
               {isVerifiedHost && (
                 <ShieldCheck className="h-3 w-3 text-emerald-600 shrink-0" />
@@ -510,33 +646,65 @@ export function MatchCard({
           )}
         </div>
 
-        {/* Row 4: Price & Slots Left & CTA */}
-        <div className="mt-1 flex items-center justify-between border-t border-slate-100 pt-1 text-xs">
+        {/* Row 4: Price + Avatar Stack + Slots Progress & CTA */}
+        <div className="mt-1.5 flex items-center justify-between border-t border-slate-100 pt-1.5 text-xs gap-2">
           {session.hasGenderPricing && session.priceFemale !== undefined ? (
-            <div className="flex items-center gap-1.5 text-[11px] font-bold">
+            <div className="flex items-center gap-1 text-[10.5px] font-bold shrink-0">
               <span className="text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200/60 leading-none">
                 ♂ {session.price.toLocaleString("vi-VN")}đ
               </span>
               <span className="text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200/60 leading-none">
-                ♀ {session.priceFemale > 0 ? `${session.priceFemale.toLocaleString("vi-VN")}đ` : "Free"}
+                ♀{" "}
+                {session.priceFemale > 0
+                  ? `${session.priceFemale.toLocaleString("vi-VN")}đ`
+                  : "Free"}
               </span>
             </div>
           ) : (
-            <div className="flex items-baseline gap-1">
+            <div className="flex items-baseline gap-1 shrink-0">
               <span className="text-xs sm:text-[13px] font-black text-emerald-600 leading-none">
-                {session.price > 0 ? `${session.price.toLocaleString("vi-VN")}đ` : "Miễn phí"}
+                {session.price > 0
+                  ? `${session.price.toLocaleString("vi-VN")}đ`
+                  : "Miễn phí"}
               </span>
-              <span className="text-[9px] text-slate-400 font-medium">/người</span>
+              <span className="text-[9px] text-slate-400 font-medium">
+                /người
+              </span>
             </div>
           )}
 
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 text-[10px] text-slate-500 font-medium">
-              <Users className="h-3 w-3 text-slate-400 shrink-0" />
-              <span className="font-bold text-slate-700">
-                {currentCount}/{maxCount}
-              </span>
+          <div className="flex items-center gap-2 min-w-0">
+            {renderAvatarStack("h-5 w-5 text-[9px]")}
+
+            <div className="flex flex-col items-end">
+              <div className="flex items-center gap-1 text-[10px] text-slate-500 font-medium leading-none">
+                <span className="font-bold text-slate-800">
+                  {currentCount}/{maxCount}
+                </span>
+                <span
+                  className={clsx(
+                    "hidden sm:inline text-[9.5px] font-bold",
+                    isFull
+                      ? "text-slate-400"
+                      : isAlmostFull
+                        ? "text-amber-600"
+                        : "text-emerald-600",
+                  )}
+                >
+                  {isFull ? "(Đủ)" : `(Còn ${slotsLeft})`}
+                </span>
+              </div>
+              <div className="mt-1 w-14 sm:w-16 h-1 rounded-full bg-slate-100 overflow-hidden">
+                <div
+                  className={clsx(
+                    "h-full rounded-full transition-all duration-500",
+                    progressBarColor,
+                  )}
+                  style={{ width: `${fillPercent}%` }}
+                />
+              </div>
             </div>
+
             <span className="inline-flex items-center text-xs font-bold text-emerald-700 group-hover:text-emerald-800 transition-colors">
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </span>
@@ -555,7 +723,8 @@ export function MatchCard({
       suppressHydrationWarning
       className={clsx(
         "group flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-400 hover:shadow-md active:scale-[0.995]",
-        isPastSession && "opacity-75 hover:opacity-100 bg-slate-50/70 border-slate-200",
+        isPastSession &&
+          "opacity-75 hover:opacity-100 bg-slate-50/70 border-slate-200",
         className,
       )}
     >
@@ -564,7 +733,7 @@ export function MatchCard({
         <img
           src={imageSrc}
           alt={session.title}
-          onError={() => setImageSrc(BADMINTON_COVER_PRESETS[0].url)}
+          onError={() => setImageSrc(DEFAULT_BADMINTON_COVER)}
           loading="lazy"
           className={clsx(
             "h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105",
@@ -615,18 +784,30 @@ export function MatchCard({
                   : "bg-black/55 text-white/85 hover:text-white hover:bg-black/75 border-white/20",
               )}
             >
-              <Bookmark className={clsx("h-3 w-3", isSaved && "fill-white")} />
+              <Bookmark
+                className={clsx("h-3 w-3", isSaved && "fill-white")}
+              />
             </button>
           </div>
         </div>
 
         {/* Bottom Price on Image */}
-        <div className="absolute bottom-1.5 right-2 rounded-md bg-slate-950/85 backdrop-blur-xs px-1.5 py-0.5 text-right border border-white/15 pointer-events-none">
+        <div className="absolute bottom-2 right-2 rounded-md bg-slate-950/85 backdrop-blur-xs px-1.5 py-0.5 text-right border border-white/15 pointer-events-none">
           {session.hasGenderPricing && session.priceFemale !== undefined ? (
             <div className="flex items-center gap-1 text-[9.5px] font-bold leading-none">
-              <span className="text-blue-300">♂{session.price > 0 ? `${Math.round(session.price / 1000)}k` : "Free"}</span>
+              <span className="text-blue-300">
+                ♂
+                {session.price > 0
+                  ? `${Math.round(session.price / 1000)}k`
+                  : "Free"}
+              </span>
               <span className="text-white/40">·</span>
-              <span className="text-rose-300">♀{session.priceFemale > 0 ? `${Math.round(session.priceFemale / 1000)}k` : "Free"}</span>
+              <span className="text-rose-300">
+                ♀
+                {session.priceFemale > 0
+                  ? `${Math.round(session.priceFemale / 1000)}k`
+                  : "Free"}
+              </span>
             </div>
           ) : (
             <>
@@ -635,9 +816,19 @@ export function MatchCard({
                   ? `${session.price.toLocaleString("vi-VN")}đ`
                   : "Free"}
               </span>
-              <span className="text-[8.5px] text-slate-300 ml-0.5 font-normal">/ng</span>
+              <span className="text-[8.5px] text-slate-300 ml-0.5 font-normal">
+                /ng
+              </span>
             </>
           )}
+        </div>
+
+        {/* Bottom 3px Slot Progress Bar */}
+        <div className="absolute bottom-0 inset-x-0 h-1 bg-black/40 pointer-events-none">
+          <div
+            className={clsx("h-full transition-all duration-500", progressBarColor)}
+            style={{ width: `${fillPercent}%` }}
+          />
         </div>
       </div>
 
@@ -655,7 +846,9 @@ export function MatchCard({
             )}
           >
             <Clock className="h-3 w-3 shrink-0" />
-            <span suppressHydrationWarning className="truncate">{timeInfo.time} · {timeInfo.date}</span>
+            <span suppressHydrationWarning className="truncate">
+              {timeInfo.time} · {timeInfo.date}
+            </span>
           </div>
 
           {/* Venue & District */}
@@ -665,26 +858,43 @@ export function MatchCard({
 
           <p className="flex items-center gap-1 text-[10px] text-slate-500 line-clamp-1 leading-tight mt-0.5">
             <MapPin className="h-2.5 w-2.5 text-slate-400 shrink-0" />
-            <span className="truncate">{session.district || "TP.HCM"}{session.courtNumber ? ` · Sân ${session.courtNumber}` : ""}</span>
+            <span className="truncate">
+              {session.district || "TP.HCM"}
+              {session.courtNumber ? ` · Sân ${session.courtNumber}` : ""}
+            </span>
           </p>
 
           {/* Skill & Host */}
           <div className="mt-1.5 flex flex-wrap items-center gap-1">
             <SkillBadge level={skillLevel} className="text-[9px] px-1 py-0" />
             {hostName && (
-              <span className="text-[9.5px] text-slate-500 truncate max-w-[85px]" title={hostName}>
+              <span
+                className="text-[9.5px] text-slate-500 truncate max-w-[95px]"
+                title={hostName}
+              >
                 {hostName} {hostReputation > 0 ? `⭐${hostReputation}` : ""}
               </span>
             )}
           </div>
         </div>
 
-        {/* Bottom Slots & Arrow */}
+        {/* Bottom Avatar Stack, Slots & Arrow */}
         <div className="mt-2 flex items-center justify-between border-t border-slate-100 pt-1.5 text-[10.5px]">
-          <div className="flex items-center gap-1 font-semibold text-slate-600 text-[10px]">
-            <Users className="h-2.5 w-2.5 text-slate-400" />
-            <span>{currentCount}/{maxCount}</span>
-            <span className="text-emerald-600 font-bold text-[9.5px]">
+          <div className="flex items-center gap-1.5">
+            {renderAvatarStack("h-4 w-4 text-[8px]")}
+            <span className="font-bold text-slate-700 text-[10px]">
+              {currentCount}/{maxCount}
+            </span>
+            <span
+              className={clsx(
+                "font-bold text-[9.5px]",
+                isFull
+                  ? "text-slate-400"
+                  : isAlmostFull
+                    ? "text-amber-600"
+                    : "text-emerald-600",
+              )}
+            >
               {slotsLeft > 0 ? `(${slotsLeft} trống)` : "(Hết)"}
             </span>
           </div>
@@ -695,12 +905,11 @@ export function MatchCard({
   );
 
   /* -------------------------------------------------------------
-   * RENDER: 3. Auto Layout (Horizontal on mobile, Grid on desktop)
+   * RENDER: 3. Auto Layout
    * ------------------------------------------------------------- */
   if (layout === "horizontal") return renderHorizontal();
   if (layout === "grid") return renderGrid();
 
-  // "auto": Responsive switcher
   return (
     <>
       <div className="block sm:hidden">{renderHorizontal()}</div>

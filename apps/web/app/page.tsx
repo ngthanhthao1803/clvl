@@ -21,6 +21,7 @@ import {
   ShieldCheck,
   Locate,
   Sparkles,
+  CalendarDays,
 } from "lucide-react";
 import { useSavedSessionsStore } from "@/stores/saved-sessions-store";
 import { VIETNAM_PROVINCES, getDistricts } from "@/lib/vietnam-locations";
@@ -251,6 +252,7 @@ export default function HomePage() {
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [activeChip, setActiveChip] = useState<string>("all");
+  const [selectedDateKey, setSelectedDateKey] = useState<string>("");
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [userCoords, setUserCoords] = useState<[number, number] | null>(null);
@@ -386,6 +388,13 @@ export default function HomePage() {
       );
     };
 
+    const toLocalDateKey = (dateObj: Date) => {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const d = String(dateObj.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    };
+
     // Keyword search
     if (searchKeyword.trim()) {
       const q = searchKeyword.toLowerCase().trim();
@@ -397,6 +406,17 @@ export default function HomePage() {
           (s.host?.name || "").toLowerCase().includes(q) ||
           String(s.courtNumber || "").includes(q),
       );
+    }
+
+    // 7-Day Date Strip Filter
+    if (selectedDateKey) {
+      list = list.filter((s) => {
+        const d = new Date(s.datetime);
+        if (!isNaN(d.getTime())) {
+          return toLocalDateKey(d) === selectedDateKey;
+        }
+        return false;
+      });
     }
 
     // Quick Chip filters
@@ -476,7 +496,45 @@ export default function HomePage() {
       const timeB = new Date(b.datetime).getTime() || 0;
       return timeA - timeB;
     });
-  }, [sessionsQuery.data, searchKeyword, activeChip, savedIds, getSavedList, userCoords]);
+  }, [sessionsQuery.data, searchKeyword, activeChip, selectedDateKey, savedIds, getSavedList, userCoords]);
+
+  // 7-Day Date Strip items with live session count per day
+  const sevenDaysStrip = useMemo(() => {
+    const rawList = (sessionsQuery.data ?? []) as any[];
+    const weekdays = ["CN", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+    const baseNow = new Date();
+
+    return Array.from({ length: 7 }).map((_, offset) => {
+      const target = new Date(
+        baseNow.getFullYear(),
+        baseNow.getMonth(),
+        baseNow.getDate() + offset,
+      );
+      const y = target.getFullYear();
+      const m = String(target.getMonth() + 1).padStart(2, "0");
+      const d = String(target.getDate()).padStart(2, "0");
+      const key = `${y}-${m}-${d}`;
+      const dayMonth = `${d}/${m}`;
+      const label =
+        offset === 0
+          ? "Hôm nay"
+          : offset === 1
+            ? "Ngày mai"
+            : weekdays[target.getDay()];
+
+      const count = rawList.filter((s) => {
+        const dt = new Date(s.datetime);
+        if (isNaN(dt.getTime())) return false;
+        return (
+          dt.getFullYear() === y &&
+          dt.getMonth() === target.getMonth() &&
+          dt.getDate() === target.getDate()
+        );
+      }).length;
+
+      return { key, label, dayMonth, count, isWeekend: target.getDay() === 0 || target.getDay() === 6 };
+    });
+  }, [sessionsQuery.data]);
 
   // Transform sessions into map venue markers
   const mapVenues = useMemo(() => {
@@ -534,6 +592,7 @@ export default function HomePage() {
   const clearAllFilters = () => {
     setSearchKeyword("");
     setActiveChip("all");
+    setSelectedDateKey("");
     setUiFilters({
       city: "",
       district: "",
@@ -873,6 +932,88 @@ export default function HomePage() {
             </div>
           </div>
         )}
+
+        {/* 7-Day Quick Date Strip */}
+        <div
+          suppressHydrationWarning
+          className="mt-2 pt-2 border-t border-slate-100 flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-0.5"
+        >
+          <button
+            type="button"
+            suppressHydrationWarning
+            onClick={() => setSelectedDateKey("")}
+            className={`shrink-0 inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-left transition ${
+              selectedDateKey === ""
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "border border-slate-200/80 bg-slate-50/70 text-slate-600 hover:bg-slate-100"
+            }`}
+          >
+            <CalendarDays className="h-3.5 w-3.5 shrink-0" />
+            <div className="leading-tight">
+              <div className="text-[10.5px] font-bold">Mọi ngày</div>
+              <div
+                className={`text-[9px] font-medium ${
+                  selectedDateKey === "" ? "text-emerald-100" : "text-slate-400"
+                }`}
+              >
+                7 ngày tới
+              </div>
+            </div>
+          </button>
+
+          {mounted &&
+            sevenDaysStrip.map((item) => {
+              const isSelected = selectedDateKey === item.key;
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() =>
+                    setSelectedDateKey(isSelected ? "" : item.key)
+                  }
+                  className={`shrink-0 flex items-center gap-2 rounded-xl border px-2.5 py-1 text-left transition active:scale-95 ${
+                    isSelected
+                      ? "border-emerald-600 bg-emerald-600 text-white shadow-xs"
+                      : item.count > 0
+                        ? "border-slate-200/90 bg-white text-slate-800 hover:border-emerald-300 hover:bg-emerald-50/40"
+                        : "border-slate-100 bg-slate-50/50 text-slate-400 hover:bg-slate-100"
+                  }`}
+                >
+                  <div className="leading-tight">
+                    <div
+                      className={`text-[10.5px] font-extrabold ${
+                        isSelected
+                          ? "text-white"
+                          : item.isWeekend
+                            ? "text-rose-600"
+                            : "text-slate-800"
+                      }`}
+                    >
+                      {item.label}
+                    </div>
+                    <div
+                      className={`text-[9.5px] font-medium ${
+                        isSelected ? "text-emerald-100" : "text-slate-400"
+                      }`}
+                    >
+                      {item.dayMonth}
+                    </div>
+                  </div>
+                  {item.count > 0 && (
+                    <span
+                      className={`rounded-full px-1.5 py-0.2 text-[9.5px] font-black ${
+                        isSelected
+                          ? "bg-white text-emerald-700"
+                          : "bg-emerald-50 text-emerald-700 border border-emerald-200/70"
+                      }`}
+                    >
+                      {item.count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+        </div>
       </div>
 
       {/* 2. Toolbar: Count, Quick Create & View Switcher */}

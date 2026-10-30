@@ -1,0 +1,18 @@
+{
+  "name": "Đánh Cầu Lông - Ghép Kèo & Tìm Sân Cầu Lông Toàn Quốc",
+  "short_name": "Đánh Cầu Lông",
+  "description": "Nền tảng kết nối lông thủ, tìm kèo cầu lông gần bạn, ghép nhóm giao lưu và bảo chứng giữ chỗ VietQR uy tín tại danhcaulong.com.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#022c22",
+  "theme_color": "#059669",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

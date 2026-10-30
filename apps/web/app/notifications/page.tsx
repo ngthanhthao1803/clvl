@@ -9,17 +9,14 @@ import {
   ArrowRight,
   Bell,
   BellOff,
-  Calendar,
   Check,
   CheckCheck,
   CheckCircle2,
-  Clock,
   Compass,
   Mail,
   MapPin,
   MessageCircle,
   ShieldAlert,
-  Sparkles,
   Star,
   Trash2,
   UserPlus,
@@ -43,13 +40,16 @@ type NotificationItem = {
     avatar?: string;
     skillLevel?: string;
   } | null;
-  session?: {
-    _id?: string;
-    id?: string;
-    title?: string;
-    venueName?: string;
-    datetime?: string;
-  } | string | null;
+  session?:
+    | {
+        _id?: string;
+        id?: string;
+        title?: string;
+        venueName?: string;
+        datetime?: string;
+      }
+    | string
+    | null;
   venue?: {
     _id?: string;
     id?: string;
@@ -60,6 +60,15 @@ type NotificationItem = {
 };
 
 type FilterTab = "all" | "unread" | "sessions" | "others";
+
+const SESSION_NOTIFICATION_TYPES = [
+  "session_join_request",
+  "session_join_approved",
+  "session_join_rejected",
+  "session_joined",
+  "session_invited",
+  "session_cancelled",
+];
 
 function formatRelativeTime(dateStr: string): string {
   try {
@@ -73,16 +82,14 @@ function formatRelativeTime(dateStr: string): string {
     const diffDays = Math.floor(diffHours / 24);
 
     if (diffMin < 1) return "Vừa xong";
-    if (diffMin < 60) return `${diffMin} phút trước`;
-    if (diffHours < 24) return `${diffHours} giờ trước`;
+    if (diffMin < 60) return `${diffMin}p trước`;
+    if (diffHours < 24) return `${diffHours}h trước`;
     if (diffDays === 1) return "Hôm qua";
     if (diffDays < 7) return `${diffDays} ngày trước`;
 
     const day = `${d.getDate()}`.padStart(2, "0");
     const month = `${d.getMonth() + 1}`.padStart(2, "0");
-    const hours = `${d.getHours()}`.padStart(2, "0");
-    const minutes = `${d.getMinutes()}`.padStart(2, "0");
-    return `${hours}:${minutes} · ${day}/${month}`;
+    return `${day}/${month}`;
   } catch {
     return "";
   }
@@ -97,7 +104,7 @@ function getNotificationConfig(type: string) {
         bgColor: "bg-amber-100",
         textColor: "text-amber-700",
         badgeColor: "bg-amber-50 text-amber-800 border-amber-200",
-        actionText: "Duyệt yêu cầu",
+        actionText: "Duyệt ngay",
       };
     case "session_join_approved":
       return {
@@ -106,7 +113,7 @@ function getNotificationConfig(type: string) {
         bgColor: "bg-emerald-100",
         textColor: "text-emerald-700",
         badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
-        actionText: "Vào buổi chơi",
+        actionText: "Mở thẻ vé",
       };
     case "session_join_rejected":
       return {
@@ -128,7 +135,7 @@ function getNotificationConfig(type: string) {
       };
     case "session_invited":
       return {
-        label: "Lời mời tham gia",
+        label: "Lời mời ghép sân",
         icon: Mail,
         bgColor: "bg-sky-100",
         textColor: "text-sky-700",
@@ -137,7 +144,7 @@ function getNotificationConfig(type: string) {
       };
     case "session_cancelled":
       return {
-        label: "Buổi chơi đã hủy",
+        label: "Kèo đã hủy",
         icon: AlertTriangle,
         bgColor: "bg-rose-100",
         textColor: "text-rose-700",
@@ -151,11 +158,11 @@ function getNotificationConfig(type: string) {
         bgColor: "bg-indigo-100",
         textColor: "text-indigo-700",
         badgeColor: "bg-indigo-50 text-indigo-800 border-indigo-200",
-        actionText: "Mở chat",
+        actionText: "Trả lời",
       };
     case "rating_received":
       return {
-        label: "Đánh giá uy tín",
+        label: "Điểm uy tín",
         icon: Star,
         bgColor: "bg-amber-100",
         textColor: "text-amber-700",
@@ -169,8 +176,8 @@ function getNotificationConfig(type: string) {
         icon: ShieldAlert,
         bgColor: "bg-slate-100",
         textColor: "text-slate-700",
-        badgeColor: "bg-slate-50 text-slate-800 border-slate-200",
-        actionText: "Xem chi tiết",
+        badgeColor: "bg-slate-50 text-slate-700 border-slate-200",
+        actionText: "Chi tiết",
       };
   }
 }
@@ -220,6 +227,10 @@ export default function NotificationsPage() {
 
   const notifications = notificationsQuery.data ?? [];
   const unreadCount = notifications.filter((n) => !n.readAt).length;
+  const sessionsNotifCount = notifications.filter((n) =>
+    SESSION_NOTIFICATION_TYPES.includes(n.type),
+  ).length;
+  const othersNotifCount = notifications.length - sessionsNotifCount;
 
   const filteredNotifications = useMemo(() => {
     switch (activeTab) {
@@ -227,21 +238,11 @@ export default function NotificationsPage() {
         return notifications.filter((n) => !n.readAt);
       case "sessions":
         return notifications.filter((n) =>
-          [
-            "session_join_request",
-            "session_join_approved",
-            "session_join_rejected",
-            "session_joined",
-            "session_invited",
-            "session_cancelled",
-          ].includes(n.type),
+          SESSION_NOTIFICATION_TYPES.includes(n.type),
         );
       case "others":
         return notifications.filter(
-          (n) =>
-            !["session_join_request", "session_join_approved", "session_join_rejected", "session_joined", "session_invited", "session_cancelled"].includes(
-              n.type,
-            ),
+          (n) => !SESSION_NOTIFICATION_TYPES.includes(n.type),
         );
       case "all":
       default:
@@ -262,122 +263,101 @@ export default function NotificationsPage() {
 
     if (sessionId) {
       if (notification.type === "session_join_request") {
-        router.push((`/sessions/${sessionId}#join-requests`) as any);
+        router.push(`/sessions/${sessionId}#join-requests` as any);
       } else if (notification.type === "chat_message") {
-        router.push((`/chat/${sessionId}`) as any);
+        router.push(`/chat/${sessionId}` as any);
       } else {
-        router.push((`/sessions/${sessionId}`) as any);
+        router.push(`/sessions/${sessionId}` as any);
       }
       return;
     }
 
     if (notification.type === "rating_received") {
-      router.push(user ? ((`/profile/${user.id}`) as any) : ("/explore" as any));
+      router.push(
+        user ? (`/profile/${user.id}` as any) : ("/explore" as any),
+      );
       return;
     }
   };
 
+  const tabs: Array<{
+    key: FilterTab;
+    label: string;
+    count: number;
+    highlight?: boolean;
+  }> = [
+    { key: "all", label: "Tất cả", count: notifications.length },
+    {
+      key: "unread",
+      label: "Chưa đọc",
+      count: unreadCount,
+      highlight: unreadCount > 0,
+    },
+    { key: "sessions", label: "Kèo đấu", count: sessionsNotifCount },
+    { key: "others", label: "Khác", count: othersNotifCount },
+  ];
+
   return (
     <RequireAuth>
-      <div className="mx-auto max-w-3xl space-y-4 pb-12 sm:space-y-5">
-        {/* Top Header */}
-        <div className="flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xs sm:flex-row sm:items-center sm:justify-between sm:rounded-3xl sm:p-5">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 sm:h-11 sm:w-11 sm:rounded-2xl">
-              <Bell className="h-5 w-5 sm:h-6 sm:w-6" />
+      <div className="mx-auto max-w-3xl space-y-3 pb-16 animate-fadeUp">
+        {/* 1. Compact Header Bar */}
+        <div className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200/90 bg-white px-3.5 py-2.5 sm:px-4 sm:py-3 shadow-xs">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200/60">
+              <Bell className="h-4 w-4" />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h1 className="text-lg font-bold tracking-tight text-slate-900 sm:text-2xl">
+                <h1 className="text-base sm:text-lg font-extrabold tracking-tight text-slate-900">
                   Thông báo
                 </h1>
                 {unreadCount > 0 && (
-                  <span className="inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800">
+                  <span className="inline-flex items-center rounded-full bg-emerald-600 px-2 py-0.2 text-[10px] font-black text-white">
                     {unreadCount} mới
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-500">
-                Tin nhắn, lời mời và diễn biến từ các buổi chơi cầu lông
+              <p className="text-[11px] text-slate-500 truncate">
+                Cập nhật duyệt kèo, đặt cọc và tin nhắn sân cầu
               </p>
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-2 pt-2 border-t border-slate-100 sm:pt-0 sm:border-0">
-            <button
-              type="button"
-              disabled={unreadCount === 0 || markAllReadMutation.isPending}
-              onClick={() => markAllReadMutation.mutate()}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <CheckCheck className="h-3.5 w-3.5 text-emerald-600" />
-              <span>Đọc tất cả</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            disabled={unreadCount === 0 || markAllReadMutation.isPending}
+            onClick={() => markAllReadMutation.mutate()}
+            className="shrink-0 inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[11px] font-bold text-slate-700 transition hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 disabled:cursor-not-allowed disabled:opacity-45"
+          >
+            <CheckCheck className="h-3.5 w-3.5 text-emerald-600" />
+            <span>Đọc tất cả</span>
+          </button>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar">
-          {[
-            { key: "all" as FilterTab, label: "Tất cả", count: notifications.length },
-            {
-              key: "unread" as FilterTab,
-              label: "Chưa đọc",
-              count: unreadCount,
-              badge: unreadCount > 0,
-            },
-            {
-              key: "sessions" as FilterTab,
-              label: "Kèo cầu lông",
-              count: notifications.filter((n) =>
-                [
-                  "session_join_request",
-                  "session_join_approved",
-                  "session_join_rejected",
-                  "session_joined",
-                  "session_invited",
-                  "session_cancelled",
-                ].includes(n.type),
-              ).length,
-            },
-            {
-              key: "others" as FilterTab,
-              label: "Tin nhắn & Khác",
-              count: notifications.filter(
-                (n) =>
-                  ![
-                    "session_join_request",
-                    "session_join_approved",
-                    "session_join_rejected",
-                    "session_joined",
-                    "session_invited",
-                    "session_cancelled",
-                  ].includes(n.type),
-              ).length,
-            },
-          ].map((tab) => {
+        {/* 2. 4-Column Segmented Control (Matching /my-sessions) */}
+        <div className="grid grid-cols-4 gap-1 rounded-2xl border border-slate-200/80 bg-slate-100/90 p-1">
+          {tabs.map((tab) => {
             const isActive = activeTab === tab.key;
             return (
               <button
                 key={tab.key}
                 type="button"
                 onClick={() => setActiveTab(tab.key)}
-                className={`inline-flex flex-shrink-0 items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition ${
+                className={`flex items-center justify-center gap-1 rounded-xl py-2 px-1.5 text-xs font-bold transition-all ${
                   isActive
-                    ? "bg-emerald-600 text-white shadow-xs"
-                    : "border border-slate-200/80 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    ? "bg-white text-emerald-700 shadow-xs ring-1 ring-slate-200/70"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                <span>{tab.label}</span>
+                <span className="truncate">{tab.label}</span>
                 {tab.count > 0 && (
                   <span
-                    className={`rounded-full px-1.5 py-0.2 text-[10px] font-bold ${
+                    className={`rounded-full px-1.5 py-0.2 text-[9.5px] font-black ${
                       isActive
-                        ? "bg-white/20 text-white"
-                        : tab.badge
-                          ? "bg-emerald-100 text-emerald-800"
-                          : "bg-slate-100 text-slate-600"
+                        ? "bg-emerald-100 text-emerald-800"
+                        : tab.highlight
+                          ? "bg-rose-500 text-white"
+                          : "bg-slate-200/80 text-slate-600"
                     }`}
                   >
                     {tab.count}
@@ -388,68 +368,65 @@ export default function NotificationsPage() {
           })}
         </div>
 
-        {/* Notifications List */}
-        <div className="space-y-2.5">
+        {/* 3. Notifications List */}
+        <div className="space-y-2">
           {notificationsQuery.isLoading ? (
-            /* Loading Skeletons */
-            <div className="space-y-2.5">
+            <div className="space-y-2">
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-3.5 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xs animate-pulse"
+                  className="flex items-start gap-3 rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-xs animate-pulse"
                 >
-                  <div className="h-10 w-10 flex-shrink-0 rounded-xl bg-slate-200" />
+                  <div className="h-10 w-10 shrink-0 rounded-xl bg-slate-200" />
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center justify-between">
-                      <div className="h-4 w-32 rounded bg-slate-200" />
-                      <div className="h-3 w-16 rounded bg-slate-100" />
+                      <div className="h-3.5 w-28 rounded bg-slate-200" />
+                      <div className="h-3 w-12 rounded bg-slate-100" />
                     </div>
                     <div className="h-3 w-3/4 rounded bg-slate-100" />
-                    <div className="h-3 w-1/2 rounded bg-slate-100" />
                   </div>
                 </div>
               ))}
             </div>
           ) : filteredNotifications.length === 0 ? (
-            /* Empty State */
-            <div className="rounded-2xl border border-slate-200/80 bg-white p-8 text-center shadow-xs sm:rounded-3xl sm:p-12">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 sm:h-16 sm:w-16">
+            <div className="rounded-2xl border border-slate-200/80 bg-white p-8 text-center shadow-xs">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
                 {activeTab === "unread" ? (
-                  <CheckCircle2 className="h-7 w-7 text-emerald-500 sm:h-8 sm:w-8" />
+                  <CheckCircle2 className="h-6 w-6 text-emerald-500" />
                 ) : (
-                  <BellOff className="h-7 w-7 text-slate-400 sm:h-8 sm:w-8" />
+                  <BellOff className="h-6 w-6 text-slate-400" />
                 )}
               </div>
-              <h3 className="mt-4 text-base font-bold text-slate-900 sm:text-lg">
+              <h3 className="mt-3 text-sm font-bold text-slate-900 sm:text-base">
                 {activeTab === "unread"
-                  ? "Bạn đã đọc hết thông báo!"
-                  : "Chưa có thông báo nào"}
+                  ? "Bạn đã xem hết mọi thông báo!"
+                  : "Chưa có thông báo nào trong mục này"}
               </h3>
-              <p className="mx-auto mt-1 max-w-sm text-xs text-slate-500 sm:text-sm">
+              <p className="mx-auto mt-1 max-w-xs text-xs text-slate-500">
                 {activeTab === "unread"
-                  ? "Tuyệt vời! Không có tin nhắn hoặc yêu cầu nào còn tồn đọng."
-                  : "Khi có người đăng ký kèo, gửi lời mời hoặc nhắn tin, thông báo sẽ xuất hiện tại đây."}
+                  ? "Không còn yêu cầu duyệt kèo hay tin nhắn nào bị bỏ lỡ."
+                  : "Khi có người đăng ký kèo, gửi lời mời hoặc nhắn tin, thông báo sẽ hiển thị ngay tại đây."}
               </p>
               {activeTab === "all" && (
-                <div className="mt-5">
+                <div className="mt-4">
                   <Link
                     href="/explore"
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-700 active:scale-95"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-emerald-700 active:scale-95"
                   >
-                    <Compass className="h-4 w-4" />
-                    <span>Khám phá các buổi chơi</span>
+                    <Compass className="h-3.5 w-3.5" />
+                    <span>Tìm kèo cầu lông ngay</span>
                   </Link>
                 </div>
               )}
             </div>
           ) : (
-            /* List of notifications */
             filteredNotifications.map((notification) => {
               const config = getNotificationConfig(notification.type);
               const Icon = config.icon;
               const isUnread = !notification.readAt;
               const sessionObj =
-                notification.session && typeof notification.session !== "string"
+                notification.session &&
+                typeof notification.session !== "string"
                   ? notification.session
                   : null;
               const sessionId = sessionObj?._id ?? sessionObj?.id;
@@ -458,59 +435,64 @@ export default function NotificationsPage() {
                 <article
                   key={notification._id}
                   onClick={() => handleNotificationClick(notification)}
-                  className={`group relative flex items-start gap-3 rounded-2xl border p-3.5 transition-all cursor-pointer sm:p-4 ${
+                  className={`group relative flex items-start gap-3 rounded-2xl border p-3 transition-all cursor-pointer sm:p-3.5 ${
                     isUnread
-                      ? "border-emerald-200/90 bg-emerald-50/20 shadow-xs ring-1 ring-emerald-500/20"
-                      : "border-slate-200/80 bg-white hover:border-slate-300 hover:bg-slate-50/50"
+                      ? "border-emerald-300/90 bg-emerald-50/25 shadow-xs"
+                      : "border-slate-200/80 bg-white hover:border-emerald-300 hover:bg-slate-50/40"
                   }`}
                 >
-                  {/* Unread Left Border / Indicator */}
                   {isUnread && (
-                    <span className="absolute left-1.5 top-1/2 -translate-y-1/2 h-8 w-1 rounded-full bg-emerald-500 sm:left-2" />
+                    <span className="absolute left-1 top-1/2 -translate-y-1/2 h-7 w-1 rounded-full bg-emerald-500" />
                   )}
 
-                  {/* Icon or Actor Avatar */}
-                  <div className="relative flex-shrink-0">
+                  {/* Actor Avatar or Type Icon */}
+                  <div className="relative shrink-0">
                     {notification.actor?.avatar ? (
-                      <div className="relative h-10 w-10 sm:h-11 sm:w-11">
+                      <div className="relative h-10 w-10">
                         <img
                           src={notification.actor.avatar}
                           alt={notification.actor.name || "User"}
                           className="h-full w-full rounded-xl object-cover ring-1 ring-slate-200"
                         />
                         <div
-                          className={`absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-md border border-white ${config.bgColor} ${config.textColor}`}
+                          className={`absolute -bottom-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-md border border-white ${config.bgColor} ${config.textColor}`}
                         >
-                          <Icon className="h-3 w-3" />
+                          <Icon className="h-2.5 w-2.5" />
                         </div>
                       </div>
                     ) : (
                       <div
-                        className={`flex h-10 w-10 items-center justify-center rounded-xl sm:h-11 sm:w-11 ${config.bgColor} ${config.textColor}`}
+                        className={`flex h-10 w-10 items-center justify-center rounded-xl ${config.bgColor} ${config.textColor}`}
                       >
-                        <Icon className="h-5 w-5" />
+                        <Icon className="h-4.5 w-4.5" />
                       </div>
                     )}
                   </div>
 
-                  {/* Body Content */}
+                  {/* Content */}
                   <div className="min-w-0 flex-1">
-                    {/* Top Row: Tag & Relative Time */}
                     <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1.5 min-w-0">
                         <span
-                          className={`inline-flex items-center rounded-md border px-1.5 py-0.2 text-[10px] font-semibold ${config.badgeColor}`}
+                          className={`inline-flex items-center rounded-md border px-1.5 py-0.2 text-[9.5px] font-bold ${config.badgeColor}`}
                         >
                           {config.label}
                         </span>
-                        {isUnread && (
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        {sessionObj && (
+                          <span className="inline-flex items-center gap-1 truncate rounded-md bg-slate-100 px-1.5 py-0.2 text-[10px] font-semibold text-slate-600 max-w-[150px] sm:max-w-[240px]">
+                            <MapPin className="h-2.5 w-2.5 shrink-0 text-emerald-600" />
+                            <span className="truncate">
+                              {sessionObj.venueName ||
+                                sessionObj.title ||
+                                "Kèo cầu lông"}
+                            </span>
+                          </span>
                         )}
                       </div>
 
                       <span
                         suppressHydrationWarning
-                        className="flex-shrink-0 text-[10.5px] font-medium text-slate-400"
+                        className="shrink-0 text-[10px] font-semibold text-slate-400"
                       >
                         {mounted
                           ? formatRelativeTime(notification.createdAt)
@@ -518,41 +500,26 @@ export default function NotificationsPage() {
                       </span>
                     </div>
 
-                    {/* Title */}
                     <h2
-                      className={`mt-1 text-xs font-bold leading-snug sm:text-sm ${
+                      className={`mt-1 text-xs sm:text-[13px] font-bold leading-snug ${
                         isUnread ? "text-slate-900" : "text-slate-700"
                       }`}
                     >
                       {notification.title}
                     </h2>
 
-                    {/* Message */}
-                    <p className="mt-0.5 text-xs text-slate-500 leading-relaxed line-clamp-2 sm:line-clamp-none">
+                    <p className="mt-0.5 text-[11.5px] text-slate-500 leading-relaxed line-clamp-2">
                       {notification.message}
                     </p>
 
-                    {/* Session Context Pill if attached */}
-                    {sessionObj && (
-                      <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                        <div className="inline-flex items-center gap-1 rounded-lg bg-slate-100/90 px-2 py-0.5 text-[11px] font-medium text-slate-700 max-w-full">
-                          <MapPin className="h-3 w-3 flex-shrink-0 text-emerald-600" />
-                          <span className="truncate">
-                            {sessionObj.venueName || sessionObj.title || "Buổi chơi cầu lông"}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Action Row */}
-                    <div className="mt-2.5 flex items-center justify-between gap-2 pt-1 border-t border-slate-100/60">
-                      {sessionId ? (
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 transition group-hover:text-emerald-800">
+                    <div className="mt-2 flex items-center justify-between gap-2">
+                      {sessionId || notification.type === "rating_received" ? (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-700 group-hover:text-emerald-800">
                           <span>{config.actionText}</span>
                           <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                         </span>
                       ) : (
-                        <div />
+                        <span />
                       )}
 
                       <div className="flex items-center gap-1">
@@ -564,7 +531,7 @@ export default function NotificationsPage() {
                               e.stopPropagation();
                               markReadMutation.mutate(notification._id);
                             }}
-                            className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-600"
+                            className="flex h-6 w-6 items-center justify-center rounded-lg text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-600"
                           >
                             <Check className="h-3.5 w-3.5" />
                           </button>
@@ -576,7 +543,7 @@ export default function NotificationsPage() {
                             e.stopPropagation();
                             deleteMutation.mutate(notification._id);
                           }}
-                          className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-rose-50 hover:text-rose-600"
+                          className="flex h-6 w-6 items-center justify-center rounded-lg text-slate-400 transition hover:bg-rose-50 hover:text-rose-600"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>

@@ -30,6 +30,7 @@ import {
   Edit3,
   ExternalLink,
   Camera,
+  Ticket,
 } from "lucide-react";
 import { api, paymentsApi, sessionsApi } from "@/lib/api";
 import { MapWrapper } from "@/components/map/MapWrapper";
@@ -56,6 +57,50 @@ function formatMatchType(type?: string): string {
   if (lower.includes("doubles") || lower.includes("đôi")) return "Đôi Nam/Nữ";
   if (lower.includes("singles") || lower.includes("đơn")) return "Đơn Nam/Nữ";
   return type;
+}
+
+function triggerConfetti() {
+  if (typeof document === "undefined") return;
+  const colors = ["#10b981", "#f59e0b", "#0ea5e9", "#f43f5e", "#14b8a6", "#a855f7"];
+  const container = document.createElement("div");
+  container.style.position = "fixed";
+  container.style.inset = "0";
+  container.style.pointerEvents = "none";
+  container.style.zIndex = "9999";
+  container.style.overflow = "hidden";
+  document.body.appendChild(container);
+
+  for (let i = 0; i < 42; i++) {
+    const piece = document.createElement("div");
+    const size = 6 + Math.random() * 6;
+    const startX = 50 + (Math.random() - 0.5) * 30;
+    const dx = (Math.random() - 0.5) * 380;
+    const dy = 220 + Math.random() * 340;
+    const rot = (Math.random() - 0.5) * 720;
+
+    piece.style.position = "absolute";
+    piece.style.left = `${startX}%`;
+    piece.style.top = "18%";
+    piece.style.width = `${size}px`;
+    piece.style.height = `${size * 0.65}px`;
+    piece.style.borderRadius = "2px";
+    piece.style.backgroundColor = colors[i % colors.length];
+    piece.style.opacity = "1";
+    piece.style.transform = "translate3d(0,0,0) rotate(0deg)";
+    piece.style.transition = `transform ${1.1 + Math.random() * 0.8}s cubic-bezier(0.22, 1, 0.36, 1), opacity ${1.2 + Math.random() * 0.7}s ease-out`;
+    container.appendChild(piece);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        piece.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${rot}deg)`;
+        piece.style.opacity = "0";
+      });
+    });
+  }
+
+  setTimeout(() => {
+    container.remove();
+  }, 2200);
 }
 
 export default function SessionDetailsPage() {
@@ -136,6 +181,7 @@ export default function SessionDetailsPage() {
         });
         createDepositMutation.mutate();
       } else {
+        triggerConfetti();
         setNotice({
           type: "success",
           text: "Đã tham gia buổi chơi thành công! Bạn đã có tên trong danh sách.",
@@ -170,6 +216,7 @@ export default function SessionDetailsPage() {
     },
     onSuccess: (data) => {
       if (data?.isFree) {
+        triggerConfetti();
         sessionQuery.refetch();
         setNotice({
           type: "success",
@@ -628,6 +675,192 @@ export default function SessionDetailsPage() {
           </div>
         </div>
       </div>
+
+      {/* 3.5 Digital Boarding Pass (Thẻ Vé Lên Sân) when user is participant or host */}
+      {myPlayer && (
+        <div className="relative overflow-hidden rounded-2xl border border-emerald-300/80 bg-gradient-to-r from-slate-950 via-emerald-950 to-slate-900 text-white shadow-md">
+          {/* Ticket Notch Cutouts */}
+          <div className="pointer-events-none absolute -left-3 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-slate-50 border border-emerald-300/40" />
+          <div className="pointer-events-none absolute -right-3 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-slate-50 border border-emerald-300/40" />
+
+          <div className="flex flex-col md:flex-row md:items-stretch">
+            {/* Main Pass Area */}
+            <div className="flex-1 p-4 sm:p-5">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                    <Ticket className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-emerald-300">
+                        THẺ VÉ LÊN SÂN · CLVL MATCH PASS
+                      </span>
+                      <span className="rounded bg-white/10 px-1.5 py-0.2 font-mono text-[9.5px] font-bold text-slate-300">
+                        #{String(sessionId).slice(-6).toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {canEdit ? (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-2.5 py-0.5 text-[10px] font-black text-slate-950">
+                    <ShieldCheck className="h-3 w-3" />
+                    CHỦ KÈO (HOST)
+                  </span>
+                ) : isPending && session.depositRequired && !hasPaidDeposit ? (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-400 px-2.5 py-0.5 text-[10px] font-black text-slate-950 animate-pulse">
+                    ⏳ CHỜ ĐẶT CỌC GIỮ CHỖ
+                  </span>
+                ) : hasAttended ? (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-teal-400 px-2.5 py-0.5 text-[10px] font-black text-slate-950">
+                    ✓ ĐÃ CHECK-IN TẠI SÂN
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400 px-2.5 py-0.5 text-[10px] font-black text-slate-950">
+                    ✓ ĐÃ CÓ VÉ CHÍNH THỨC
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold block">
+                    Giờ lên sân
+                  </span>
+                  <span className="text-sm sm:text-base font-black text-emerald-300 mt-0.5 block">
+                    {timeFormatted}
+                  </span>
+                  <span className="text-[10.5px] text-slate-300 capitalize">
+                    {dateFormatted}
+                  </span>
+                </div>
+
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold block">
+                    Sân thi đấu
+                  </span>
+                  <span className="text-xs sm:text-sm font-extrabold text-white mt-0.5 line-clamp-1 block">
+                    {session.venueName}
+                  </span>
+                  <span className="text-[10.5px] text-emerald-300 font-semibold">
+                    {session.courtNumber ? `Sân số ${session.courtNumber}` : session.district || "TP.HCM"}
+                  </span>
+                </div>
+
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold block">
+                    Người chơi
+                  </span>
+                  <span className="text-xs sm:text-sm font-bold text-white mt-0.5 truncate block">
+                    {user?.name || "Lông thủ"}
+                  </span>
+                  <span className="text-[10.5px] text-slate-300">
+                    Trình độ: {user?.skillLevel || "TB"}
+                  </span>
+                </div>
+
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold block">
+                    Trạng thái vé
+                  </span>
+                  <span className="text-xs sm:text-sm font-bold text-emerald-300 mt-0.5 block">
+                    {canEdit
+                      ? "Quản lý sân"
+                      : hasPaidDeposit
+                        ? "Đã bảo chứng cọc"
+                        : session.depositRequired
+                          ? "Chưa đặt cọc"
+                          : "Đóng tại sân"}
+                  </span>
+                  <span className="text-[10.5px] text-slate-300">
+                    {isLiveSession
+                      ? "🔴 Đang diễn ra"
+                      : isStartingSoon
+                        ? "⚡ Sắp bắt đầu"
+                        : isPastSession
+                          ? "Đã hoàn thành"
+                          : "Sẵn sàng thi đấu"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Perforated Stub Action Area */}
+            <div className="border-t md:border-t-0 md:border-l border-dashed border-white/20 bg-black/25 p-4 sm:px-5 flex flex-row md:flex-col items-center justify-between md:justify-center gap-2.5 md:w-56 shrink-0">
+              {canEdit ? (
+                <>
+                  <div className="text-left md:text-center">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                      Mã Check-in Sân
+                    </span>
+                    <span className="font-mono text-base sm:text-lg font-black tracking-widest text-emerald-300">
+                      {session.checkInCode || "123456"}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={copyCheckInCode}
+                    className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 px-3.5 py-2 text-xs font-black text-slate-950 transition active:scale-95 md:w-full"
+                  >
+                    <Copy className="h-3.5 w-3.5" />
+                    <span>{copiedCode ? "Đã chép mã" : "Chép mã sân"}</span>
+                  </button>
+                </>
+              ) : isPending && session.depositRequired && !hasPaidDeposit ? (
+                <>
+                  <div className="text-left md:text-center">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300 block">
+                      Hoàn tất giữ chỗ
+                    </span>
+                    <span className="text-[11px] text-slate-300">
+                      Quét QR 10 giây
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => createDepositMutation.mutate()}
+                    disabled={createDepositMutation.isPending}
+                    className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 px-3.5 py-2 text-xs font-black text-slate-950 transition active:scale-95 md:w-full"
+                  >
+                    <CreditCard className="h-3.5 w-3.5" />
+                    <span>Đặt cọc ngay</span>
+                  </button>
+                </>
+              ) : !hasAttended ? (
+                <>
+                  <div className="text-left md:text-center">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                      Khi đến sân
+                    </span>
+                    <span className="text-[11px] text-emerald-300 font-semibold">
+                      Xác nhận có mặt
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsCheckInModalOpen(true)}
+                    className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 px-3.5 py-2 text-xs font-black text-slate-950 transition active:scale-95 md:w-full"
+                  >
+                    <MapPin className="h-3.5 w-3.5" />
+                    <span>Check-in ngay</span>
+                  </button>
+                </>
+              ) : (
+                <div className="text-center">
+                  <span className="inline-flex items-center gap-1 text-xs font-black text-teal-300">
+                    <CheckCircle2 className="h-4 w-4" />
+                    Đã Check-in
+                  </span>
+                  <p className="text-[10.5px] text-slate-400 mt-0.5">
+                    Chúc bạn có trận cầu bùng nổ!
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 4. Main 2-Column Grid (Left: Details & Roster | Right: Sticky Booking) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
@@ -1324,6 +1557,7 @@ export default function SessionDetailsPage() {
         orderData={paymentOrderData}
         onConfirmPayment={async (orderCode) => {
           await paymentsApi.confirmPayment(orderCode);
+          triggerConfetti();
           sessionQuery.refetch();
         }}
       />
@@ -1335,6 +1569,7 @@ export default function SessionDetailsPage() {
         venueName={session.venueName}
         onCheckIn={async (code) => {
           await paymentsApi.checkIn(params.id ?? "", code);
+          triggerConfetti();
           sessionQuery.refetch();
         }}
       />
