@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useId } from "react";
 import Link from "next/link";
 
 interface BrandLogoProps {
@@ -8,6 +8,44 @@ interface BrandLogoProps {
   showSubtitle?: boolean;
   href?: string;
   className?: string;
+}
+
+/**
+ * Biểu tượng quả cầu tối giản (Concept A) — dùng chung cho Navbar, Footer, v.v.
+ * Đồng bộ với app/icon.svg, favicon.ico, apple-icon.png và icon PWA.
+ */
+export function BrandEmblem({ className = "h-8 w-8" }: { className?: string }) {
+  const gradId = `dclBg-${useId().replace(/:/g, "")}`;
+  return (
+    <svg
+      viewBox="0 0 512 512"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#10b981" />
+          <stop offset="1" stopColor="#047857" />
+        </linearGradient>
+      </defs>
+      <rect width="512" height="512" rx="112" fill={`url(#${gradId})`} />
+      <g transform="rotate(225 256 256) translate(256 256) scale(0.9) translate(-256 -250)">
+        {/* Thân cầu (lông vũ) */}
+        <path d="M150 118 Q256 96 362 118 L310 318 L202 318 Z" fill="#ffffff" />
+        <g stroke="#059669" strokeWidth="9" strokeLinecap="round" fill="none">
+          <path d="M256 310 L256 116" />
+          <path d="M229 310 L192 124" />
+          <path d="M283 310 L320 124" />
+          <path d="M178 200 Q256 186 334 200" strokeWidth="7" />
+        </g>
+        {/* Băng cổ cầu */}
+        <rect x="198" y="310" width="116" height="24" rx="5" fill="#065f46" />
+        {/* Đầu cầu vàng */}
+        <path d="M198 334 H314 V340 A58 58 0 0 1 198 340 Z" fill="#fbbf24" />
+      </g>
+    </svg>
+  );
 }
 
 export function BrandLogo({
@@ -43,99 +81,11 @@ export function BrandLogo({
 
   const content = (
     <div className={`group inline-flex items-center ${config.gap} ${className} select-none cursor-pointer`}>
-      {/* 1. Iconic Aerodynamic Shuttlecock Shield Emblem */}
+      {/* 1. Minimal Shuttlecock Emblem */}
       <div
-        className={`relative ${config.emblemBox} shrink-0 rounded-2xl bg-gradient-to-br from-[#06241a] via-[#021811] to-[#010c08] p-0.5 shadow-md shadow-emerald-950/40 ring-1 ring-emerald-500/30 transition-all duration-300 group-hover:scale-105 group-hover:ring-emerald-400 group-hover:shadow-[0_0_24px_rgba(16,185,129,0.45)]`}
+        className={`relative ${config.emblemBox} shrink-0 rounded-[22%] shadow-sm shadow-emerald-900/20 transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-6`}
       >
-        <svg
-          viewBox="0 0 48 48"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-full w-full"
-        >
-          <defs>
-            {/* Emerald Wing Gradient */}
-            <linearGradient id="clvlWingTop" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#047857" />
-              <stop offset="50%" stopColor="#10b981" />
-              <stop offset="100%" stopColor="#34d399" />
-            </linearGradient>
-
-            {/* Radiant White Center Blade */}
-            <linearGradient id="clvlWingCenter" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#a7f3d0" />
-              <stop offset="50%" stopColor="#ffffff" />
-              <stop offset="100%" stopColor="#ffffff" />
-            </linearGradient>
-
-            {/* Cyan/Teal Wing Gradient */}
-            <linearGradient id="clvlWingBottom" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#0f766e" />
-              <stop offset="60%" stopColor="#06b6d4" />
-              <stop offset="100%" stopColor="#38bdf8" />
-            </linearGradient>
-
-            {/* Golden Cork Head Gradient */}
-            <linearGradient id="clvlCorkGold" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#b45309" />
-              <stop offset="40%" stopColor="#f59e0b" />
-              <stop offset="80%" stopColor="#fbbf24" />
-              <stop offset="100%" stopColor="#fef08a" />
-            </linearGradient>
-
-            {/* Speed Slash Glow */}
-            <filter id="clvlGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="1.5" stdDeviation="2.5" floodColor="#10b981" floodOpacity="0.5" />
-            </filter>
-          </defs>
-
-          {/* Internal Geometric Guide Rays (Nét Chuyển Động Khí Động Học) */}
-          <path
-            d="M9 39L39 9"
-            stroke="rgba(52, 211, 153, 0.18)"
-            strokeWidth="1.2"
-            strokeDasharray="2 3"
-          />
-          <circle cx="34" cy="18" r="8" fill="rgba(16, 185, 129, 0.12)" filter="blur(3px)" />
-
-          {/* Core Soaring Shuttlecock Geometry (Biểu Tượng Cánh Cầu Bay Vút) */}
-          <g filter="url(#clvlGlow)">
-            {/* Wing 1: Top Dynamic Feather */}
-            <path
-              d="M13 30C15 21 22 16 31 16C26 20 23 24 20 29Z"
-              fill="url(#clvlWingTop)"
-            />
-
-            {/* Wing 2: Center Main Blade (Pure White Core) */}
-            <path
-              d="M10 33C13 22 23 17 34 19C27 24 21 28 16 34Z"
-              fill="url(#clvlWingCenter)"
-            />
-
-            {/* Wing 3: Bottom Stabilizer Feather */}
-            <path
-              d="M13.5 35.5C18 30.5 25 27.5 32 28.5C26 32.5 21 34.5 17 36.5Z"
-              fill="url(#clvlWingBottom)"
-            />
-
-            {/* Iconic Red Ribbon Collar Tape (Điểm Nhấn Đỏ Thể Thao) */}
-            <path
-              d="M31.2 15.5L34.2 18.5L32.2 21L29.2 18Z"
-              fill="#f43f5e"
-            />
-
-            {/* Golden Cork Head (Đầu Bần Vàng Ánh Kim) */}
-            <ellipse
-              cx="35.5"
-              cy="17.5"
-              rx="4.6"
-              ry="4.6"
-              fill="url(#clvlCorkGold)"
-            />
-            {/* Diamond Glint */}
-            <circle cx="36.8" cy="16.2" r="1.3" fill="#ffffff" />
-          </g>
-        </svg>
+        <BrandEmblem className="h-full w-full" />
       </div>
 
       {/* 2. Athletic Sports Wordmark */}
@@ -172,4 +122,3 @@ export function BrandLogo({
     </Link>
   );
 }
-

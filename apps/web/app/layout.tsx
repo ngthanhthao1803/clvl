@@ -101,7 +101,7 @@ const jsonLdOrganization = {
   "@type": "SportsOrganization",
   name: "Đánh Cầu Lông - CLVL",
   url: siteUrl,
-  logo: `${siteUrl}/icon.svg`,
+  logo: `${siteUrl}/icons/icon-512.png`,
   sameAs: ["https://danhcaulong.com"],
   sport: "Badminton",
   description:

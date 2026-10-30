@@ -13,6 +13,7 @@ import {
   X,
   CheckCircle2,
 } from "lucide-react";
+import { BrandEmblem } from "@/components/ui/BrandLogo";
 
 export function Footer() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -133,9 +134,7 @@ export function Footer() {
           {/* Col 1: Brand */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600 text-xs font-black text-white">
-                🏸
-              </span>
+              <BrandEmblem className="h-7 w-7 shrink-0" />
               <span className="text-sm font-black tracking-tight text-slate-900">
                 ĐÁNH CẦU LÔNG · CLVL
               </span>
