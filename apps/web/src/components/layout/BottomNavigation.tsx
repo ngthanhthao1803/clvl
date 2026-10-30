@@ -46,7 +46,7 @@ export function BottomNavigation() {
   }
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200/90 bg-white/95 dark:bg-slate-900/95 dark:border-slate-800 backdrop-blur-xl px-2 pt-1 pb-[max(0.35rem,env(safe-area-inset-bottom))] shadow-[0_-4px_24px_rgba(0,0,0,0.04)] md:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200/90 bg-white/95 dark:bg-slate-900/95 dark:border-slate-800 backdrop-blur-xl px-2 pt-1 pb-[max(0.35rem,env(safe-area-inset-bottom))] shadow-[0_-4px_24px_rgba(0,0,0,0.04)] md:hidden">
       <div className="mx-auto grid max-w-md grid-cols-5 items-end">
         {/* 1. Trang chủ */}
         <Link

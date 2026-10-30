@@ -63,7 +63,9 @@ export function AvatarUploadModal({
     }
   }, [isOpen]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [isLoadingFile, setIsLoadingFile] = useState(false);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -88,14 +90,92 @@ export function AvatarUploadModal({
     setZoom(1);
     setRotation(0);
     setOffset({ x: 0, y: 0 });
+    setIsLoadingFile(true);
 
-    const objectUrl = URL.createObjectURL(file);
-    setImageSrc((prev) => {
-      if (prev && prev.startsWith("blob:")) {
-        URL.revokeObjectURL(prev);
+    // Pre-downscale high-MP mobile camera photos (e.g. 24MP/48MP iPhone/Android)
+    // to max 1080px so iOS Safari doesn't hit its 16.7MP canvas limit when cropping
+    const normalizeMobileImage = async (rawFile: File): Promise<string> => {
+      const maxDim = 1080;
+      const drawDownscaled = (
+        source: CanvasImageSource,
+        w: number,
+        h: number,
+      ): string => {
+        let width = w || 720;
+        let height = h || 720;
+        if (width > maxDim || height > maxDim) {
+          const ratio = Math.min(maxDim / width, maxDim / height);
+          width = Math.max(1, Math.round(width * ratio));
+          height = Math.max(1, Math.round(height * ratio));
+        }
+        const c = document.createElement("canvas");
+        c.width = width;
+        c.height = height;
+        const context = c.getContext("2d");
+        if (!context) {
+          throw new Error("Không thể khởi tạo bộ xử lý ảnh.");
+        }
+        context.fillStyle = "#ffffff";
+        context.fillRect(0, 0, width, height);
+        context.drawImage(source, 0, 0, width, height);
+        return c.toDataURL("image/jpeg", 0.88);
+      };
+
+      if (typeof window !== "undefined" && "createImageBitmap" in window) {
+        try {
+          const bmp = await createImageBitmap(rawFile);
+          try {
+            return drawDownscaled(bmp, bmp.width, bmp.height);
+          } finally {
+            bmp.close?.();
+          }
+        } catch {
+          // Fall through to URL.createObjectURL
+        }
       }
-      return objectUrl;
-    });
+
+      return new Promise((resolve, reject) => {
+        const objUrl = URL.createObjectURL(rawFile);
+        const tempImg = new Image();
+        tempImg.onload = () => {
+          try {
+            const dataUrl = drawDownscaled(
+              tempImg,
+              tempImg.naturalWidth || tempImg.width,
+              tempImg.naturalHeight || tempImg.height,
+            );
+            URL.revokeObjectURL(objUrl);
+            resolve(dataUrl);
+          } catch (err) {
+            URL.revokeObjectURL(objUrl);
+            reject(err);
+          }
+        };
+        tempImg.onerror = () => {
+          URL.revokeObjectURL(objUrl);
+          reject(
+            new Error(
+              "Không thể đọc định dạng ảnh này trên điện thoại. Vui lòng chọn ảnh JPG hoặc PNG.",
+            ),
+          );
+        };
+        tempImg.src = objUrl;
+      });
+    };
+
+    try {
+      const normalizedDataUrl = await normalizeMobileImage(file);
+      setImageSrc(normalizedDataUrl);
+    } catch (err: any) {
+      setErrorMsg(
+        err?.message || "Không thể xử lý hình ảnh đã chọn. Vui lòng thử ảnh khác.",
+      );
+    } finally {
+      setIsLoadingFile(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
   };
 
   // Dragging logic for panning the image inside crop box
@@ -189,12 +269,12 @@ export function AvatarUploadModal({
     ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
     ctx.restore();
 
-    // Export to JPEG with quality 0.82 (lightweight, ~25KB - 40KB)
+    // Export to JPEG with quality 0.82 (lightweight, ~25KB - 45KB)
     let finalDataUrl = canvas.toDataURL("image/jpeg", 0.82);
 
-    // If still large, compress further
-    if (finalDataUrl.length > 150000) {
-      finalDataUrl = canvas.toDataURL("image/jpeg", 0.72);
+    // Ensure compact size (< 75KB) for mobile connections and reverse proxies
+    if (finalDataUrl.length > 75000) {
+      finalDataUrl = canvas.toDataURL("image/jpeg", 0.68);
     }
 
     return finalDataUrl;
@@ -222,8 +302,8 @@ export function AvatarUploadModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 backdrop-blur-xs sm:p-4 animate-in fade-in">
-      <div className="flex max-h-[92vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-2xl">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/65 p-3 backdrop-blur-xs sm:p-4 animate-in fade-in">
+      <div className="flex max-h-[86dvh] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-2xl">
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
           <div className="flex items-center gap-2.5">
@@ -305,20 +385,28 @@ export function AvatarUploadModal({
                 /* File Dropzone - Native Label for Mobile Reliability */
                 <label
                   htmlFor="avatar-file-upload-input"
-                  className="group flex w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/60 p-8 text-center transition hover:border-emerald-400 hover:bg-emerald-50/40"
+                  className={`group flex w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/60 p-8 text-center transition hover:border-emerald-400 hover:bg-emerald-50/40 ${
+                    isLoadingFile ? "pointer-events-none opacity-60" : ""
+                  }`}
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-xs text-slate-400 transition group-hover:scale-110 group-hover:text-emerald-600">
-                    <Upload className="h-6 w-6" />
+                    {isLoadingFile ? (
+                      <div className="h-6 w-6 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
+                    ) : (
+                      <Upload className="h-6 w-6" />
+                    )}
                   </div>
                   <div className="mt-3 text-sm font-bold text-slate-800 group-hover:text-emerald-700">
-                    Chọn ảnh từ điện thoại hoặc máy tính
+                    {isLoadingFile
+                      ? "Đang xử lý ảnh từ điện thoại..."
+                      : "Chọn ảnh từ điện thoại hoặc máy tính"}
                   </div>
                   <p className="mt-1 text-xs text-slate-500">
                     Hỗ trợ PNG, JPG, WebP, HEIC. Tự động căn chỉnh khung tròn & nén nhẹ.
                   </p>
                   <span className="mt-4 inline-flex items-center gap-1 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-xs transition group-hover:bg-emerald-700">
                     <ImageIcon className="h-3.5 w-3.5" />
-                    <span>Duyệt tệp ảnh...</span>
+                    <span>{isLoadingFile ? "Vui lòng đợi..." : "Duyệt tệp ảnh..."}</span>
                   </span>
                 </label>
               ) : (
