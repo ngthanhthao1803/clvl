@@ -44,8 +44,7 @@ const fallbackSessions = [
     depositRequired: true,
     latitude: 10.7746,
     longitude: 106.6669,
-    coverImage:
-      "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80",
+    coverImage: "/images/covers/badminton.jpg",
     host: {
       name: "Hoàng Toàn",
       reputation: 100,
@@ -68,8 +67,7 @@ const fallbackSessions = [
     depositRequired: true,
     latitude: 10.779,
     longitude: 106.671,
-    coverImage:
-      "https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?auto=format&fit=crop&w=800&q=80",
+    coverImage: "/images/covers/badminton.jpg",
     host: {
       name: "Thanh Thảo",
       reputation: 98,
@@ -92,8 +90,7 @@ const fallbackSessions = [
     depositRequired: false,
     latitude: 10.7992,
     longitude: 106.6803,
-    coverImage:
-      "https://images.unsplash.com/photo-1521537634581-0dced2fed2a8?auto=format&fit=crop&w=800&q=80",
+    coverImage: "/images/covers/badminton.jpg",
     host: {
       name: "Minh Trí",
       reputation: 95,
@@ -116,8 +113,7 @@ const fallbackSessions = [
     depositRequired: true,
     latitude: 10.8015,
     longitude: 106.6558,
-    coverImage:
-      "https://images.unsplash.com/photo-1613918108466-292b78a8ef95?auto=format&fit=crop&w=800&q=80",
+    coverImage: "/images/covers/badminton.jpg",
     host: {
       name: "Quốc Hưng",
       reputation: 100,
@@ -140,8 +136,7 @@ const fallbackSessions = [
     depositRequired: false,
     latitude: 10.8387,
     longitude: 106.6653,
-    coverImage:
-      "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
+    coverImage: "/images/covers/badminton.jpg",
     host: {
       name: "Văn Đức",
       reputation: 92,
@@ -164,8 +159,7 @@ const fallbackSessions = [
     depositRequired: true,
     latitude: 10.8106,
     longitude: 106.7091,
-    coverImage:
-      "https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?auto=format&fit=crop&w=800&q=80",
+    coverImage: "/images/covers/badminton.jpg",
     host: {
       name: "Phương Linh",
       reputation: 99,
@@ -188,8 +182,7 @@ const fallbackSessions = [
     depositRequired: true,
     latitude: 10.8123,
     longitude: 106.6621,
-    coverImage:
-      "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
+    coverImage: "/images/covers/badminton.jpg",
     host: {
       name: "Thế Hùng",
       reputation: 96,

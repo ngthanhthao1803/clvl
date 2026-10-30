@@ -67,10 +67,15 @@ export async function generateMetadata({ params }: MetadataProps): Promise<Metad
           session.district || session.city || "Việt Nam"
         }) · 💰 ${priceStr} · Trình: ${skills}. Tham gia giữ chỗ ngay trên danhcaulong.com!`;
 
+        const rawCover =
+          typeof session.coverImage === "string" ? session.coverImage.trim() : "";
+        const isLegacyUnsplash = rawCover.startsWith(
+          "https://images.unsplash.com/photo-",
+        );
         const coverUrl =
-          session.coverImage && session.coverImage.startsWith("http")
-            ? session.coverImage
-            : `${siteUrl}/images/covers/cover-1.jpg`;
+          rawCover && !isLegacyUnsplash && rawCover.startsWith("http")
+            ? rawCover
+            : `${siteUrl}/images/covers/badminton.jpg`;
 
         return {
           title: `${session.title} - ${session.venueName} (${session.district || ""})`,

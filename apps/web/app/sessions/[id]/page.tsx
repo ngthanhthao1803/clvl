@@ -33,7 +33,7 @@ import {
 import { api, paymentsApi, sessionsApi } from "@/lib/api";
 import { MapWrapper } from "@/components/map/MapWrapper";
 import { SkillBadge } from "@/components/ui/SkillBadge";
-import { resolveCoverImage } from "@/lib/badminton-covers";
+import { DEFAULT_BADMINTON_COVER, resolveCoverImage } from "@/lib/badminton-covers";
 import { useSavedSessionsStore } from "@/stores/saved-sessions-store";
 import { shareSession } from "@/lib/share";
 import { toast } from "@/stores/toast-store";
@@ -484,6 +484,9 @@ export default function SessionDetailsPage() {
           <img
             src={coverImage}
             alt={session.title}
+            onError={(e) => {
+              e.currentTarget.src = DEFAULT_BADMINTON_COVER;
+            }}
             className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-black/20" />

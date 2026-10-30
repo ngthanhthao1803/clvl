@@ -6,6 +6,27 @@ import { User } from "../models/User.js";
 import { AppError } from "../utils/AppError.js";
 import { createNotification } from "./notifications.service.js";
 
+const DEFAULT_SESSION_COVER = "/images/covers/badminton.jpg";
+
+const LEGACY_PRESET_URLS = new Set([
+  "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1521537634581-0dced2fed2a8?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1613918108466-292b78a8ef95?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
+]);
+
+function normalizeCoverImage(rawUrl) {
+  if (rawUrl && typeof rawUrl === "string") {
+    const trimmed = rawUrl.trim();
+    if (trimmed.length > 0 && !LEGACY_PRESET_URLS.has(trimmed)) {
+      return trimmed;
+    }
+  }
+  return DEFAULT_SESSION_COVER;
+}
+
 async function populateSession(sessionQuery) {
   return sessionQuery
     .populate("host venue players.user")
@@ -22,12 +43,19 @@ function sanitizeSessionForViewer(session, viewer = null) {
     session.host?.toString?.();
   const isHost = Boolean(viewerId && hostId && String(viewerId) === String(hostId));
 
+  const resolvedCover = normalizeCoverImage(
+    session.coverImage || session.imageUrl,
+  );
+  const copy = {
+    ...session,
+    coverImage: resolvedCover,
+    imageUrl: resolvedCover,
+  };
+
   if (!isHost && !isAdmin) {
-    const copy = { ...session };
     delete copy.checkInCode;
-    return copy;
   }
-  return session;
+  return copy;
 }
 
 export async function handleSessionCancellationRefunds(session, cancelReason = "") {
@@ -143,7 +171,9 @@ export async function createSession(hostId, payload) {
       : payload.price && payload.price > 0
         ? Math.min(payload.price, 50000)
         : 50000;
-  const coverImage = payload.coverImage ?? payload.imageUrl ?? "";
+  const coverImage = normalizeCoverImage(
+    payload.coverImage ?? payload.imageUrl ?? "",
+  );
 
   let geoFields = {};
   const venueIdToLook = payload.venueId || payload.venue;
@@ -250,11 +280,11 @@ export async function updateSession(sessionId, hostId, updates) {
   }
 
   if (updates.coverImage !== undefined) {
-    const val = updates.coverImage || "";
+    const val = normalizeCoverImage(updates.coverImage);
     session.coverImage = val;
     session.imageUrl = val;
   } else if (updates.imageUrl !== undefined) {
-    const val = updates.imageUrl || "";
+    const val = normalizeCoverImage(updates.imageUrl);
     session.coverImage = val;
     session.imageUrl = val;
   }
