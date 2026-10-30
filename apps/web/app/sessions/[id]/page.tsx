@@ -29,11 +29,16 @@ import {
   Check,
   Edit3,
   ExternalLink,
+  Camera,
 } from "lucide-react";
 import { api, paymentsApi, sessionsApi } from "@/lib/api";
 import { MapWrapper } from "@/components/map/MapWrapper";
 import { SkillBadge } from "@/components/ui/SkillBadge";
-import { DEFAULT_BADMINTON_COVER, resolveCoverImage } from "@/lib/badminton-covers";
+import {
+  DEFAULT_BADMINTON_COVER,
+  compressCoverImageFile,
+  resolveCoverImage,
+} from "@/lib/badminton-covers";
 import { useSavedSessionsStore } from "@/stores/saved-sessions-store";
 import { shareSession } from "@/lib/share";
 import { toast } from "@/stores/toast-store";
@@ -374,6 +379,36 @@ export default function SessionDetailsPage() {
     }
   };
 
+  const [isUpdatingCover, setIsUpdatingCover] = useState(false);
+
+  const handleQuickCoverChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file || !sessionId) return;
+
+    try {
+      setIsUpdatingCover(true);
+      const compressedDataUrl = await compressCoverImageFile(file);
+      await sessionsApi.updateSession(sessionId, {
+        coverImage: compressedDataUrl,
+      });
+      await queryClient.invalidateQueries({ queryKey: ["session", params.id] });
+      await queryClient.invalidateQueries({ queryKey: ["sessions"] });
+      toast.success("Đã cập nhật ảnh bìa kèo đấu!");
+    } catch (err: any) {
+      toast.error(
+        "Không thể đổi ảnh bìa",
+        err?.response?.data?.message ||
+          err?.message ||
+          "Vui lòng thử lại với hình ảnh khác.",
+      );
+    } finally {
+      setIsUpdatingCover(false);
+      e.target.value = "";
+    }
+  };
+
   // Build participants roster with empty slots
   const activePlayers = (session.players || []).filter(
     (p: any) => p.status !== "left" && p.status !== "rejected",
@@ -492,20 +527,52 @@ export default function SessionDetailsPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-black/20" />
 
           {/* Badges on Image */}
-          <div className="absolute top-3 left-3 flex flex-wrap items-center gap-1.5">
-            <span className="rounded-lg bg-black/60 backdrop-blur-md px-2.5 py-1 text-[11px] font-bold text-white border border-white/20">
-              {formatMatchType(session.matchType)}
-            </span>
-            <SkillBadge level={skillLevel} className="text-[11px] px-2.5 py-0.5" />
-            {session.depositRequired ? (
-              <span className="inline-flex items-center gap-1 rounded-lg bg-teal-600/90 backdrop-blur-md px-2.5 py-1 text-[11px] font-bold text-white shadow-xs">
-                <ShieldCheck className="h-3.5 w-3.5" />
-                <span>Bảo chứng Escrow</span>
+          <div className="absolute top-3 left-3 right-3 flex flex-wrap items-center justify-between gap-1.5">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="rounded-lg bg-black/60 backdrop-blur-md px-2.5 py-1 text-[11px] font-bold text-white border border-white/20">
+                {formatMatchType(session.matchType)}
               </span>
-            ) : (
-              <span className="rounded-lg bg-black/50 backdrop-blur-md px-2.5 py-1 text-[11px] font-medium text-slate-200 border border-white/10">
-                Không cần cọc
-              </span>
+              <SkillBadge level={skillLevel} className="text-[11px] px-2.5 py-0.5" />
+              {session.depositRequired ? (
+                <span className="inline-flex items-center gap-1 rounded-lg bg-teal-600/90 backdrop-blur-md px-2.5 py-1 text-[11px] font-bold text-white shadow-xs">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  <span>Bảo chứng Escrow</span>
+                </span>
+              ) : (
+                <span className="rounded-lg bg-black/50 backdrop-blur-md px-2.5 py-1 text-[11px] font-medium text-slate-200 border border-white/10">
+                  Không cần cọc
+                </span>
+              )}
+            </div>
+
+            {canEdit && (
+              <>
+                <input
+                  id="quick-session-cover-input"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/*"
+                  onChange={handleQuickCoverChange}
+                  className="sr-only"
+                />
+                <label
+                  htmlFor="quick-session-cover-input"
+                  className={`inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-black/65 hover:bg-black/85 backdrop-blur-md px-2.5 py-1.5 text-[11px] font-bold text-white border border-white/25 shadow-sm transition active:scale-95 ${
+                    isUpdatingCover ? "pointer-events-none opacity-60" : ""
+                  }`}
+                >
+                  {isUpdatingCover ? (
+                    <>
+                      <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      <span>Đang lưu...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Camera className="h-3.5 w-3.5 text-emerald-400" />
+                      <span>Đổi ảnh bìa</span>
+                    </>
+                  )}
+                </label>
+              </>
             )}
           </div>
 

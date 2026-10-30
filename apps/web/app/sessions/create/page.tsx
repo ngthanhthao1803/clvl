@@ -8,6 +8,7 @@ import {
   AlertCircle,
   ArrowLeft,
   ArrowRight,
+  Camera,
   Check,
   CheckCircle2,
   ChevronDown,
@@ -34,9 +35,11 @@ import { DualSkillRangeSlider } from "@/components/ui/DualSkillRangeSlider";
 import { api, sessionsApi, venuesApi } from "@/lib/api";
 import {
   DEFAULT_BADMINTON_COVER,
+  compressCoverImageFile,
   resolveCoverImage,
 } from "@/lib/badminton-covers";
 import { VIETNAM_PROVINCES, getDistricts } from "@/lib/vietnam-locations";
+import { toast } from "@/stores/toast-store";
 
 type SessionFormState = {
   title: string;
@@ -181,50 +184,6 @@ const emptyForm: SessionFormState = {
   coverImage: "",
 };
 
-function compressCoverImageFile(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error("Không thể đọc tệp hình ảnh."));
-    reader.onload = () => {
-      const img = new Image();
-      img.onerror = () => reject(new Error("Định dạng hình ảnh không hợp lệ."));
-      img.onload = () => {
-        const maxWidth = 1200;
-        const maxHeight = 675;
-        let width = img.naturalWidth || 800;
-        let height = img.naturalHeight || 450;
-
-        if (width > maxWidth || height > maxHeight) {
-          const ratio = Math.min(maxWidth / width, maxHeight / height);
-          width = Math.round(width * ratio);
-          height = Math.round(height * ratio);
-        }
-
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) {
-          reject(new Error("Không thể xử lý hình ảnh."));
-          return;
-        }
-
-        ctx.fillStyle = "#0f172a";
-        ctx.fillRect(0, 0, width, height);
-        ctx.drawImage(img, 0, 0, width, height);
-
-        let dataUrl = canvas.toDataURL("image/jpeg", 0.82);
-        if (dataUrl.length > 350000) {
-          dataUrl = canvas.toDataURL("image/jpeg", 0.7);
-        }
-        resolve(dataUrl);
-      };
-      img.src = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
 function CreateSessionForm() {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -237,6 +196,7 @@ function CreateSessionForm() {
   const [selectedVenue, setSelectedVenue] = useState<VenueSuggestion | null>(null);
   const [formHydrated, setFormHydrated] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [coverUploadError, setCoverUploadError] = useState<string | null>(null);
   const [isOptionsOpen, setIsOptionsOpen] = useState(true);
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [isUploadingCover, setIsUploadingCover] = useState(false);
@@ -247,23 +207,20 @@ function CreateSessionForm() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-      setFormError("Vui lòng chọn tệp hình ảnh hợp lệ (JPG, PNG, WebP).");
-      return;
-    }
-
-    if (file.size > 15 * 1024 * 1024) {
-      setFormError("Hình ảnh quá lớn (tối đa 15MB). Vui lòng chọn ảnh khác.");
-      return;
-    }
-
     try {
       setIsUploadingCover(true);
       setFormError(null);
+      setCoverUploadError(null);
       const compressedDataUrl = await compressCoverImageFile(file);
       setForm((prev) => ({ ...prev, coverImage: compressedDataUrl }));
+      toast.success(
+        "Đã tải hình ảnh lên!",
+        "Hình ảnh đã được tối ưu sắc nét cho buổi chơi.",
+      );
     } catch (err: any) {
-      setFormError(err?.message || "Không thể tải hình ảnh lên.");
+      const msg = err?.message || "Không thể tải hình ảnh lên.";
+      setCoverUploadError(msg);
+      toast.error("Không thể tải ảnh", msg);
     } finally {
       setIsUploadingCover(false);
       if (coverFileInputRef.current) {
@@ -401,6 +358,10 @@ function CreateSessionForm() {
         err?.message ||
         "Đã có lỗi xảy ra khi tạo buổi chơi. Vui lòng thử lại.";
       setFormError(msg);
+      toast.error("Không thể lưu buổi chơi", msg);
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     },
     onSuccess: async (session) => {
       const sessionId =
@@ -1366,26 +1327,37 @@ function CreateSessionForm() {
                       </div>
 
                       <input
+                        id="session-cover-file-input"
                         ref={coverFileInputRef}
                         type="file"
-                        accept="image/*"
+                        accept="image/jpeg,image/png,image/webp,image/*"
                         onChange={handleCoverFileChange}
-                        className="hidden"
+                        className="sr-only"
                       />
 
+                      {coverUploadError && (
+                        <div className="mb-2 flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-medium text-rose-700">
+                          <AlertCircle className="h-4 w-4 shrink-0 text-rose-600" />
+                          <span>{coverUploadError}</span>
+                        </div>
+                      )}
+
                       <div className="grid gap-3 sm:grid-cols-12 items-center rounded-2xl border border-slate-200/90 bg-slate-50/60 p-3">
-                        {/* Image Preview Box */}
-                        <div className="relative sm:col-span-5 h-32 overflow-hidden rounded-xl border border-slate-200 bg-slate-900">
+                        {/* Image Preview Box - Clickable Label on Mobile & Desktop */}
+                        <label
+                          htmlFor="session-cover-file-input"
+                          className="group relative sm:col-span-5 h-36 sm:h-32 cursor-pointer overflow-hidden rounded-xl border border-slate-200 bg-slate-900 block"
+                        >
                           <img
                             src={resolveCoverImage(form.coverImage)}
                             alt="Ảnh bìa buổi chơi"
                             onError={(e) => {
                               e.currentTarget.src = DEFAULT_BADMINTON_COVER;
                             }}
-                            className="h-full w-full object-cover"
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none" />
-                          <div className="absolute top-2 left-2">
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/25 pointer-events-none" />
+                          <div className="absolute top-2 left-2 pointer-events-none">
                             <span
                               className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-bold text-white shadow-xs ${
                                 form.coverImage &&
@@ -1400,7 +1372,11 @@ function CreateSessionForm() {
                                 : "Ảnh mặc định"}
                             </span>
                           </div>
-                        </div>
+                          <div className="absolute bottom-2 inset-x-2 flex items-center justify-center gap-1 rounded-lg bg-black/65 backdrop-blur-xs py-1 text-[10.5px] font-bold text-white border border-white/20 pointer-events-none">
+                            <Camera className="h-3 w-3 text-emerald-400" />
+                            <span>Chạm vào đây để đổi ảnh</span>
+                          </div>
+                        </label>
 
                         {/* Upload Controls */}
                         <div className="sm:col-span-7 flex flex-col justify-center space-y-2">
@@ -1408,11 +1384,13 @@ function CreateSessionForm() {
                             Bạn có thể tải ảnh chụp sân cầu lông hoặc đội nhóm của mình lên. Nếu không tải ảnh, hệ thống sẽ tự động sử dụng <strong>ảnh mặc định</strong> bên cạnh.
                           </p>
                           <div className="flex flex-wrap items-center gap-2">
-                            <button
-                              type="button"
-                              disabled={isUploadingCover}
-                              onClick={() => coverFileInputRef.current?.click()}
-                              className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-2xs transition hover:bg-emerald-700 active:scale-95 disabled:opacity-60"
+                            <label
+                              htmlFor="session-cover-file-input"
+                              className={`inline-flex cursor-pointer items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2.5 text-xs font-bold text-white shadow-2xs transition hover:bg-emerald-700 active:scale-95 ${
+                                isUploadingCover
+                                  ? "pointer-events-none opacity-60"
+                                  : ""
+                              }`}
                             >
                               {isUploadingCover ? (
                                 <>
@@ -1426,11 +1404,11 @@ function CreateSessionForm() {
                                     {form.coverImage &&
                                     form.coverImage !== DEFAULT_BADMINTON_COVER
                                       ? "Đổi hình ảnh khác"
-                                      : "Tải hình lên từ thiết bị"}
+                                      : "Tải hình lên từ điện thoại / máy tính"}
                                   </span>
                                 </>
                               )}
-                            </button>
+                            </label>
 
                             {form.coverImage &&
                               form.coverImage !== DEFAULT_BADMINTON_COVER && (
@@ -1449,7 +1427,7 @@ function CreateSessionForm() {
                               )}
                           </div>
                           <span className="text-[10.5px] text-slate-400">
-                            Hỗ trợ JPG, PNG, WebP (Tự động tối ưu dung lượng nhanh & sắc nét)
+                            Hỗ trợ ảnh chụp từ Camera điện thoại, Thư viện ảnh (JPG, PNG, WebP, HEIC)
                           </span>
                         </div>
                       </div>

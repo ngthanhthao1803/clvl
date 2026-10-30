@@ -67,13 +67,19 @@ export function AvatarUploadModal({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
+    const isLikelyImage =
+      !file.type ||
+      file.type.startsWith("image/") ||
+      file.type === "application/octet-stream" ||
+      /\.(jpe?g|png|webp|gif|heic|heif|bmp|avif)$/i.test(file.name || "");
+
+    if (!isLikelyImage) {
       setErrorMsg("Vui lòng chọn tệp hình ảnh hợp lệ (PNG, JPG, WebP).");
       return;
     }
 
-    if (file.size > 15 * 1024 * 1024) {
-      setErrorMsg("Ảnh gốc quá lớn (vượt quá 15MB). Vui lòng chọn ảnh khác.");
+    if (file.size > 20 * 1024 * 1024) {
+      setErrorMsg("Ảnh gốc quá lớn (vượt quá 20MB). Vui lòng chọn ảnh khác.");
       return;
     }
 
@@ -83,11 +89,13 @@ export function AvatarUploadModal({
     setRotation(0);
     setOffset({ x: 0, y: 0 });
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImageSrc(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    const objectUrl = URL.createObjectURL(file);
+    setImageSrc((prev) => {
+      if (prev && prev.startsWith("blob:")) {
+        URL.revokeObjectURL(prev);
+      }
+      return objectUrl;
+    });
   };
 
   // Dragging logic for panning the image inside crop box
@@ -285,34 +293,34 @@ export function AvatarUploadModal({
           {activeTab === "upload" ? (
             <div>
               <input
+                id="avatar-file-upload-input"
                 ref={fileInputRef}
                 type="file"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/webp,image/*"
                 onChange={handleFileChange}
-                className="hidden"
+                className="sr-only"
               />
 
               {!imageSrc ? (
-                /* File Dropzone */
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="group flex w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/60 p-8 text-center transition hover:border-emerald-400 hover:bg-emerald-50/40"
+                /* File Dropzone - Native Label for Mobile Reliability */
+                <label
+                  htmlFor="avatar-file-upload-input"
+                  className="group flex w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/60 p-8 text-center transition hover:border-emerald-400 hover:bg-emerald-50/40"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-xs text-slate-400 transition group-hover:scale-110 group-hover:text-emerald-600">
                     <Upload className="h-6 w-6" />
                   </div>
                   <div className="mt-3 text-sm font-bold text-slate-800 group-hover:text-emerald-700">
-                    Chọn ảnh từ máy tính hoặc điện thoại
+                    Chọn ảnh từ điện thoại hoặc máy tính
                   </div>
                   <p className="mt-1 text-xs text-slate-500">
-                    Hỗ trợ PNG, JPG, WebP. Tự động căn chỉnh khung tròn & nén nhẹ.
+                    Hỗ trợ PNG, JPG, WebP, HEIC. Tự động căn chỉnh khung tròn & nén nhẹ.
                   </p>
                   <span className="mt-4 inline-flex items-center gap-1 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-xs transition group-hover:bg-emerald-700">
                     <ImageIcon className="h-3.5 w-3.5" />
                     <span>Duyệt tệp ảnh...</span>
                   </span>
-                </button>
+                </label>
               ) : (
                 /* Interactive Crop & Adjust Stage */
                 <div className="space-y-4">
@@ -326,7 +334,7 @@ export function AvatarUploadModal({
                     onTouchStart={handleTouchStart}
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
-                    className="relative mx-auto h-56 w-56 cursor-grab active:cursor-grabbing overflow-hidden rounded-full border-4 border-emerald-500 bg-slate-900 shadow-xl select-none"
+                    className="relative mx-auto h-56 w-56 cursor-grab active:cursor-grabbing overflow-hidden rounded-full border-4 border-emerald-500 bg-slate-900 shadow-xl select-none touch-none"
                   >
                     <img
                       ref={imgRef}
@@ -406,13 +414,12 @@ export function AvatarUploadModal({
                         </button>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 underline"
+                      <label
+                        htmlFor="avatar-file-upload-input"
+                        className="cursor-pointer text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 underline"
                       >
                         Chọn ảnh khác
-                      </button>
+                      </label>
                     </div>
                   </div>
                 </div>
