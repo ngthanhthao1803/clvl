@@ -35,6 +35,16 @@ export function BottomNavigation() {
   const isNotifications = pathname.startsWith("/notifications");
   const isProfile = pathname.startsWith("/profile") || pathname === "/login";
 
+  // Hide BottomNavigation on Session Detail (/sessions/[id]) and Chat (/chat/[id])
+  // so the sticky Booking CTA bar and Chat Input have full bottom screen real estate on mobile
+  const isSessionDetail =
+    pathname.startsWith("/sessions/") && !pathname.startsWith("/sessions/create");
+  const isChatRoom = pathname.startsWith("/chat/");
+
+  if (isSessionDetail || isChatRoom) {
+    return null;
+  }
+
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200/90 bg-white/95 dark:bg-slate-900/95 dark:border-slate-800 backdrop-blur-xl px-2 pt-1 pb-[max(0.35rem,env(safe-area-inset-bottom))] shadow-[0_-4px_24px_rgba(0,0,0,0.04)] md:hidden">
       <div className="mx-auto grid max-w-md grid-cols-5 items-end">

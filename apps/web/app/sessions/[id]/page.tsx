@@ -122,9 +122,20 @@ export default function SessionDetailsPage() {
   // Mutations
   const joinMutation = useMutation({
     mutationFn: async () => sessionsApi.joinSession(params.id ?? ""),
-    onSuccess: () => {
-      sessionQuery.refetch();
-      setNotice({ type: "success", text: "Đã đăng ký tham gia buổi chơi thành công!" });
+    onSuccess: async () => {
+      await sessionQuery.refetch();
+      if (session?.depositRequired && !canEdit) {
+        setNotice({
+          type: "info",
+          text: "Đã đăng ký slot! Vui lòng hoàn tất đặt cọc VietQR để giữ chỗ chính thức.",
+        });
+        createDepositMutation.mutate();
+      } else {
+        setNotice({
+          type: "success",
+          text: "Đã tham gia buổi chơi thành công! Bạn đã có tên trong danh sách.",
+        });
+      }
     },
     onError: (err: any) => {
       setNotice({
@@ -367,7 +378,7 @@ export default function SessionDetailsPage() {
   const activePlayers = (session.players || []).filter(
     (p: any) => p.status !== "left" && p.status !== "rejected",
   );
-  const emptySlotsCount = Math.max(0, maxCount - activePlayers.length);
+  const emptySlotsCount = Math.max(0, maxCount - currentCount);
 
   return (
     <div className="space-y-4 pb-24 animate-fadeUp max-w-6xl mx-auto">
@@ -626,35 +637,43 @@ export default function SessionDetailsPage() {
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0">
-                      {/* Deposit tag */}
-                      <span
-                        className={`rounded-md px-2 py-0.5 text-[9.5px] font-bold ${
-                          p.paymentStatus === "escrow_held" || p.paymentStatus === "paid"
-                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                            : p.paymentStatus === "forfeited"
-                              ? "bg-rose-50 text-rose-700 border border-rose-200"
-                              : "bg-slate-100 text-slate-600"
-                        }`}
-                      >
-                        {p.paymentStatus === "escrow_held" || p.paymentStatus === "paid"
-                          ? "✓ Đã cọc"
-                          : p.paymentStatus === "forfeited"
-                            ? "Mất cọc"
-                            : "Tại sân"}
-                      </span>
+                      {/* Deposit / Status tag */}
+                      {p.status === "pending" ? (
+                        <span className="rounded-md px-2 py-0.5 text-[9.5px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                          ⏳ Chờ cọc / Duyệt
+                        </span>
+                      ) : (
+                        <>
+                          <span
+                            className={`rounded-md px-2 py-0.5 text-[9.5px] font-bold ${
+                              p.paymentStatus === "escrow_held" || p.paymentStatus === "paid"
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                : p.paymentStatus === "forfeited"
+                                  ? "bg-rose-50 text-rose-700 border border-rose-200"
+                                  : "bg-slate-100 text-slate-600"
+                            }`}
+                          >
+                            {p.paymentStatus === "escrow_held" || p.paymentStatus === "paid"
+                              ? "✓ Đã cọc"
+                              : p.paymentStatus === "forfeited"
+                                ? "Mất cọc"
+                                : "Tại sân"}
+                          </span>
 
-                      {/* Attendance tag */}
-                      <span
-                        className={`rounded-md px-2 py-0.5 text-[9.5px] font-bold ${
-                          p.attendanceStatus === "attended"
-                            ? "bg-teal-50 text-teal-700 border border-teal-200"
-                            : p.attendanceStatus === "no_show"
-                              ? "bg-rose-50 text-rose-700 border border-rose-200"
-                              : "bg-slate-100 text-slate-500"
-                        }`}
-                      >
-                        {p.attendanceStatus === "attended" ? "✓ Có mặt" : "Chờ đến"}
-                      </span>
+                          {/* Attendance tag */}
+                          <span
+                            className={`rounded-md px-2 py-0.5 text-[9.5px] font-bold ${
+                              p.attendanceStatus === "attended"
+                                ? "bg-teal-50 text-teal-700 border border-teal-200"
+                                : p.attendanceStatus === "no_show"
+                                  ? "bg-rose-50 text-rose-700 border border-rose-200"
+                                  : "bg-slate-100 text-slate-500"
+                            }`}
+                          >
+                            {p.attendanceStatus === "attended" ? "✓ Có mặt" : "Chờ đến"}
+                          </span>
+                        </>
+                      )}
 
                       {/* Host action */}
                       {canEdit && !isHost && p.attendanceStatus !== "no_show" && (
@@ -679,7 +698,7 @@ export default function SessionDetailsPage() {
                 >
                   <div className="flex items-center gap-2.5">
                     <div className="h-8 w-8 rounded-full border border-dashed border-slate-300 flex items-center justify-center text-xs font-bold text-slate-400">
-                      {activePlayers.length + idx + 1}
+                      {currentCount + idx + 1}
                     </div>
                     <span className="text-xs font-medium text-slate-400 italic">
                       Slot trống (Đang mở)
@@ -900,18 +919,39 @@ export default function SessionDetailsPage() {
                       }
                       joinMutation.mutate();
                     }}
-                    disabled={joinMutation.isPending}
+                    disabled={joinMutation.isPending || createDepositMutation.isPending}
                     className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 py-3 text-xs font-black text-white shadow-md shadow-emerald-600/25 transition active:scale-[0.98] disabled:opacity-50"
                   >
-                    {joinMutation.isPending ? "Đang gửi yêu cầu..." : !user ? "Đăng nhập để tham gia" : "Tham Gia Buổi Chơi Ngay"}
+                    {joinMutation.isPending || createDepositMutation.isPending
+                      ? "Đang xử lý giữ chỗ..."
+                      : !user
+                        ? "Đăng nhập để tham gia"
+                        : session.depositRequired
+                          ? "Tham Gia & Đặt Cọc Giữ Chỗ Ngay"
+                          : "Tham Gia Buổi Chơi Ngay"}
                   </button>
                 )
               ) : (
                 <div className="space-y-2">
-                  <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800 flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-                    <span>{isPending ? "Đang chờ Host xét duyệt" : "Bạn đã có slot tham gia!"}</span>
-                  </div>
+                  {isPending && session.depositRequired && !hasPaidDeposit ? (
+                    <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-xs font-semibold text-amber-900 flex items-start gap-2">
+                      <Clock className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+                      <span>
+                        Bạn đã đăng ký slot tạm thời. Hãy bấm{" "}
+                        <strong>Đặt cọc VietQR</strong> bên dưới để hệ thống duyệt vào
+                        thẳng danh sách chính thức!
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-800 flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <span>
+                        {isPending
+                          ? "Đang chờ Host xét duyệt"
+                          : "Bạn đã có slot chính thức trong buổi chơi!"}
+                      </span>
+                    </div>
+                  )}
 
                   {session.depositRequired && !hasPaidDeposit && !canEdit && (() => {
                     const isFemaleUser = user?.gender === "female";
@@ -1123,22 +1163,43 @@ export default function SessionDetailsPage() {
       </div>
 
       {/* 5. Mobile Floating Action Bar */}
-      <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 border-t border-slate-200 p-3 shadow-xl backdrop-blur-md flex items-center justify-between gap-3 lg:hidden">
-        <div>
-          <span className="text-lg font-black text-emerald-600 leading-none">
-            {session.price > 0 ? `${session.price.toLocaleString("vi-VN")}đ` : "Miễn phí"}
-          </span>
-          <p className="text-[10px] text-slate-500 font-medium">
-            {slotsLeft > 0 ? `Còn ${slotsLeft} chỗ` : "Đã hết chỗ"}
+      <div className="fixed bottom-0 inset-x-0 z-50 bg-white/95 border-t border-slate-200 px-3.5 pt-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_rgba(0,0,0,0.08)] backdrop-blur-md flex items-center justify-between gap-3 lg:hidden">
+        <div className="min-w-0">
+          {session.hasGenderPricing && session.priceFemale !== undefined ? (
+            <div className="flex items-center gap-1.5 text-xs font-black">
+              <span className="text-blue-700">
+                ♂ {session.price > 0 ? `${Math.round(session.price / 1000)}k` : "Free"}
+              </span>
+              <span className="text-slate-300">|</span>
+              <span className="text-rose-600">
+                ♀ {session.priceFemale > 0 ? `${Math.round(session.priceFemale / 1000)}k` : "Free"}
+              </span>
+            </div>
+          ) : (
+            <span className="text-lg font-black text-emerald-600 leading-none">
+              {session.price > 0 ? `${session.price.toLocaleString("vi-VN")}đ` : "Chia sân"}
+            </span>
+          )}
+          <p className="text-[10.5px] text-slate-500 font-semibold mt-0.5">
+            {slotsLeft > 0 ? `🟢 Còn ${slotsLeft} chỗ trống` : "🔴 Đã hết chỗ"}
           </p>
         </div>
 
-        <div>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={handleChatClick}
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-teal-600 active:scale-95"
+            title="Phòng Chat"
+          >
+            <MessageSquare className="h-4 w-4" />
+          </button>
+
           {!myPlayer ? (
             isPastSession ? (
-              <span className="text-xs font-bold text-slate-400">Đã kết thúc</span>
+              <span className="text-xs font-bold text-slate-400 px-2">Đã kết thúc</span>
             ) : isFull ? (
-              <span className="text-xs font-bold text-slate-400">Đã đủ</span>
+              <span className="text-xs font-bold text-slate-400 px-2">Đã đủ người</span>
             ) : (
               <button
                 type="button"
@@ -1149,19 +1210,26 @@ export default function SessionDetailsPage() {
                   }
                   joinMutation.mutate();
                 }}
-                disabled={joinMutation.isPending}
-                className="rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-bold text-white shadow-md active:scale-95 disabled:opacity-50"
+                disabled={joinMutation.isPending || createDepositMutation.isPending}
+                className="rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-black text-white shadow-md shadow-emerald-600/25 active:scale-95 disabled:opacity-50"
               >
-                {joinMutation.isPending ? "Đang gửi..." : !user ? "Đăng nhập" : "Tham Gia Ngay"}
+                {joinMutation.isPending || createDepositMutation.isPending
+                  ? "Đang xử lý..."
+                  : !user
+                    ? "Đăng nhập & Tham gia"
+                    : session.depositRequired
+                      ? "Tham Gia & Đặt Cọc"
+                      : "Tham Gia Ngay"}
               </button>
             )
           ) : session.depositRequired && !hasPaidDeposit && !canEdit ? (
             <button
               type="button"
               onClick={() => createDepositMutation.mutate()}
-              className="rounded-xl bg-amber-500 px-4 py-2.5 text-xs font-bold text-white shadow-md active:scale-95"
+              disabled={createDepositMutation.isPending}
+              className="rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2.5 text-xs font-black text-white shadow-md active:scale-95"
             >
-              Đặt cọc VietQR
+              {createDepositMutation.isPending ? "Đang tạo QR..." : "⚡ Đặt cọc giữ chỗ"}
             </button>
           ) : isJoined && !hasAttended && !canEdit ? (
             <button
@@ -1172,8 +1240,8 @@ export default function SessionDetailsPage() {
               Check-in sân
             </button>
           ) : (
-            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
-              ✓ Đã có slot
+            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-200">
+              ✓ Đã giữ chỗ
             </span>
           )}
         </div>

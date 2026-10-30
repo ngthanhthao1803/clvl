@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { Session } from "../models/Session.js";
 import { Venue } from "../models/Venue.js";
 import { Payment } from "../models/Payment.js";
+import { User } from "../models/User.js";
 import { AppError } from "../utils/AppError.js";
 import { createNotification } from "./notifications.service.js";
 
@@ -9,6 +10,24 @@ async function populateSession(sessionQuery) {
   return sessionQuery
     .populate("host venue players.user")
     .lean({ virtuals: true });
+}
+
+function sanitizeSessionForViewer(session, viewer = null) {
+  if (!session) return session;
+  const viewerId = viewer?.sub || viewer?.id;
+  const isAdmin = viewer?.role === "admin" || viewer?.role === "superadmin";
+  const hostId =
+    session.host?._id?.toString?.() ||
+    session.host?.id ||
+    session.host?.toString?.();
+  const isHost = Boolean(viewerId && hostId && String(viewerId) === String(hostId));
+
+  if (!isHost && !isAdmin) {
+    const copy = { ...session };
+    delete copy.checkInCode;
+    return copy;
+  }
+  return session;
 }
 
 export async function handleSessionCancellationRefunds(session, cancelReason = "") {
@@ -60,7 +79,7 @@ function syncSessionStatus(session) {
   return session;
 }
 
-export async function listSessions(filters = {}) {
+export async function listSessions(filters = {}, viewer = null) {
   const query = {};
 
   if (filters.host) query.host = filters.host;
@@ -100,9 +119,13 @@ export async function listSessions(filters = {}) {
     }
   }
 
-  return populateSession(
+  const sessions = await populateSession(
     Session.find(query).sort({ datetime: 1, createdAt: -1 }).limit(100),
   );
+
+  return Array.isArray(sessions)
+    ? sessions.map((s) => sanitizeSessionForViewer(s, viewer))
+    : sessions;
 }
 
 export async function createSession(hostId, payload) {
@@ -278,7 +301,7 @@ export async function cancelSession(sessionId, hostId) {
   return populateSession(Session.findById(session._id));
 }
 
-export async function getSessionById(sessionId) {
+export async function getSessionById(sessionId, viewer = null) {
   // Validate ObjectId to avoid Mongoose CastError for invalid ids
   if (
     !Session.db ||
@@ -289,14 +312,14 @@ export async function getSessionById(sessionId) {
     // Fallback: if ObjectId helper isn't available, attempt to find directly
     const session = await populateSession(Session.findById(sessionId));
     if (!session) throw new AppError("Session not found", 404);
-    return session;
+    return sanitizeSessionForViewer(session, viewer);
   }
 
   const ObjectId = Session.db.base.Types.ObjectId;
   if (!ObjectId.isValid(sessionId)) {
     // Try slug fallback (e.g. "session-1") before returning 404
     const bySlug = await populateSession(Session.findOne({ slug: sessionId }));
-    if (bySlug) return bySlug;
+    if (bySlug) return sanitizeSessionForViewer(bySlug, viewer);
     throw new AppError("Session not found", 404);
   }
 
@@ -305,45 +328,90 @@ export async function getSessionById(sessionId) {
     throw new AppError("Session not found", 404);
   }
 
-  return session;
+  return sanitizeSessionForViewer(session, viewer);
 }
 
 export async function joinSession(sessionId, userId) {
   const session = await Session.findById(sessionId);
 
   if (!session) {
-    throw new AppError("Session not found", 404);
+    throw new AppError("Không tìm thấy buổi chơi", 404);
   }
 
   if (session.status === "cancelled") {
-    throw new AppError("Cancelled sessions cannot be joined", 400);
+    throw new AppError("Buổi chơi này đã bị hủy, không thể tham gia", 400);
   }
 
   const uidStr = String(userId);
-  const alreadyRequested = session.players.some(
-    (entry) => entry.user.toString() === uidStr && entry.status !== "left",
+  const activeEntry = session.players.find(
+    (entry) =>
+      entry.user.toString() === uidStr &&
+      entry.status !== "left" &&
+      entry.status !== "rejected",
   );
-  if (alreadyRequested) {
-    throw new AppError("You already requested or joined this session", 409);
+  if (activeEntry) {
+    throw new AppError("Bạn đã đăng ký tham gia buổi chơi này rồi", 409);
   }
 
-  // Add as pending request; host will approve to become 'joined'
-  session.players.push({ user: userId, status: "pending" });
+  // If the session does NOT require deposit and has slots, or if it requires deposit:
+  // If user previously left or was rejected, reuse their slot entry instead of duplicating
+  const previousEntry = session.players.find(
+    (entry) => entry.user.toString() === uidStr,
+  );
+
+  // Auto-join immediately if session does not require deposit and has open slots;
+  // otherwise set as pending (will auto-promote to joined when deposit is paid or host approves)
+  const canAutoJoinFree =
+    !session.depositRequired && session.currentPlayersCount < session.maxPlayers;
+  const nextStatus = canAutoJoinFree ? "joined" : "pending";
+
+  if (previousEntry) {
+    previousEntry.status = nextStatus;
+    previousEntry.paymentStatus = "unpaid";
+    previousEntry.attendanceStatus = "registered";
+    previousEntry.joinedAt = new Date();
+  } else {
+    session.players.push({
+      user: userId,
+      status: nextStatus,
+      paymentStatus: "unpaid",
+      attendanceStatus: "registered",
+    });
+  }
+
+  if (canAutoJoinFree) {
+    session.currentPlayersCount = (session.currentPlayersCount || 1) + 1;
+    syncSessionStatus(session);
+  }
+
   await session.save();
 
-  // Notify host that someone requested to join
+  // Notify host with real player name
   if (session.host.toString() !== uidStr) {
+    const joiningUser = await User.findById(userId)
+      .select("name skillLevel")
+      .lean();
+    const playerName = joiningUser?.name || "Một lông thủ";
+    const playerSkill = joiningUser?.skillLevel
+      ? ` (Trình ${joiningUser.skillLevel})`
+      : "";
+
     await createNotification({
       recipient: session.host,
       actor: userId,
-      type: "session_join_request",
-      title: "Yêu cầu tham gia buổi chơi",
-      message: `${userId} muốn tham gia ${session.title}`,
+      type: canAutoJoinFree ? "session_joined" : "session_join_request",
+      title: canAutoJoinFree
+        ? "Thành viên mới tham gia buổi chơi"
+        : "Yêu cầu tham gia buổi chơi",
+      message: canAutoJoinFree
+        ? `${playerName}${playerSkill} đã tham gia "${session.title}".`
+        : `${playerName}${playerSkill} đã đăng ký tham gia "${session.title}".`,
       session: session._id,
     });
   }
 
-  return populateSession(Session.findById(sessionId));
+  const populated = await populateSession(Session.findById(sessionId));
+  return sanitizeSessionForViewer(populated, { sub: userId });
 }
 
 export async function respondToJoinRequest(sessionId, hostId, userId, approve) {
@@ -469,12 +537,16 @@ export async function leaveSession(sessionId, userId) {
     }
   }
 
+  const wasJoined = participant.status === "joined";
   participant.status = "left";
-  session.currentPlayersCount = Math.max(1, session.currentPlayersCount - 1);
+  if (wasJoined) {
+    session.currentPlayersCount = Math.max(1, session.currentPlayersCount - 1);
+  }
   syncSessionStatus(session);
   await session.save();
 
-  return populateSession(Session.findById(sessionId));
+  const populated = await populateSession(Session.findById(sessionId));
+  return sanitizeSessionForViewer(populated, { sub: userId });
 }
 
 export async function invitePlayer(sessionId, hostId, userId) {

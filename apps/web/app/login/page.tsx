@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -31,6 +31,20 @@ function AuthFormContent() {
 
   const { user, setSession } = useAuthStore();
   const [tab, setTab] = useState<"login" | "register">("login");
+  const [isInAppBrowser, setIsInAppBrowser] = useState(false);
+
+  useEffect(() => {
+    if (typeof navigator !== "undefined") {
+      const ua = navigator.userAgent || "";
+      const inApp = /FBAN|FBAV|Messenger|Zalo|TikTok|BytedanceWebview|Instagram|Line/i.test(
+        ua,
+      );
+      if (inApp) {
+        setIsInAppBrowser(true);
+        setTab("register");
+      }
+    }
+  }, []);
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState("");
@@ -203,8 +217,33 @@ function AuthFormContent() {
 
       {/* Main Form Box */}
       <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-sm sm:p-8">
+        {/* In-App Browser Helper Notice (Zalo / Facebook / TikTok Ads) */}
+        {isInAppBrowser && (
+          <div className="mb-4 rounded-2xl border border-emerald-200 bg-emerald-50/80 p-3 text-xs text-emerald-900 leading-relaxed">
+            <span className="font-bold">⚡ Đăng ký nhanh 10 giây:</span> Bạn đang mở từ trình duyệt Zalo/Facebook. Hãy điền nhanh Tên + Mật khẩu bên dưới để vào kèo ngay (không cần xác minh phức tạp)!
+          </div>
+        )}
+
+        {/* 1-Tap Google Login at Top for Fast Conversion */}
+        {!isInAppBrowser && (
+          <>
+            <GoogleLoginButton
+              onSuccess={() => {
+                router.replace(redirectPath as any);
+              }}
+            />
+
+            <div className="relative my-5 flex items-center justify-center">
+              <div className="w-full border-t border-slate-200" />
+              <span className="absolute bg-white px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Hoặc dùng tài khoản CLVL
+              </span>
+            </div>
+          </>
+        )}
+
         {/* Tab switcher */}
-        <div className="flex rounded-2xl bg-slate-100 p-1 mb-6">
+        <div className="flex rounded-2xl bg-slate-100 p-1 mb-5">
           <button
             type="button"
             onClick={() => {
@@ -225,11 +264,11 @@ function AuthFormContent() {
               setErrorMsg(null);
             }}
             className={`flex-1 rounded-xl py-2 text-xs font-bold transition ${tab === "register"
-              ? "bg-white text-slate-900 shadow-sm"
+              ? "bg-white text-emerald-700 shadow-sm"
               : "text-slate-500 hover:text-slate-900"
               }`}
           >
-            Tạo Tài Khoản
+            Tạo Tài Khoản Nhanh
           </button>
         </div>
 
@@ -552,20 +591,22 @@ function AuthFormContent() {
           </form>
         )}
 
-        {/* Divider */}
-        <div className="relative my-6 flex items-center justify-center">
-          <div className="w-full border-t border-slate-200" />
-          <span className="absolute bg-white px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            Hoặc tiếp tục với
-          </span>
-        </div>
+        {isInAppBrowser && (
+          <>
+            <div className="relative my-5 flex items-center justify-center">
+              <div className="w-full border-t border-slate-200" />
+              <span className="absolute bg-white px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Hoặc thử với Google
+              </span>
+            </div>
 
-        {/* Google Login Option */}
-        <GoogleLoginButton
-          onSuccess={() => {
-            router.replace(redirectPath as any);
-          }}
-        />
+            <GoogleLoginButton
+              onSuccess={() => {
+                router.replace(redirectPath as any);
+              }}
+            />
+          </>
+        )}
       </div>
 
       {/* Footer Disclaimer */}

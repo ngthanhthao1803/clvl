@@ -77,9 +77,24 @@ export async function createDepositOrder({ sessionId, userId }) {
   // If session has gender pricing and female is free (0đ)
   if (session.hasGenderPricing && isFemale && userPrice === 0) {
     participant.paymentStatus = "paid";
-    participant.escrowAmount = 0;
-    participant.paidAt = new Date();
+    participant.paidAmount = 0;
+    if (participant.status === "pending") {
+      participant.status = "joined";
+      session.currentPlayersCount = (session.currentPlayersCount || 1) + 1;
+      if (session.currentPlayersCount >= session.maxPlayers) {
+        session.status = "full";
+      }
+    }
     await session.save();
+
+    await createNotification({
+      recipient: session.host._id || session.host,
+      actor: user._id,
+      type: "session_joined",
+      title: "Thành viên Nữ xác nhận giữ chỗ (Free 0đ)",
+      message: `${user.name} (Nữ) đã xác nhận giữ chỗ miễn phí tại buổi chơi "${session.title}".`,
+      session: session._id,
+    });
 
     return {
       orderCode: `FREE-${Date.now().toString().slice(-6)}`,
@@ -361,7 +376,12 @@ export async function cancelBookingWithRefund({ sessionId, userId, reason = "" }
     status: "escrow_held",
   });
 
-  const isEligibleForFullRefund = diffHours >= policyHours;
+  const wasJoined = participant.status === "joined";
+  const wasConfirmed =
+    wasJoined || Boolean(payment) || participant.paymentStatus === "paid";
+
+  // Players who were still "pending" and hadn't deposited/confirmed are never penalized
+  const isEligibleForFullRefund = !wasConfirmed || diffHours >= policyHours;
 
   if (isEligibleForFullRefund) {
     if (payment) {
@@ -394,7 +414,7 @@ export async function cancelBookingWithRefund({ sessionId, userId, reason = "" }
         recipient: userId,
         type: "system",
         title: "Hủy tham gia thành công",
-        message: `Bạn đã hủy tham gia buổi chơi "${session.title}" trước thời hạn ${policyHours}h.`,
+        message: `Bạn đã hủy đăng ký tham gia buổi chơi "${session.title}".`,
         session: session._id,
       });
 
@@ -402,7 +422,7 @@ export async function cancelBookingWithRefund({ sessionId, userId, reason = "" }
         recipient: session.host,
         type: "system",
         title: "Thành viên hủy tham gia",
-        message: `Một người chơi đã hủy tham gia buổi "${session.title}". Slot đã được mở lại cho người khác.`,
+        message: `Một người chơi đã hủy tham gia buổi "${session.title}".`,
         session: session._id,
       });
     }
@@ -410,7 +430,7 @@ export async function cancelBookingWithRefund({ sessionId, userId, reason = "" }
     participant.status = "left";
     participant.attendanceStatus = "cancelled_refund";
   } else {
-    // Penalty: Last-minute cancellation / No-show
+    // Penalty: Last-minute cancellation / No-show (only for confirmed/joined players)
     if (payment) {
       payment.status = "forfeited_to_host";
       payment.refundReason = `Hủy sát giờ (< ${policyHours}h) - Tiền cọc được bồi thường cho Host`;
@@ -461,9 +481,11 @@ export async function cancelBookingWithRefund({ sessionId, userId, reason = "" }
     participant.attendanceStatus = "no_show";
   }
 
-  // Update session counts
-  session.currentPlayersCount = Math.max(1, (session.currentPlayersCount || 1) - 1);
-  if (session.status === "full") {
+  // Only decrement session currentPlayersCount if this player was actually counted as joined
+  if (wasJoined) {
+    session.currentPlayersCount = Math.max(1, (session.currentPlayersCount || 1) - 1);
+  }
+  if (session.status === "full" && session.currentPlayersCount < session.maxPlayers) {
     session.status = "open";
   }
   await session.save();
@@ -673,6 +695,27 @@ export async function handlePaymentWebhook({ body = {}, headers = {}, io = null 
       }
     } catch (payosWebhookErr) {
       console.error("PayOS webhook verification failed:", payosWebhookErr.message);
+      return {
+        success: false,
+        message: "Chữ ký xác thực PayOS không hợp lệ",
+      };
+    }
+  }
+
+  // Optional webhook secret validation for SePAY / Casso / Custom gateways
+  const expectedSecret =
+    process.env.WEBHOOK_SECRET || process.env.SEPAY_WEBHOOK_SECRET || "";
+  if (expectedSecret) {
+    const authHeader = String(headers.authorization || "");
+    const headerSecret =
+      headers["x-webhook-secret"] ||
+      (authHeader.startsWith("Apikey ") ? authHeader.slice(7) : "") ||
+      (authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "");
+    if (headerSecret !== expectedSecret && body.secret !== expectedSecret) {
+      return {
+        success: false,
+        message: "Unauthorized webhook request",
+      };
     }
   }
 
@@ -721,19 +764,21 @@ export async function handlePaymentWebhook({ body = {}, headers = {}, io = null 
     return { success: false, message: "Không tìm thấy mã đơn CLVL trong nội dung chuyển khoản" };
   }
 
-  const extractedCode = match[0].replace(/\s+/g, "").toUpperCase();
+  const extractedOrderDigits = match[1].toUpperCase();
+  const extractedFull = match[0].replace(/\s+/g, "").toUpperCase();
   const payment = await Payment.findOne({
     $or: [
-      { orderCode: extractedCode },
-      { orderCode: new RegExp(`^${extractedCode}$`, "i") },
-      { transferContent: new RegExp(extractedCode, "i") },
+      { orderCode: extractedOrderDigits },
+      { orderCode: extractedFull },
+      { orderCode: new RegExp(`^${extractedFull}$`, "i") },
+      { transferContent: new RegExp(extractedOrderDigits, "i") },
     ],
   });
 
   if (!payment) {
     return {
       success: false,
-      message: `Không tìm thấy đơn hàng mã ${extractedCode} trong hệ thống`,
+      message: `Không tìm thấy đơn hàng mã ${extractedFull} trong hệ thống`,
     };
   }
 
@@ -743,6 +788,21 @@ export async function handlePaymentWebhook({ body = {}, headers = {}, io = null 
       message: "Đơn hàng đã được xác nhận thanh toán trước đó",
       orderCode: payment.orderCode,
     };
+  }
+
+  // Anti-spoofing: If PayOS is enabled or order was created via PayOS and webhook was unsigned,
+  // cross-verify directly with PayOS API before confirming!
+  if ((isPayOSEnabled() || payment.gateway === "PayOS") && !expectedSecret) {
+    const payosStatus = await getPayOSPaymentStatus(payment.orderCode);
+    if (!payosStatus || payosStatus.status !== "PAID") {
+      return {
+        success: false,
+        message: "Giao dịch chưa được xác nhận thanh toán trên cổng PayOS",
+      };
+    }
+    if (payosStatus.transactions?.[0]?.reference) {
+      reference = String(payosStatus.transactions[0].reference);
+    }
   }
 
   // Check amount

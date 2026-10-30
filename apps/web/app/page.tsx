@@ -18,10 +18,14 @@ import {
   X,
   Bookmark,
   PlusCircle,
+  ShieldCheck,
+  Locate,
+  Sparkles,
 } from "lucide-react";
 import { useSavedSessionsStore } from "@/stores/saved-sessions-store";
 import { VIETNAM_PROVINCES, getDistricts } from "@/lib/vietnam-locations";
 import { SKILL_OPTIONS } from "@/lib/skills";
+import { toast } from "@/stores/toast-store";
 
 const fallbackSessions = [
   {
@@ -230,6 +234,24 @@ function resolveCoords(district?: string): [number, number] {
   return [10.8231, 106.6297];
 }
 
+function getDistanceKm(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+): number {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 export default function HomePage() {
   const router = useRouter();
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -238,6 +260,8 @@ export default function HomePage() {
   const [activeChip, setActiveChip] = useState<string>("all");
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
+  const [userCoords, setUserCoords] = useState<[number, number] | null>(null);
+  const [locatingGps, setLocatingGps] = useState(false);
 
   const [mounted, setMounted] = useState(false);
   const savedIds = useSavedSessionsStore((s) => s.savedIds);
@@ -289,7 +313,7 @@ export default function HomePage() {
       try {
         const response = await api.get("/sessions", { params });
         const sessions = response.data?.data?.sessions;
-        if (Array.isArray(sessions) && sessions.length > 0) {
+        if (Array.isArray(sessions)) {
           return sessions;
         }
       } catch (err) {
@@ -297,8 +321,42 @@ export default function HomePage() {
       }
       return fallbackSessions;
     },
-    placeholderData: fallbackSessions,
   });
+
+  const handleNearMeClick = () => {
+    if (activeChip === "nearby") {
+      setActiveChip("all");
+      return;
+    }
+    if (userCoords) {
+      setActiveChip("nearby");
+      return;
+    }
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      toast.error("Trình duyệt của bạn không hỗ trợ định vị GPS");
+      return;
+    }
+    setLocatingGps(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setLocatingGps(false);
+        setUserCoords([pos.coords.latitude, pos.coords.longitude]);
+        setActiveChip("nearby");
+        toast.success(
+          "Đã bật lọc kèo gần bạn!",
+          "Danh sách kèo được sắp xếp từ gần đến xa theo vị trí hiện tại.",
+        );
+      },
+      () => {
+        setLocatingGps(false);
+        toast.info(
+          "Không thể lấy vị trí GPS",
+          "Vui lòng cấp quyền vị trí hoặc chọn Quận/Huyện trong bộ lọc.",
+        );
+      },
+      { enableHighAccuracy: true, timeout: 7000 },
+    );
+  };
 
   // Client-side filtering logic
   const filteredSessions = useMemo(() => {
@@ -386,6 +444,8 @@ export default function HomePage() {
         const max = s.maxPlayers || 8;
         return max - current > 0 && !isPastSession(s);
       });
+    } else if (activeChip === "nearby") {
+      list = list.filter((s) => !isPastSession(s));
     } else if (activeChip === "saved") {
       const savedFromList = list.filter((s) =>
         savedIds.includes(String(s.id || s._id)),
@@ -399,16 +459,31 @@ export default function HomePage() {
       list = [...savedFromList, ...extraSaved];
     }
 
-    // Smart Sorting: Kèo sắp diễn ra xếp trước
+    // Smart Sorting: Nếu chọn "Gần tôi" thì xếp theo khoảng cách GPS, ngược lại xếp kèo sắp diễn ra trước
     return list.slice().sort((a, b) => {
       const pastA = isPastSession(a);
       const pastB = isPastSession(b);
       if (pastA !== pastB) return pastA ? 1 : -1;
+
+      if (activeChip === "nearby" && userCoords) {
+        const [latA, lngA] =
+          a.latitude && a.longitude
+            ? [Number(a.latitude), Number(a.longitude)]
+            : resolveCoords(a.district);
+        const [latB, lngB] =
+          b.latitude && b.longitude
+            ? [Number(b.latitude), Number(b.longitude)]
+            : resolveCoords(b.district);
+        const distA = getDistanceKm(userCoords[0], userCoords[1], latA, lngA);
+        const distB = getDistanceKm(userCoords[0], userCoords[1], latB, lngB);
+        return distA - distB;
+      }
+
       const timeA = new Date(a.datetime).getTime() || 0;
       const timeB = new Date(b.datetime).getTime() || 0;
       return timeA - timeB;
     });
-  }, [sessionsQuery.data, searchKeyword, activeChip, savedIds, getSavedList]);
+  }, [sessionsQuery.data, searchKeyword, activeChip, savedIds, getSavedList, userCoords]);
 
   // Transform sessions into map venue markers
   const mapVenues = useMemo(() => {
@@ -487,6 +562,38 @@ export default function HomePage() {
 
   return (
     <div suppressHydrationWarning className="space-y-3 pb-20 animate-fadeUp">
+      {/* 0. Compact Value Proposition & Fast Conversion Strip for New Visitors */}
+      <div className="rounded-2xl border border-emerald-200/80 bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 px-3.5 py-2.5 text-white shadow-xs flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+          <span className="inline-flex items-center gap-1.5 font-extrabold text-emerald-300">
+            <span>Ghép Kèo Cầu Lông Toàn Quốc</span>
+          </span>
+          <span className="hidden sm:inline text-white/30">•</span>
+          <span className="inline-flex items-center gap-1 text-[11px] text-slate-200 font-medium">
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+            <span>Bảo chứng cọc VietQR · Hoàn 100% nếu hủy trước hạn</span>
+          </span>
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={handleNearMeClick}
+            className="inline-flex items-center gap-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 px-2.5 py-1 text-[11px] font-bold text-emerald-300 transition active:scale-95"
+          >
+            <Locate className={`h-3 w-3 ${locatingGps ? "animate-spin" : ""}`} />
+            <span>{locatingGps ? "Đang định vị..." : "Kèo gần tôi"}</span>
+          </button>
+          <Link
+            href="/sessions/create"
+            className="inline-flex items-center gap-1 rounded-full bg-emerald-500 hover:bg-emerald-400 px-2.5 py-1 text-[11px] font-black text-slate-950 transition active:scale-95"
+          >
+            <PlusCircle className="h-3 w-3" />
+            <span>Đăng kèo</span>
+          </Link>
+        </div>
+      </div>
+
       {/* 1. Search Bar + Quick Filter Chips */}
       <div suppressHydrationWarning className="rounded-2xl border border-slate-200/90 bg-white p-2 sm:p-2.5 shadow-xs">
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
@@ -519,11 +626,10 @@ export default function HomePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setActiveChip("all")}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "all"
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "all"
                   ? "bg-slate-900 text-white shadow-xs font-bold"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               Tất cả
             </button>
@@ -533,24 +639,21 @@ export default function HomePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setActiveChip(activeChip === "saved" ? "all" : "saved")}
-              className={`shrink-0 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold transition ${
-                activeChip === "saved"
+              className={`shrink-0 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold transition ${activeChip === "saved"
                   ? "bg-amber-500 text-white shadow-xs"
                   : "border border-amber-300/80 bg-amber-50/70 text-amber-800 hover:bg-amber-100"
-              }`}
+                }`}
             >
               <Bookmark
-                className={`h-3 w-3 ${
-                  activeChip === "saved" ? "fill-white text-white" : "fill-amber-600 text-amber-600"
-                }`}
+                className={`h-3 w-3 ${activeChip === "saved" ? "fill-white text-white" : "fill-amber-600 text-amber-600"
+                  }`}
               />
               <span>Đã lưu</span>
               {savedCount > 0 && (
                 <span
                   suppressHydrationWarning
-                  className={`rounded-full px-1.5 py-0.2 text-[9.5px] font-black ${
-                    activeChip === "saved" ? "bg-white text-amber-700" : "bg-amber-200 text-amber-900"
-                  }`}
+                  className={`rounded-full px-1.5 py-0.2 text-[9.5px] font-black ${activeChip === "saved" ? "bg-white text-amber-700" : "bg-amber-200 text-amber-900"
+                    }`}
                 >
                   {savedCount}
                 </span>
@@ -560,12 +663,24 @@ export default function HomePage() {
             <button
               type="button"
               suppressHydrationWarning
+              onClick={handleNearMeClick}
+              className={`shrink-0 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold transition ${activeChip === "nearby"
+                  ? "bg-sky-600 text-white shadow-xs"
+                  : "border border-sky-200 bg-sky-50/80 text-sky-800 hover:bg-sky-100"
+                }`}
+            >
+              <Locate className={`h-3 w-3 ${locatingGps ? "animate-spin" : ""}`} />
+              <span>Gần tôi</span>
+            </button>
+
+            <button
+              type="button"
+              suppressHydrationWarning
               onClick={() => setActiveChip(activeChip === "upcoming" ? "all" : "upcoming")}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "upcoming"
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "upcoming"
                   ? "bg-emerald-600 text-white shadow-xs font-bold"
                   : "border border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
-              }`}
+                }`}
             >
               ⚡ Sắp tới
             </button>
@@ -574,11 +689,10 @@ export default function HomePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setActiveChip(activeChip === "today" ? "all" : "today")}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "today"
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "today"
                   ? "bg-emerald-600 text-white shadow-xs font-bold"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               🔥 Hôm nay
             </button>
@@ -587,11 +701,10 @@ export default function HomePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setActiveChip(activeChip === "tonight" ? "all" : "tonight")}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "tonight"
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "tonight"
                   ? "bg-emerald-600 text-white shadow-xs font-bold"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               🌙 Tối nay
             </button>
@@ -600,11 +713,10 @@ export default function HomePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setActiveChip(activeChip === "tomorrow" ? "all" : "tomorrow")}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "tomorrow"
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "tomorrow"
                   ? "bg-sky-600 text-white shadow-xs font-bold"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               📅 Ngày mai
             </button>
@@ -613,11 +725,10 @@ export default function HomePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setActiveChip(activeChip === "escrow" ? "all" : "escrow")}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "escrow"
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "escrow"
                   ? "bg-emerald-600 text-white shadow-xs font-bold"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               🛡️ Ký quỹ
             </button>
@@ -626,11 +737,10 @@ export default function HomePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setActiveChip(activeChip === "tb" ? "all" : "tb")}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "tb"
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "tb"
                   ? "bg-emerald-600 text-white shadow-xs font-bold"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               🏸 Trình TB/TB+
             </button>
@@ -639,11 +749,10 @@ export default function HomePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setActiveChip(activeChip === "mixed" ? "all" : "mixed")}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "mixed"
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "mixed"
                   ? "bg-emerald-600 text-white shadow-xs font-bold"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               👥 Đôi Nam Nữ
             </button>
@@ -652,11 +761,10 @@ export default function HomePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setActiveChip(activeChip === "available" ? "all" : "available")}
-              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${
-                activeChip === "available"
+              className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold transition ${activeChip === "available"
                   ? "bg-emerald-600 text-white shadow-xs font-bold"
                   : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-              }`}
+                }`}
             >
               🟢 Còn chỗ
             </button>
@@ -802,11 +910,10 @@ export default function HomePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setViewMode("list")}
-              className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold transition ${
-                viewMode === "list"
+              className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold transition ${viewMode === "list"
                   ? "bg-white text-emerald-800 shadow-xs"
                   : "text-slate-500 hover:text-slate-800"
-              }`}
+                }`}
               title="Danh sách ngang gọn"
             >
               <LayoutList className="h-3.5 w-3.5" />
@@ -816,11 +923,10 @@ export default function HomePage() {
               type="button"
               suppressHydrationWarning
               onClick={() => setViewMode("grid")}
-              className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold transition ${
-                viewMode === "grid"
+              className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold transition ${viewMode === "grid"
                   ? "bg-white text-emerald-800 shadow-xs"
                   : "text-slate-500 hover:text-slate-800"
-              }`}
+                }`}
               title="Lưới 2 cột gọn"
             >
               <LayoutGrid className="h-3.5 w-3.5" />
@@ -856,11 +962,33 @@ export default function HomePage() {
       <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-12">
         {/* Left Column: Match Cards */}
         <div
-          className={`space-y-2 sm:space-y-2.5 lg:col-span-7 ${
-            mobileView === "map" ? "hidden lg:block" : "block"
-          }`}
+          className={`space-y-2 sm:space-y-2.5 lg:col-span-7 ${mobileView === "map" ? "hidden lg:block" : "block"
+            }`}
         >
-          {filteredSessions.length === 0 ? (
+          {sessionsQuery.isLoading ? (
+            <div className="flex flex-col gap-2.5">
+              {[1, 2, 3, 4].map((n) => (
+                <div
+                  key={n}
+                  className="flex items-stretch gap-3 rounded-2xl border border-slate-200/80 bg-white p-2.5 shadow-xs animate-pulse"
+                >
+                  <div className="w-24 sm:w-28 h-24 rounded-xl bg-slate-200 shrink-0" />
+                  <div className="flex-1 flex flex-col justify-between py-1 space-y-2">
+                    <div className="flex justify-between">
+                      <div className="h-4 w-28 rounded bg-slate-200" />
+                      <div className="h-4 w-16 rounded bg-slate-100" />
+                    </div>
+                    <div className="h-4 w-3/4 rounded bg-slate-200" />
+                    <div className="h-3 w-1/2 rounded bg-slate-100" />
+                    <div className="flex justify-between pt-1">
+                      <div className="h-4 w-20 rounded bg-slate-200" />
+                      <div className="h-4 w-12 rounded bg-slate-100" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredSessions.length === 0 ? (
             activeChip === "saved" ? (
               <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-amber-300 bg-amber-50/40 p-8 text-center">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-600 mb-2 border border-amber-200">
@@ -910,11 +1038,10 @@ export default function HomePage() {
                   <div
                     key={sId}
                     onMouseEnter={() => setSelectedSessionId(sId)}
-                    className={`transition-all duration-200 ${
-                      isSelected
+                    className={`transition-all duration-200 ${isSelected
                         ? "ring-2 ring-emerald-500/80 rounded-2xl scale-[1.005]"
                         : ""
-                    }`}
+                      }`}
                   >
                     <MatchCard session={session} layout="horizontal" />
                   </div>
@@ -933,11 +1060,10 @@ export default function HomePage() {
                   <div
                     key={sId}
                     onMouseEnter={() => setSelectedSessionId(sId)}
-                    className={`transition-all duration-200 ${
-                      isSelected
+                    className={`transition-all duration-200 ${isSelected
                         ? "ring-2 ring-emerald-500/80 rounded-2xl scale-[1.01]"
                         : ""
-                    }`}
+                      }`}
                   >
                     <MatchCard session={session} layout="grid" />
                   </div>
@@ -949,9 +1075,8 @@ export default function HomePage() {
 
         {/* Right Column: Sticky Interactive Leaflet Map */}
         <div
-          className={`lg:col-span-5 ${
-            mobileView === "list" ? "hidden lg:block" : "block"
-          }`}
+          className={`lg:col-span-5 ${mobileView === "list" ? "hidden lg:block" : "block"
+            }`}
         >
           <div className="sticky top-16 sm:top-20">
             <div className="flex items-center justify-between px-1 pb-1.5 text-xs">

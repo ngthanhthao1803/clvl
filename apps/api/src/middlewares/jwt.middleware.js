@@ -16,3 +16,19 @@ export function authenticateJwt(req, res, next) {
     return next(new AppError("Invalid or expired token", 401));
   }
 }
+
+export function optionalAuthenticateJwt(req, res, next) {
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+
+  if (!token) {
+    return next();
+  }
+
+  try {
+    req.user = verifyJwt(token);
+  } catch (error) {
+    // Ignore invalid/expired token on optional routes
+  }
+  return next();
+}

@@ -13,7 +13,7 @@ import {
 } from "../services/sessions.service.js";
 
 export const listSessionsController = asyncHandler(async (req, res) => {
-  const sessions = await listSessions(req.query);
+  const sessions = await listSessions(req.query, req.user);
   res.json({ success: true, data: { sessions } });
 });
 
@@ -28,7 +28,7 @@ export const updateSessionController = asyncHandler(async (req, res) => {
 });
 
 export const getSessionController = asyncHandler(async (req, res) => {
-  const session = await getSessionById(req.params.id);
+  const session = await getSessionById(req.params.id, req.user);
   res.json({ success: true, data: { session } });
 });
 

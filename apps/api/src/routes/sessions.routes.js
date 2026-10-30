@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { authenticateJwt } from "../middlewares/jwt.middleware.js";
+import {
+  authenticateJwt,
+  optionalAuthenticateJwt,
+} from "../middlewares/jwt.middleware.js";
 import { validate } from "../middlewares/validate.middleware.js";
 import {
   createSessionSchema,
@@ -21,14 +24,14 @@ import {
 
 const router = Router();
 
-router.get("/", listSessionsController);
+router.get("/", optionalAuthenticateJwt, listSessionsController);
 router.post(
   "/",
   authenticateJwt,
   validate(createSessionSchema),
   createSessionController,
 );
-router.get("/:id", getSessionController);
+router.get("/:id", optionalAuthenticateJwt, getSessionController);
 router.patch(
   "/:id",
   authenticateJwt,
